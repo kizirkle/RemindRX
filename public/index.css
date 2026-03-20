@@ -1,0 +1,61 @@
+body {
+    text-align: center; 
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.login {
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto; 
+    gap: 10px;
+}
+
+button {
+    width: 200px; 
+    margin: auto; 
+    margin-top: 10px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin: 0; 
+    margin: 10px 0 0 0;
+}
+
+h3 { 
+    margin: 10px 0 0 0; 
+}
+
+#forgot-password {
+    text-align: right; 
+}
+
+#sign-up {
+    text-align: center; 
+}
+
+.invalid {
+    border: 2px solid red; 
+}
+
+#message {
+    display: none; 
+    color: red; 
+}
+
+#provider-id-field {
+    display: none; 
+}
+
+/* input {
+    width: 300px;
+} */
+
+
+
