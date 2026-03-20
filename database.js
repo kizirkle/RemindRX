@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 
-export const pool = mysql.createPool( {
+export var pool = mysql.createPool( {
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
@@ -12,15 +12,15 @@ export const pool = mysql.createPool( {
 }).promise()
 
 export async function getPatients() {
-  const [rows] = await pool.query("SELECT * FROM patient")
+  var [rows] = await pool.query("SELECT * FROM patient")
   return rows
 }
-// const rows = await getPatients()
+// var rows = await getPatients()
 // console.log(rows)
 
 
 export async function getPatient(email) {
-  const [rows] = await pool.query(`
+  var [rows] = await pool.query(`
     SELECT * FROM patient
     WHERE patient_email = ?
     `, [email])
@@ -28,7 +28,7 @@ export async function getPatient(email) {
 }
 
 export async function getProvider(email) {
-  const [rows] = await pool.query(`
+  var [rows] = await pool.query(`
     SELECT * FROM healthcare_provider
     WHERE provider_email = ?
     `, [email])
@@ -36,7 +36,7 @@ export async function getProvider(email) {
 }
 
 export async function createPatient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password) {
-  const [result] = await pool.query(`
+  var [result] = await pool.query(`
     INSERT INTO patient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password)
     VALUES(?, ?, ?, ?, ?)
     `, [patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password])
@@ -44,7 +44,7 @@ export async function createPatient(patient_first_name, patient_last_name, patie
 }
 
 export async function createProvider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password) {
-  const [result] = await pool.query(`
+  var [result] = await pool.query(`
     INSERT INTO healthcare_provider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password)
     VALUES(?, ?, ?, ?, ?)
     `, [provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password])
