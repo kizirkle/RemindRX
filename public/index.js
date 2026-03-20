@@ -1,26 +1,26 @@
-const createAccountForm = document.getElementById('create-account-form')
-const loginForm = document.getElementById('login-form')
-const providerIDField = document.getElementById('hidden')
-const firstName = document.getElementById('first-name')
-const lastName = document.getElementById('last-name')
-const phoneNumber = document.getElementById('phone-number')
-const email = document.getElementById('email')
-const newPassword = document.getElementById('new-password')
-const confirmedPassword = document.getElementById('confirmed-password')
-const loginBtn = document.getElementById('login-btn')
-const createAccountBtn = document.getElementById('create-account-btn')
-const result = document.getElementById('result')
-const message = document.getElementById('message')
-const radioPatientCreate = document.getElementById('radio-patient')
-const radioProviderCreate = document.getElementById('radio-provider')
-const providerIdField = document.getElementById("provider-id-field")
+var createAccountForm = document.getElementById('create-account-form')
+var loginForm = document.getElementById('login-form')
+var providerIDField = document.getElementById('hidden')
+var firstName = document.getElementById('first-name')
+var lastName = document.getElementById('last-name')
+var phoneNumber = document.getElementById('phone-number')
+var email = document.getElementById('email')
+var newPassword = document.getElementById('new-password')
+var confirmedPassword = document.getElementById('confirmed-password')
+var loginBtn = document.getElementById('login-btn')
+var createAccountBtn = document.getElementById('create-account-btn')
+var result = document.getElementById('result')
+var message = document.getElementById('message')
+var radioPatientCreate = document.getElementById('radio-patient')
+var radioProviderCreate = document.getElementById('radio-provider')
+var providerIdField = document.getElementById("provider-id-field")
 
 if(createAccountForm){
     createAccountForm.addEventListener("submit", async (event)=> {
         event.preventDefault()
-        const type = document.querySelector('input[name="choice"]:checked').value
+        var type = document.querySelector('input[name="choice"]:checked').value
         try {
-            const response = await fetch('/create_account', {
+            var response = await fetch('/create_account', {
             method: "POST", 
             headers: {
                 'Content-Type': 'application/json' 
@@ -35,7 +35,7 @@ if(createAccountForm){
                 confirmed_password: confirmedPassword.value
                 })
             })
-            const data = await response.json()
+            var data = await response.json()
 
             reportMessage(data)
         }
@@ -48,9 +48,9 @@ if(createAccountForm){
 if(loginForm) {
     loginForm.addEventListener("submit", async (event)=> {
         event.preventDefault()
-        const type = document.querySelector('input[name="choice"]:checked').value
+        var type = document.querySelector('input[name="choice"]:checked').value
         try {
-            const response = await fetch('/login', {
+            var response = await fetch('/login', {
             method: "POST", 
             headers: {
                 'Content-Type': 'application/json' 
@@ -61,7 +61,7 @@ if(loginForm) {
                 entered_password: password.value,
                 })
             })
-            const data = await response.json()
+            var data = await response.json()
 
             reportMessage(data)
         }
@@ -92,7 +92,7 @@ function reportMessage(data) {
 
 window.onload = function () {
     console.log("here")
-    const errorMessage = sessionStorage.getItem('errorMessage')
+    var errorMessage = sessionStorage.getItem('errorMessage')
     if (errorMessage) {
         message.textContent = errorMessage
         message.style.display = "block"
