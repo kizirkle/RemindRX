@@ -15,11 +15,8 @@ export async function getPatients() {
   var [rows] = await pool.query("SELECT * FROM patient")
   return rows
 }
-// var rows = await getPatients()
-// console.log(rows)
 
-
-export async function getPatient(email) {
+export async function getPatientByEmail(email) {
   var [rows] = await pool.query(`
     SELECT * FROM patient
     WHERE patient_email = ?
@@ -27,7 +24,7 @@ export async function getPatient(email) {
   return rows[0]
 }
 
-export async function getProvider(email) {
+export async function getProviderByEmail(email) {
   var [rows] = await pool.query(`
     SELECT * FROM healthcare_provider
     WHERE provider_email = ?
@@ -35,32 +32,33 @@ export async function getProvider(email) {
   return rows[0]
 }
 
+export async function getProviderById(provider_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM healthcare_provider
+    WHERE provider_id = ?
+    `, [provider_id])
+  return rows[0]
+}
+
 export async function createPatient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password) {
-  var [result] = await pool.query(`
+  await pool.query(`
     INSERT INTO patient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password)
     VALUES(?, ?, ?, ?, ?)
     `, [patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password])
-  return getPatient(patient_email)
+  return getPatientByEmail(patient_email)
 }
 
 export async function createProvider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password) {
-  var [result] = await pool.query(`
+  await pool.query(`
     INSERT INTO healthcare_provider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password)
     VALUES(?, ?, ?, ?, ?)
     `, [provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password])
-  return getProvider(provider_email)
+  return getProviderByEmail(provider_email)
 }
 
-
-
-// con.connect(function(err) {
-//   if (err) throw err;
-//   console.log("Hi!");
-
-//   var sql = 'INSERT INTO PatientProvider VALUES(2,5)'
-//   con.query(sql, function (err, result) {
-//     if (err) throw err;
-//   });
-// });
-
+export async function createPatientProvider(patient_id, provider_id) {
+  await pool.query(`
+    INSERT INTO PatientProvider VALUES (?,?)
+    `, [patient_id, provider_id])
+}
 
