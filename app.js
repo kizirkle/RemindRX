@@ -26,7 +26,7 @@ app.post("/create_account", async (req, res) => {
             var patientExists = await getPatient(email)
             if(patientExists === undefined) {
                 var patient = await createPatient(first_name, last_name, phone_number, email, password)
-                return res.json({passed: true, message: "Patient account created"})
+                return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
             }
             else {
                 return res.json({passed: false, message: "Account already exists"})
@@ -35,7 +35,7 @@ app.post("/create_account", async (req, res) => {
             var providerExists = await getProvider(email)
             if(providerExists === undefined) {
                 var provider = await createProvider(first_name, last_name, phone_number, email, password)
-                return res.json({passed: true, message: "Provider account created"})
+                return res.json({passed: true, providerPage: `/provider/${provider.provider_first_name}/${provider.provider_last_name}/${provider.provider_id}`})
             }
             else {
                 return res.json({passed: false, message: "Account already exists"})
@@ -62,7 +62,7 @@ app.post("/login", async (req, res) => {
             } else if(patient.patient_password != entered_password) {
                 return res.status(401).json({passed: false, message: "Incorrect password"})
             } else {
-                return res.json({passed: true, message: "Patinet logged in"})
+                return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
             }
         } else {
             var provider = await getProvider(entered_email)
@@ -71,7 +71,7 @@ app.post("/login", async (req, res) => {
             } else if(provider.provider_password != entered_password) {
                 res.status(401).json({passed: false, message: "Incorrect password"})
             } else {
-                res.json({passed: true, message: "Provider logged in"})
+                return res.json({passed: true, providerPage: `/provider/${provider.provider_first_name}/${provider.provider_last_name}/${provider.provider_id}`})
             }
         }
     } catch{
@@ -87,6 +87,16 @@ app.use((err, req, res, next) => {
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080')
+})
+
+app.get("/patient/:firstName/:lastName/:id", async(req,res) => {
+    var filePath = path.join(__dirname, '/public/patientPortal.html');
+    res.sendFile(filePath)
+})
+
+app.get("/provider/:firstName/:lastName/:id", async(req,res) => {
+    var filePath = path.join(__dirname, '/public/providerPortal.html');
+    res.sendFile(filePath)
 })
 
 

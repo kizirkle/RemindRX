@@ -37,7 +37,7 @@ if(createAccountForm){
             })
             var data = await response.json()
 
-            reportMessage(data)
+            systemResponse(data, type)
         }
         catch(error) {
             console.log("error")
@@ -63,35 +63,29 @@ if(loginForm) {
             })
             var data = await response.json()
 
-            reportMessage(data)
+            systemResponse(data, type)
         }
         catch(error) {
-            console.log("error")
+            console.log("error")    
         }
-        })
+    })
 }
 
-function reportMessage(data) {
+function systemResponse(data, type) {
     if(!data.passed) {
+        console.log("reporting")
         sessionStorage.setItem('errorMessage', data.message)
         location.reload()
     } else {
-        window.location.href = "/login"
+        if(type === 'patient') {
+            window.location.href = data.patientPage
+        } else {
+            window.location.href = data.providerPage
+        }
     }
 }
 
-// function reportMessage(data) {
-//     message.textContent = data.message
-//     message.style.display = "block"
-//     if(!data.passed) {
-//         message.style.color = "red"
-//     } else {
-//         message.style.color = "green"
-//     }
-// }
-
 window.onload = function () {
-    console.log("here")
     var errorMessage = sessionStorage.getItem('errorMessage')
     if (errorMessage) {
         message.textContent = errorMessage
@@ -113,7 +107,6 @@ if(radioProviderCreate) {
     providerIdField.removeAttribute('required');
     })
 }
-
 
 
 
