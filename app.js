@@ -1,6 +1,6 @@
 import express from 'express'
 import path from 'path'
-import {getPatients, getPatient, getProvider, createPatient, createProvider} from './database.js'
+import {getPatientByEmail, getProviderByEmail, createPatient, createProvider, createPatientProvider, getProviderById} from './database.js'
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
@@ -17,22 +17,28 @@ app.get("/create_account", async(req,res) => {
 })
 
 app.post("/create_account", async (req, res) => {
-    var {choice, first_name, last_name, phone_number, email, password, confirmed_password} = req.body
+    var {choice, first_name, last_name, phone_number, email, password, confirmed_password, provider_id} = req.body
     if(password !== confirmed_password) {
         return res.json({passed: false, message: "Passwords do not match"})
     }
     try {
         if(choice === "patient") {
-            var patientExists = await getPatient(email)
+            var patientExists = await getPatientByEmail(email)
             if(patientExists === undefined) {
-                var patient = await createPatient(first_name, last_name, phone_number, email, password)
-                return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
-            }
-            else {
+                var providerExists = await getProviderById(provider_id)
+                    if(providerExists === undefined) {
+                        return res.json({passed: false, message: "No healthcare provider with ID"})
+                    } else {
+                        var patient = await createPatient(first_name, last_name, phone_number, email, password)
+                        createPatientProvider(patient.patient_id, provider_id)
+                        return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
+                    } 
+            } else {
                 return res.json({passed: false, message: "Account already exists"})
             }
-        } else {
-            var providerExists = await getProvider(email)
+        }
+         else {
+            var providerExists = await getProviderByEmail(email)
             if(providerExists === undefined) {
                 var provider = await createProvider(first_name, last_name, phone_number, email, password)
                 return res.json({passed: true, providerPage: `/provider/${provider.provider_first_name}/${provider.provider_last_name}/${provider.provider_id}`})
@@ -56,7 +62,7 @@ app.post("/login", async (req, res) => {
     var {choice, entered_email, entered_password} = req.body
     try {
         if (choice === 'patient') {
-            var patient = await getPatient(entered_email)
+            var patient = await getPatientByEmail(entered_email)
             if(patient === undefined) {
                 return res.json({passed: false, message: "No account found. Create a new account or enter a different email."})
             } else if(patient.patient_password != entered_password) {
@@ -65,7 +71,7 @@ app.post("/login", async (req, res) => {
                 return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
             }
         } else {
-            var provider = await getProvider(entered_email)
+            var provider = await getProviderByEmail(entered_email)
             if(provider === undefined) {
                 res.json({passed: false, message: "No account found. Create a new account or enter a different email."})
             } else if(provider.provider_password != entered_password) {

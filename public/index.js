@@ -14,6 +14,8 @@ var message = document.getElementById('message')
 var radioPatientCreate = document.getElementById('radio-patient')
 var radioProviderCreate = document.getElementById('radio-provider')
 var providerIdField = document.getElementById("provider-id-field")
+var providerId = document.getElementById("provider-id")
+
 
 if(createAccountForm){
     createAccountForm.addEventListener("submit", async (event)=> {
@@ -32,7 +34,8 @@ if(createAccountForm){
                 phone_number: phoneNumber.value, 
                 email: email.value,
                 password: newPassword.value,
-                confirmed_password: confirmedPassword.value
+                confirmed_password: confirmedPassword.value, 
+                provider_id: providerId.value
                 })
             })
             var data = await response.json()
@@ -96,15 +99,15 @@ window.onload = function () {
 
 if(radioPatientCreate) {
     radioPatientCreate.addEventListener("change", ()=> {
-    providerIdField.style.display = "block"
-    providerIdField.setAttribute('required', '')
+        providerIdField.style.display = "block"
+        providerId.required = true
     })
 }
 
 if(radioProviderCreate) {
     radioProviderCreate.addEventListener("change", ()=> {
-    providerIdField.style.display = "none"
-    providerIdField.removeAttribute('required');
+        providerIdField.style.display = "none"
+        providerId.required = false
     })
 }
 
