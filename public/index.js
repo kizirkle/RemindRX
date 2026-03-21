@@ -28,7 +28,7 @@ if(createAccountForm){
             body: JSON.stringify({
                 choice: type, 
                 first_name: firstName.value,
-                last_name: lastName.value,
+                last_name: lastName.value, 
                 phone_number: phoneNumber.value, 
                 email: email.value,
                 password: newPassword.value,
