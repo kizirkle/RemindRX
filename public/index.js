@@ -40,7 +40,7 @@ if(createAccountForm){
             reportMessage(data)
         }
         catch(error) {
-            console.log("error")
+            console.log("ERROR: Failed to submit, error from index.js:", error);
         }
     })
 }
@@ -66,7 +66,7 @@ if(loginForm) {
             reportMessage(data)
         }
         catch(error) {
-            console.log("error")
+            console.log("ERROR: failed to submit, error from index.js:", error);
         }
         })
 }

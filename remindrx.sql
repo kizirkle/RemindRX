@@ -11,7 +11,7 @@ CREATE TABLE healthcare_provider (
     provider_id INT AUTO_INCREMENT, 
     provider_first_name VARCHAR(50), 
     provider_last_name VARCHAR(50), 
-    patient_phone_number VARCHAR(10),
+    provider_phone_number VARCHAR(10),
     provider_email VARCHAR(10),
     provider_password VARCHAR(50),
     PRIMARY KEY(provider_id)
