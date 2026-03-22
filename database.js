@@ -1,9 +1,11 @@
+//Functions that query the SQL database
+
 import mysql from 'mysql2'
 
 import dotenv from 'dotenv'
 dotenv.config()
 
-
+//Setting up the connect to MySQL
 export var pool = mysql.createPool( {
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
@@ -11,15 +13,14 @@ export var pool = mysql.createPool( {
     database: process.env.MYSQL_DATABASE
 }).promise()
 
+//Get all patients
 export async function getPatients() {
   var [rows] = await pool.query("SELECT * FROM patient")
   return rows
 }
-// var rows = await getPatients()
-// console.log(rows)
 
-
-export async function getPatient(email) {
+//Get patients by email address and return the corresponding patient object
+export async function getPatientByEmail(email) {
   var [rows] = await pool.query(`
     SELECT * FROM patient
     WHERE patient_email = ?
@@ -27,7 +28,8 @@ export async function getPatient(email) {
   return rows[0]
 }
 
-export async function getProvider(email) {
+//Get providers by email address and return the corresponding provider object
+export async function getProviderByEmail(email) {
   var [rows] = await pool.query(`
     SELECT * FROM healthcare_provider
     WHERE provider_email = ?
@@ -35,32 +37,37 @@ export async function getProvider(email) {
   return rows[0]
 }
 
+//Get provider by provider_id and return the correponding provider
+export async function getProviderById(provider_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM healthcare_provider
+    WHERE provider_id = ?
+    `, [provider_id])
+  return rows[0]
+}
+
+//Create a new patient
 export async function createPatient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password) {
-  var [result] = await pool.query(`
+  await pool.query(`
     INSERT INTO patient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password)
     VALUES(?, ?, ?, ?, ?)
     `, [patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password])
-  return getPatient(patient_email)
+  return getPatientByEmail(patient_email)
 }
-
+ 
+//Create a new healthcare provider
 export async function createProvider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password) {
-  var [result] = await pool.query(`
+  await pool.query(`
     INSERT INTO healthcare_provider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password)
     VALUES(?, ?, ?, ?, ?)
     `, [provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password])
-  return getProvider(provider_email)
+  return getProviderByEmail(provider_email)
 }
 
-
-
-// con.connect(function(err) {
-//   if (err) throw err;
-//   console.log("Hi!");
-
-//   var sql = 'INSERT INTO PatientProvider VALUES(2,5)'
-//   con.query(sql, function (err, result) {
-//     if (err) throw err;
-//   });
-// });
-
+//Create a new entry the links a patient to their provider
+export async function createPatientProvider(patient_id, provider_id) {
+  await pool.query(`
+    INSERT INTO PatientProvider VALUES (?,?)
+    `, [patient_id, provider_id])
+}
 

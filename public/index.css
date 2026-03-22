@@ -1,3 +1,5 @@
+/* Style sheet for all current html documents */
+
 body {
     text-align: center; 
     font-family:Arial, Helvetica, sans-serif;
@@ -7,13 +9,13 @@ body {
     text-align: left; 
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 275px;
     margin: auto; 
     gap: 10px;
 }
 
 button {
-    width: 200px; 
+    width: 150px; 
     margin: auto; 
     margin-top: 10px;
 }
@@ -36,7 +38,7 @@ h3 {
     text-align: right; 
 }
 
-#sign-up {
+#create-account {
     text-align: center; 
 }
 
@@ -53,9 +55,7 @@ h3 {
     display: none; 
 }
 
-/* input {
-    width: 300px;
-} */
+
 
 
 
