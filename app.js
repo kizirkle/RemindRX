@@ -12,6 +12,7 @@ import { dirname } from 'node:path';
 var __filename = fileURLToPath(import.meta.url);
 var __dirname = dirname(__filename);
 
+//Setting up Express
 var app = express() 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));

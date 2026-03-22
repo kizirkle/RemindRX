@@ -7,7 +7,9 @@
     </head>
     <body class="login" id="create-account-form">
         <h1>Create Account</h1>
+        <!-- Create account form -->
         <form class="login">
+            <!-- Choose patient or provider radio button -->
             <div>
                 <input type="radio" value="healthcare-provider" name="choice" id="radio-provider" required> 
                 <label class="option" >Healthcare Provider</label>
@@ -16,23 +18,30 @@
                 <input type="radio" value="patient" name="choice" id="radio-patient"> 
                 <label class="option" >Patient</label>
             </div>
-                <input id="first-name" placeholder="First Name" required>
-                <input id="last-name" placeholder="Last Name" required>
-                <input id="phone-number" placeholder="Phone Number" required>
-                <input id="email" placeholder="Email" required>
-                <input type="password" id="new-password" placeholder="Password">
-                <input type="password" placeholder="Confirm Password" id='confirmed-password' required>
-                <div id="provider-id-field">
-                    <input id="provider-id" placeholder="Provider ID" name="message">
-                </div>
-                <span id="message" style="display: none"></span>
-                <button type="submit" id="sign-up-btn">Sign Up</button>
-                <h3>Already have an account?</h3>
+
+            <!-- Get first name, last name, phone number, email, passwor, and confirmed password from user -->
+            <input id="first-name" placeholder="First Name" required>
+            <input id="last-name" placeholder="Last Name" required>
+            <input id="phone-number" placeholder="Phone Number" required>
+            <input id="email" placeholder="Email" required>
+            <input type="password" id="new-password" placeholder="Password">
+            <input type="password" placeholder="Confirm Password" id='confirmed-password' required>
+            
+            <!-- Get provider ID from patient attempting to create an account -->
+            <div id="provider-id-field">
+                <input id="provider-id" placeholder="Provider ID" name="message">
             </div>
-        </form>
-                <a type="button" href="/login" id="sign-up">
-                <button>Login</button>
-                </a>
+
+            <!-- Error message displayed on reload if create account failed -->
+            <span id="message" style="display: none"></span>
+            <button type="submit" id="create-account-btn">Create Account</button>
+            
+            <!-- Link to log in page -->
+            <h3>Already have an account?</h3>
+            </form>
+            <a type="button" href="/login" id="create-account">
+                <button>Log In</button>
+            </a>
         <script src="index.js"></script>
     </body>
 </html>
