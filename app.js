@@ -65,8 +65,9 @@ app.post("/create_account", async (req, res) => {
             }
         }
     }
-    catch {
-        res.status(500).send('Error in Create Account')
+    catch (err) {
+        console.error("ERROR IN CREATE ACCOUNT:", err);
+        res.status(500).json({passed: false, message: 'Error in Create Account'});
     }
 })
 
@@ -108,7 +109,7 @@ app.post("/login", async (req, res) => {
             }
         }
     } catch{
-        res.status(500).send('Error in Login')
+        res.status(500).json({passed: false, message:'Error in Login'})
     }
 })
 
@@ -127,7 +128,7 @@ app.get("/provider/:firstName/:lastName/:id", async(req,res) => {
 //Alert if failure occured
 app.use((err, req, res, next) => {
     console.error(err.stack)
-    res.status(500).send('Something broke!')
+    res.status(500).json({passed: false, message:'Something broke!'})
 })
 
 //Port to access the website

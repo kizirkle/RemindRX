@@ -60,7 +60,7 @@ if(createAccountForm){
             systemResponse(data, type)
         }
         catch(error) {
-            console.log("error")
+            console.log("ERROR: Failed to submit, error from index.js:", error);
         }
     })
 }
@@ -92,7 +92,7 @@ if(loginForm) {
             systemResponse(data, type)
         }
         catch(error) {
-            console.log("error")    
+            console.log("ERROR: failed to submit, error from index.js:", error);
         }
     })
 }
