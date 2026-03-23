@@ -55,6 +55,7 @@ if(createAccountForm){
 
             //Gets the response from the API call which will either contain an error message or URL to personal portal
             var data = await response.json()
+            //console.log(data.passwordProblems)
 
             //Calls function to either return an error or sends the patient or provider to their personal portal
             systemResponse(data, type)
