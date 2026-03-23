@@ -34,31 +34,55 @@ app.post("/create_account", async (req, res) => {
     try {
         if(choice === "patient") {
             //Attempts to create a new patient
-            //Checks if there is already a patient with the email in the databse
             var patientExists = await getPatientByEmail(email)
             if(patientExists === undefined) {
-                //If there is not an existing patient with the email, determine if they have entered a valid provider ID
-                var providerExists = await getProviderById(provider_id)
-                    if(providerExists === undefined) {
-                        //Return error if there is not a provider with the given ID
-                        return res.json({passed: false, message: "No healthcare provider with ID"})
+                //Checks if there is already a patient with the email in the database
+                if(password !== confirmed_password) {
+                    //Returns error if password and confirmed_password do not match
+                    return res.json({passed: false, message: "Passwords do not match"})
+                } else {
+                    //Checks if the password is valid 
+                    var passwordProblems = checkPassword(password, confirmedPassword)
+                    if (passwordProblems.length !== 0) {
+                        //Returns error if password is invalid, with array that contains the problems
+                        return res.json({passed: false, message: "Invalid password", passwordProblems: passwordProblems})
                     } else {
-                        //Creates a new patient and returns the URL to the patient portal
-                        var patient = await createPatient(first_name, last_name, phone_number, email, password)
-                        createPatientProvider(patient.patient_id, provider_id)
-                        return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
-                    } 
+                        //Checks if provider exists for given provider ID
+                        var providerExists = await getProviderById(provider_id)
+                        if(providerExists === undefined) {
+                            //Return error if there is not a provider with the given ID
+                            return res.json({passed: false, message: "No healthcare provider with ID"})
+                        }  else {
+                            //Creates a new patient and returns the URL to the patient portal if the password is valid
+                            var patient = await createPatient(first_name, last_name, phone_number, email, password)
+                            createPatientProvider(patient.patient_id, provider_id)
+                            return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
+                        }
+                    }
+                }
             } else {
                 //Returns error if there is an existing provider with the email 
                 return res.json({passed: false, message: "Account already exists"})
-            }
+            }   
         } else {
             //Attempts to create a new provider
             var providerExists = await getProviderByEmail(email)
             if(providerExists === undefined) {
-                //If there is not an existing provider with the email, creates a new provider obejct and returns the URL to provider protal
-                var provider = await createProvider(first_name, last_name, phone_number, email, password)
-                return res.json({passed: true, providerPage: `/provider/${provider.provider_first_name}/${provider.provider_last_name}/${provider.provider_id}`})
+                //Checks if there is already a provider with the email in the database
+                if(password !== confirmed_password) {
+                    //Returns error if password and confirmed_password do not match
+                    return res.json({passed: false, message: "Passwords do not match"})
+                } else {
+                    var passwordProblems = checkPassword(password)
+                    if (passwordProblems.length !== 0) {
+                        //Return error if password is invalid, with array that contains the problems
+                        return res.json({passed: false, message: "Invalid password", passwordProblems: passwordProblems})
+                    } else {
+                    //Creates a new provider and returns the URL to the provider portal if the password is valid
+                    var provider = await createProvider(first_name, last_name, phone_number, email, password)
+                    return res.json({passed: true, providerPage: `/provider/${provider.provider_first_name}/${provider.provider_last_name}/${provider.provider_id}`})
+                    }
+                }
             } else {
                 //Returns error if there is an existing patient with the email 
                 return res.json({passed: false, message: "Account already exists"})
@@ -70,6 +94,26 @@ app.post("/create_account", async (req, res) => {
         res.status(500).json({passed: false, message: 'Error in Create Account'});
     }
 })
+
+function checkPassword(password) {
+    var passwordProblems = []
+    if (password.length < 12) {
+        passwordProblems.push("short")
+    }
+    if (!(/[0-9]/.test(password))) {
+        passwordProblems.push("no number")
+    }
+    if (!(/[a-z]/.test(password))) {
+        passwordProblems.push("no lowercase")
+    }
+    if (!(/[A-Z]/.test(password))) {
+        passwordProblems.push("no uppercase")
+    }
+    if (!(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(password))) {
+        passwordProblems.push("no special character")
+    }
+    return passwordProblems
+}
 
 //Access the login page
 app.get("/login", async(req,res) => {
