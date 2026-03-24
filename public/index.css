@@ -1,8 +1,29 @@
 /* Style sheet for all current html documents */
 
+@import url('https://fonts.googleapis.com/css2?family=Cal+Sans&family=Questrial&display=swap');
+
+/* Headings + Titles */
+.cal-sans-regular {
+    font-family: "Cal Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Subheadings */
+.questrial-regular {
+    font-family: "Questrial", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 body {
     text-align: center; 
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: "Questrial", sans-serif;
+    background-color: rgb(245, 245, 245);
+}
+
+b {
+    color: rgb(117, 126, 255);
 }
 
 .login {
@@ -18,20 +39,35 @@ button {
     width: 150px; 
     margin: auto; 
     margin-top: 10px;
+    border-radius: 25px;
+    color: white;
+    background-color: rgb(0, 0, 75);
+    padding: 3px;
+    font-family: "Questrial", sans-serif;
+}
+
+button:hover {
+    /* opacity: 0.55; */
+    background-color:rgb(117, 126, 255);
+    /* color:rgb(255, 255, 255); */
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
+    font-family: "Cal Sans", sans-serif;
+    color: rgb(0, 0, 75);
 }
 
 h2 {
     margin: 0; 
     margin: 10px 0 0 0;
+    font-family: "Questrial", sans-serif;
 }
 
 h3 { 
     margin: 10px 0 0 0; 
+    font-family: "Questrial", sans-serif;
 }
 
 #forgot-password {
@@ -66,6 +102,52 @@ h3 {
     font-size: 15px; 
 }
 
+.option {
+    font-family: "Questrial", sans-serif;
+}
 
+.password-requirements-header{
+    font-family: "Questrial", sans-serif;
+}
 
+.a {
+    color: hidden;
+}
 
+.a:hover{
+    color: pink;
+}
+
+/*
+Source - https://stackoverflow.com/a/34854325
+Posted by Jamie, modified by community. See post 'Timeline' for change history
+Retrieved 2026-03-24, License - CC BY-SA 4.0
+*/
+
+input[type='radio']:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: #d1d3d1;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+input[type='radio']:checked:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color:rgb(117, 126, 255);
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
