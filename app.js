@@ -42,7 +42,7 @@ app.post("/create_account", async (req, res) => {
                     return res.json({passed: false, message: "Passwords do not match"})
                 } else {
                     //Checks if the password is valid 
-                    var passwordProblems = checkPassword(password, confirmedPassword)
+                    var passwordProblems = checkPassword(password, confirmed_password)
                     if (passwordProblems.length !== 0) {
                         //Returns error if password is invalid, with array that contains the problems
                         return res.json({passed: false, message: "Invalid password", passwordProblems: passwordProblems})
@@ -180,7 +180,7 @@ app.listen(8080, () => {
     console.log('Server is running on port 8080')
 })
 
-
+export default app
 
 
 

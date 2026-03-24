@@ -25,6 +25,14 @@
             <input type="tel" id="phone-number" placeholder="Phone Number" required>
             <input type="email" id="email" placeholder="Email" required>
             <input type="password" id="new-password" placeholder="Password">
+            <span id="password-requirements-header">Password must be:</span>
+            <ul id="password-requirements-list">
+                <li id="length">At least 12 characters</li>
+                <li id="upper">At least one uppercase letter</li>
+                <li id="lower">At least one lowercase letter</li>
+                <li id="number">At least one number</li>
+                <li id="special">At least one special character</li>
+            </ul>
             <input type="password" placeholder="Confirm Password" id='confirmed-password' required>
             
             <!-- Get provider ID from patient attempting to create an account -->
