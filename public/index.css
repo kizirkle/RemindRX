@@ -55,6 +55,16 @@ h3 {
     display: none; 
 }
 
+#password-requirements-header {
+    text-align: left;
+    font-size: 15px;  
+}
+
+#password-requirements-list {
+    margin: 0; 
+    padding-left: 20px;
+    font-size: 15px; 
+}
 
 
 
