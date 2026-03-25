@@ -4,38 +4,41 @@
 var addMedicationForm = document.getElementById('add-med-form');
 
 //Info from form needed to make a new medication
-var medicationName = document.getElementById('medication-name')
-var dose = document.getElementById('dose')
-var startDate = document.getElementById('start-date').valueAsDate
-var frequency = document.getElementById('frequency')
-var numPills = document.getElementById('num-pills')
-var sideEffects = document.getElementById('side-effects')
-var additionalNotes = document.getElementById('additional notes')
-var patientFirstName = document.getElementById('patient-first-name')
-var patientLastName = document.getElementById('patient-last-name')
-var patientId = 0;
+
+
 
 //when the form is submitted, calculate the end date, find the patient id, and add a new medication
 if(addMedicationForm){
     addMedicationForm.addEventListener("submit", async (event) => {
         //Prevents the page from automatically reloading
         event.preventDefault()
+        var medicationName = document.getElementById('medication-name')
+        var dose = document.getElementById('dose').value;
+        var startDateValue = document.getElementById("start-date").value;
+        var startDate = startDateValue ? new Date(startDateValue) : null;
+        var frequency = document.getElementById('frequency').value;
+        var totalPills = document.getElementById('total-pills').value;
+        var sideEffects = document.getElementById('side-effects')
+        var additionalNotes = document.getElementById('additional-notes')
+        var patientFirstName = document.getElementById('patient-first-name')
+        var patientLastName = document.getElementById('patient-last-name')
+        var patientId = 0;
 
         //make startDate into new Date object
         var endDate = new Date(startDate);
 
         //calculates end date based on frequency and number of pills
-        function calculateEndDate(frequency, numPills){
-            var days = numPills / frequency;
+        function calculateEndDate(frequency, totalPills){
+            var days = totalPills / frequency;
             endDate = endDate.setDate(endDate.getDate() + days);
         }
 
         //call the end date function
-        calculateEndDate(frequency, numPills);
+        calculateEndDate(frequency, totalPills);
 
         function findPatientId(patientFirstName, patientLastName){
             //fetch patient id using first and last name
-            fetch('/getPatientId', {
+            fetch('patient/getPatientId', {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -71,7 +74,7 @@ if(addMedicationForm){
                     start_date: startDate.value,
                     end_date: endDate.value,
                     frequency_hours: frequency.value,
-                    num_pills: numPills.value,
+                    total_pills: totalPills.value,
                     side_effects: sideEffects.value,
                     additional_notes: additionalNotes.value,
                     patient_id: patientId,

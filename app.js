@@ -30,10 +30,12 @@ import patientRouter from './routes/patient.js'
 app.use('/patient', patientRouter)
 
 
+
 //Provider portal routes
 import providerRouter from './routes/provider.js'
 app.use('/provider', providerRouter)
 
+//add medication routes
 import addMedicationRouter from './routes/add_medication.js'
 app.use('/addMedication', addMedicationRouter)
 
