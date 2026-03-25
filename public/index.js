@@ -180,47 +180,49 @@ window.onload = function () {
         message.style.display = "block"
     }
 
-    //Determines which password requirements were satisfied or not
-    var short = sessionStorage.getItem('short')
-    var noNumber = sessionStorage.getItem('noNumber')
-    var noLower = sessionStorage.getItem('noLower')
-    var noUpper = sessionStorage.getItem('noUpper')
-    var noSpecial = sessionStorage.getItem('noSpecial')
+    if (window.location.href.includes('create_account')) {
+       //Determines which password requirements were satisfied or not
+        var short = sessionStorage.getItem('short')
+        var noNumber = sessionStorage.getItem('noNumber')
+        var noLower = sessionStorage.getItem('noLower')
+        var noUpper = sessionStorage.getItem('noUpper')
+        var noSpecial = sessionStorage.getItem('noSpecial')
 
-    //Changes color of list of password requirement to red if not satisfied
-    if (short === "true") {
-        length.style.color = "red"
-    } else {
-        length.style.color = "black"
-    }
-    if (noNumber === "true") {
-        number.style.color = "red"
-    } else {
-        number.style.color = "black"
-    }
-    if (noLower === "true") {
-        lower.style.color = "red"
-    } else {
-        lower.style.color = "black"
-    } 
-    if (noUpper === "true") {
-        upper.style.color = "red"
-    } else {
-        upper.style.color = "black"
-    }
-    if (noSpecial === "true") {
-        special.style.color = "red"
-    } else {
-        special.style.color = "black"
-    }
+        //Changes color of list of password requirement to red if not satisfied
+        if (short === "true") {
+            length.style.color = "red"
+        } else {
+            length.style.color = "black"
+        }
+        if (noNumber === "true") {
+            number.style.color = "red"
+        } else {
+            number.style.color = "black"
+        }
+        if (noLower === "true") {
+            lower.style.color = "red"
+        } else {
+            lower.style.color = "black"
+        } 
+        if (noUpper === "true") {
+            upper.style.color = "red"
+        } else {
+            upper.style.color = "black"
+        }
+        if (noSpecial === "true") {
+            special.style.color = "red"
+        } else {
+            special.style.color = "black"
+        }
 
-    //Rermoves the error message from session storage after it has been reported 
-    sessionStorage.removeItem('errorMessage');
-    sessionStorage.removeItem('short');
-    sessionStorage.removeItem('noNumber');
-    sessionStorage.removeItem('noLower');
-    sessionStorage.removeItem('noUpper');
-    sessionStorage.removeItem('noSpecial');
+        //Rermoves the error message from session storage after it has been reported 
+        sessionStorage.removeItem('errorMessage');
+        sessionStorage.removeItem('short');
+        sessionStorage.removeItem('noNumber');
+        sessionStorage.removeItem('noLower');
+        sessionStorage.removeItem('noUpper');
+        sessionStorage.removeItem('noSpecial');     
+   }
 }
 
 //If the patient radio button is clicked when creating an account, add the proivder ID field

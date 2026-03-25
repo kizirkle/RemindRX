@@ -2,6 +2,7 @@
 
 import express from 'express'
 import path from 'path'
+//app.set('view engine', 'ejs');
 
 //Functions that query SQL database from database.js
 import {getPatientByEmail, getProviderByEmail, createPatient, createProvider, createPatientProvider, getProviderById} from './database.js'
@@ -133,7 +134,7 @@ app.post("/login", async (req, res) => {
                 return res.json({passed: false, message: "No account found. Create a new account or enter a different email."})
             } else if(patient.patient_password != entered_password) {
                 //Return error if there if the password is not correct for the given email
-                return res.status(401).json({passed: false, message: "Incorrect password"})
+                return res.status(401).json({passed: false, message: "Incorrect password."})
             } else {
                 //Logs the user in and returns the URL to the patient portal
                 return res.json({passed: true, patientPage: `/patient/${patient.patient_first_name}/${patient.patient_last_name}/${patient.patient_id}`})
@@ -146,7 +147,7 @@ app.post("/login", async (req, res) => {
                 res.json({passed: false, message: "No account found. Create a new account or enter a different email."})
             } else if(provider.provider_password != entered_password) {
                 //Return error if there if the password is not correct for the given email
-                res.status(401).json({passed: false, message: "Incorrect password"})
+                res.status(401).json({passed: false, message: "Incorrect password."})
             } else {
                 //Logs the user in and returns the URL to the provider portal
                 return res.json({passed: true, providerPage: `/provider/${provider.provider_first_name}/${provider.provider_last_name}/${provider.provider_id}`})
