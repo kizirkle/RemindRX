@@ -55,6 +55,15 @@ export async function getProviderById(provider_id) {
   return rows[0]
 }
 
+export async function getPatientProvider(patient_id, provider_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM PatientProvider
+    WHERE patient_id = ?
+    AND provider_id = ?
+    `, [patient_id, provider_id])
+  return rows[0]
+}
+
 //Create a new patient
 export async function createPatient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password) {
   await pool.query(`
