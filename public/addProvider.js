@@ -1,5 +1,11 @@
+//Form that has the information to connect patient to provider
 var addProviderForm = document.getElementById("add-provider-form")
+
+//Information from form needed to connect patient to provider
 var providerId = document.getElementById("provider-id")
+var providerFirstName = document.getElementById("provider-first-name")
+var providerLastName = document.getElementById("provider-last-name")
+
 
 //Error message that is diplayed if adding provider failed
 var message = document.getElementById('message')
@@ -23,7 +29,9 @@ addProviderForm.addEventListener("submit", async (event)=> {
         },
         body: JSON.stringify({
             patient_id: patientId,
-            provider_id: providerId.value
+            provider_id: providerId.value,
+            provider_first_name: providerFirstName.value, 
+            provider_last_name: providerLastName.value
             })
         })
 

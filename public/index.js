@@ -1,6 +1,6 @@
 //Client side JavaScript
 
-//Forms that have the innformation to create a new patient or provider and log them in 
+//Forms that have the information to create a new patient or provider and log them in 
 var createAccountForm = document.getElementById('create-account-form')
 var loginForm = document.getElementById('login-form')
 

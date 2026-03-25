@@ -270,4 +270,16 @@ input[type="tel"]:focus {
     text-align: center;
 }
 
+.add-provider {
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    width: 175px;
+    margin: auto; 
+    gap: 10px;
+}
+
+.provider-error-spacing {
+    padding-top: 20px;
+}
 

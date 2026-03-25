@@ -18,12 +18,12 @@ patientRouter.get("/:id/add_provider", async(req, res) => {
 
 //Connect provider to patient upon patient entering valid provider ID
 patientRouter.post("/:id/add_provider", async(req, res) => {
-    var{patient_id, provider_id} = req.body
+    var{patient_id, provider_id, provider_first_name, provider_last_name} = req.body
     try {
         var providerExists = await getProviderById(provider_id)
-        if (!providerExists) {
-            //If there is no provider with ID, returns an error message
-            return res.json({passed: false, message: `No healthcare provider found`})
+        if (!providerExists || providerExists.provider_first_name !== provider_first_name ||providerExists.provider_last_name !== provider_last_name) {
+            //If there is no provider with ID or the first or last name does not math the name associated with the ID, returns an error message
+            return res.json({passed: false, message: `No healthcare provider found.`})
         } 
         var providerPatientAssociationExists = await getPatientProvider(patient_id, provider_id)
         if (providerPatientAssociationExists) {
@@ -34,7 +34,7 @@ patientRouter.post("/:id/add_provider", async(req, res) => {
         createPatientProvider(patient_id, provider_id)
         return res.json({passed: true, patientPage: `/patient/${patient_id}`})
     } catch{
-        res.status(500).json({passed: false, message:'Error in Add Provider'})
+        res.status(500).json({passed: false, message:'Error in Add Provider.'})
     }
 })
 
