@@ -14,51 +14,50 @@ var additionalNotes = document.getElementById('additional notes')
 var patientFirstName = document.getElementById('patient-first-name')
 var patientLastName = document.getElementById('patient-last-name')
 var patientId = 0;
-//make startDate into new Date object
-var endDate = new Date(startDate);
 
-//calculates end date based on frequency and number of pills
-function calculateEndDate(frequency, numPills){
-    var days = numPills / frequency;
-    endDate = endDate.setDate(endDate.getDate() + days);
-}
-
-//call the end date function
-calculateEndDate(frequency, numPills);
-
-function findPatientId(patientFirstName, patientLastName){
-    //fetch patient id using first and last name
-    fetch('/getPatientId', {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            patientFirstName: patientFirstName,
-            patientLastName: patientLastName
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.passed) {
-            patientId = data.patient_id
-        } else {
-            console.log("No patient found with that name.")
-        }
-    }
-    )
-    .catch(error => {
-        console.log("Error finding patient id:", error)
-    })
-}
-
-//call function to find patient id
-findPatientId(patientFirstName, patientLastName)
-
+//when the form is submitted, calculate the end date, find the patient id, and add a new medication
 if(addMedicationForm){
     addMedicationForm.addEventListener("submit", async (event) => {
         //Prevents the page from automatically reloading
         event.preventDefault()
+
+        //make startDate into new Date object
+        var endDate = new Date(startDate);
+
+        //calculates end date based on frequency and number of pills
+        function calculateEndDate(frequency, numPills){
+            var days = numPills / frequency;
+            endDate = endDate.setDate(endDate.getDate() + days);
+        }
+
+        //call the end date function
+        calculateEndDate(frequency, numPills);
+
+        function findPatientId(patientFirstName, patientLastName){
+            //fetch patient id using first and last name
+            fetch('/getPatientId', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.passed) {
+                    patientId = data.patient_id
+                } else {
+                    console.log("No patient found with that name.")
+                }
+            }
+            )
+            .catch(error => {
+                console.log("Error finding patient id:", error)
+            })
+        }
+
+        //call function to find patient id
+        findPatientId(patientFirstName, patientLastName)
+
         try {
             //tries to add a new medication!
             var response = await fetch('/addMedication', {
@@ -76,7 +75,7 @@ if(addMedicationForm){
                     side_effects: sideEffects.value,
                     additional_notes: additionalNotes.value,
                     patient_id: patientId,
-                    provider_id: 
+                    provider_id: 1
 
                 })
             })
