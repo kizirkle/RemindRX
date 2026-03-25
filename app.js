@@ -34,6 +34,8 @@ app.use('/patient', patientRouter)
 import providerRouter from './routes/provider.js'
 app.use('/provider', providerRouter)
 
+import addMedicationRouter from './routes/add_medication.js'
+app.use('/addMedication', addMedicationRouter)
 
 //Alert if failure occured
 app.use((err, req, res, next) => {

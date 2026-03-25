@@ -81,30 +81,6 @@ INSERT INTO `healthcare_provider` VALUES (1,'Bob','Smith','1112223333','email@gm
 UNLOCK TABLES;
 
 --
--- Table structure for table `medication`
---
-
-DROP TABLE IF EXISTS `medication`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `medication` (
-  `medication_id` int NOT NULL AUTO_INCREMENT,
-  `medication_name` varchar(50) DEFAULT NULL,
-  `side_effects` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`medication_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `medication`
---
-
-LOCK TABLES `medication` WRITE;
-/*!40000 ALTER TABLE `medication` DISABLE KEYS */;
-/*!40000 ALTER TABLE `medication` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `patient`
 --
 
@@ -196,20 +172,20 @@ DROP TABLE IF EXISTS `prescription`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `prescription` (
   `prescription_id` int NOT NULL AUTO_INCREMENT,
+  `prescription_name` varchar(100) DEFAULT NULL,
+  `dose` int DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
+  `total_pills` int DEFAULT NULL,
   `frequency_hours` int DEFAULT NULL,
-  `num_pills` int DEFAULT NULL,
+  `side_effects` varchar(300) DEFAULT NULL,
   `additional_notes` varchar(500) DEFAULT NULL,
   `patient_id` int DEFAULT NULL,
-  `medication_id` int DEFAULT NULL,
   `provider_id` int DEFAULT NULL,
   PRIMARY KEY (`prescription_id`),
   KEY `patient_id` (`patient_id`),
-  KEY `medication_id` (`medication_id`),
   KEY `provider_id` (`provider_id`),
   CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE SET NULL,
-  CONSTRAINT `prescription_ibfk_2` FOREIGN KEY (`medication_id`) REFERENCES `medication` (`medication_id`) ON DELETE SET NULL,
   CONSTRAINT `prescription_ibfk_3` FOREIGN KEY (`provider_id`) REFERENCES `healthcare_provider` (`provider_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -260,3 +236,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2026-03-22  9:21:19
+
