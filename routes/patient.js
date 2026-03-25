@@ -28,7 +28,7 @@ patientRouter.post("/:id/add_provider", async(req, res) => {
         var providerPatientAssociationExists = await getPatientProvider(patient_id, provider_id)
         if (providerPatientAssociationExists) {
             //If the patient as already associated with the provider in the database, returns an error message 
-            return res.json({passed: false, message: `Healthcare provider with ID ${provider_id} has already been added.`})
+            return res.json({passed: false, message: `Healthcare provider ${providerExists.provider_first_name} ${providerExists.provider_last_name} has already been added.`})
         }
         //If the provider ID exists and is not already associated with patient, creates new entry in PatientProvider table and return to patient portal
         createPatientProvider(patient_id, provider_id)
