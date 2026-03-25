@@ -44,6 +44,16 @@ b {
     gap: 10px;
 }
 
+.addMed {
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    width: 275px;
+    margin: auto; 
+    gap: 10px;
+    justify-content: center;
+}
+
 button {
     width: 150px; 
     margin: auto; 

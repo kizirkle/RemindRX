@@ -11,10 +11,26 @@
         <h1>Add Medication</h1>
         <!-- Add Medicine form -->
         <form class="addMed">
+            <!-- Fill out medication specifications -->
+            <div>
+                <label>Medication Specifications</label>
+            </div>
             <!-- Add Medication Name -->
-             <input>
-            <!--Side Effects-->
-            <input>
+             <div>
+                <input id="medication-name" placeholder="Medication Name" required>
+                <input id="dose" placeholder="Dose" required>
+                <input type="date" id="start-date" placeholder="Start Date" required>
+                <input type="number" min="1" max="24" id="frequency" placeholder="Frequency (hours)" required>
+                <input type="number" id="num-pills" placeholder="Number of Pills" required>
+                <textarea id="side-effects" placeholder="Side Effects"></textarea>
+                <textarea id="additional-notes" placeholder="Additional Notes"></textarea>
+            </div> 
+            <div>
+                <label>Patient Information</label>
+                <input id="patient-first-name" placeholder="Patient First Name" required>
+                <input id="patient-last-name" placeholder="Patient Last Name" required>
+            </div>
+            <button type="submit" id="add-medication-btn">Add Medication</button>
         </form>
         <script src="addMedication.js"></script>
     </body>
