@@ -1,0 +1,90 @@
+//Add Medication JavaScript
+
+//Forms that have information to add a new medication to a patient
+var addMedicationForm = document.getElementById('add-med-form');
+
+//Info from form needed to make a new medication
+var medicationName = document.getElementById('medication-name')
+var dose = document.getElementById('dose')
+var startDate = document.getElementById('start-date').valueAsDate
+var frequency = document.getElementById('frequency')
+var numPills = document.getElementById('num-pills')
+var sideEffects = document.getElementById('side-effects')
+var additionalNotes = document.getElementById('additional notes')
+var patientFirstName = document.getElementById('patient-first-name')
+var patientLastName = document.getElementById('patient-last-name')
+var patientId = 0;
+//make startDate into new Date object
+var endDate = new Date(startDate);
+
+//calculates end date based on frequency and number of pills
+function calculateEndDate(frequency, numPills){
+    var days = numPills / frequency;
+    endDate = endDate.setDate(endDate.getDate() + days);
+}
+
+//call the end date function
+calculateEndDate(frequency, numPills);
+
+function findPatientId(patientFirstName, patientLastName){
+    //fetch patient id using first and last name
+    fetch('/getPatientId', {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            patientFirstName: patientFirstName,
+            patientLastName: patientLastName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.passed) {
+            patientId = data.patient_id
+        } else {
+            console.log("No patient found with that name.")
+        }
+    }
+    )
+    .catch(error => {
+        console.log("Error finding patient id:", error)
+    })
+}
+
+//call function to find patient id
+findPatientId(patientFirstName, patientLastName)
+
+if(addMedicationForm){
+    addMedicationForm.addEventListener("submit", async (event) => {
+        //Prevents the page from automatically reloading
+        event.preventDefault()
+        try {
+            //tries to add a new medication!
+            var response = await fetch('/addMedication', {
+                method: "POST", 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prescription_name: medicationName.value,
+                    dose: dose.value,
+                    start_date: startDate.value,
+                    end_date: endDate.value,
+                    frequency_hours: frequency.value,
+                    num_pills: numPills.value,
+                    side_effects: sideEffects.value,
+                    additional_notes: additionalNotes.value,
+                    patient_id: patientId,
+                    provider_id: 
+
+                })
+            })
+            var data = await response.json()
+
+        }
+        catch (error) {
+            console.log("ERROR: Failed to submit, error from addMedication.js:", error);
+        }
+    })
+}

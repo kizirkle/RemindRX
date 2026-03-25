@@ -2,7 +2,7 @@ import express from 'express'
 const patientRouter = express.Router()
 import path from 'path'
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider} from '../database.js'
+import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getPatients} from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';
@@ -47,5 +47,22 @@ patientRouter.get("/:id", async(req,res) => {
     })
 })
 
+//find patient id based on first and last name
+patientRouter.get("/findPatientId", async(req,res) => {
+    var {patientFirstName, patientLastName} = req.body
+    try {
+        var patients = await getPatients()
+        for (var i = 0; i < patients.length; i++) {
+            if (patients[i].patient_first_name === patientFirstName && patients[i].patient_last_name === patientLastName) {
+                return res.json({passed: true, patient_id: patients[i].patient_id})
+            }
+            else{
+                return res.json({passed: false, message: "No patient found with that name."})
+            }
+        }
+    } catch (error) {
+        res.status(500).json({passed: false, message:'Error finding patient id.'})
+    }
+})
 
 export default patientRouter
