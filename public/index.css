@@ -1,8 +1,29 @@
 /* Style sheet for all current html documents */
 
+@import url('https://fonts.googleapis.com/css2?family=Cal+Sans&family=Questrial&display=swap');
+
+/* Headings + Titles */
+.cal-sans-regular {
+    font-family: "Cal Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Subheadings */
+.questrial-regular {
+    font-family: "Questrial", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 body {
     text-align: center; 
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: "Questrial", sans-serif;
+    background-color: rgb(245, 245, 245);
+}
+
+b {
+    color: rgb(117, 126, 255);
 }
 
 .login {
@@ -14,24 +35,49 @@ body {
     gap: 10px;
 }
 
+.login2 {
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto; 
+    gap: 10px;
+}
+
 button {
     width: 150px; 
     margin: auto; 
     margin-top: 10px;
+    border-radius: 25px;
+    color: white;
+    background-color: rgb(0, 0, 75);
+    padding: 3px;
+    font-family: "Questrial", sans-serif;
+    transition: ease-in-out 0.25s;
+}
+
+button:hover {
+    /* opacity: 0.55; */
+    background-color:rgb(117, 126, 255);
+    /* color:rgb(0, 0, 75); */
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
+    font-family: "Cal Sans", sans-serif;
+    color: rgb(0, 0, 75);
 }
 
 h2 {
     margin: 0; 
     margin: 10px 0 0 0;
+    font-family: "Questrial", sans-serif;
 }
 
 h3 { 
     margin: 10px 0 0 0; 
+    font-family: "Questrial", sans-serif;
 }
 
 #forgot-password {
@@ -66,6 +112,152 @@ h3 {
     font-size: 15px; 
 }
 
+.password-requirements-header{
+    font-family: "Questrial", sans-serif;
+}
 
+.a {
+    color: hidden;
+}
+
+.a:hover{
+    color: pink;
+}
+
+form.login div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+/* Radio Button edits*/
+input[type="radio"] {
+    margin: 0; 
+    cursor: pointer;
+}
+
+.option {
+    cursor: pointer;
+    line-height: 1;
+    font-family: "Questrial", sans-serif;
+}
+
+input[type='radio']:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color: #d1d3d1;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+input[type='radio']:checked:after {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    top: -2px;
+    left: -1px;
+    position: relative;
+    background-color:rgb(117, 126, 255);
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 2px solid white;
+}
+
+/* Row container */
+.row {
+    display: flex;
+    gap: 1rem;
+    padding: 0 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: nowrap;       /* keep columns side by side */
+    align-items: stretch;    /* ensures columns are same height */
+}
+
+/* Text column (2/3) */
+.column.text {
+    flex: 2;
+    box-sizing: border-box;
+}
+
+/* Images column (1/3) */
+.column.images {
+    flex: 1;
+    display: flex;
+    flex-direction: column;  /* stack images vertically */
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+/* Images scale to fit width, keep aspect ratio, do not crop */
+.column.images img {
+    width: 100%;       /* fills column width */
+    height: auto;      /* keeps original aspect ratio */
+    display: block;
+    max-height: 100%;  /* prevents images from exceeding column height */
+}
+
+  #brand-title {
+    display: block;
+    text-align: center;
+    width: 100%;
+    font-size: 5rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+#brand-title b {
+    font-weight: bold;
+}
+
+/* Getting rid of the evil orange outline */
+input:focus, 
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+input[type="password"]:focus, 
+input[type="tel"]:focus {
+    outline: none;
+    border: 2px solid rgb(117, 126, 255);
+    box-shadow: 0 0 5px rgba(0, 0, 75, 0.353);
+}
+
+#logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; 
+    padding-top: 30px;
+}
+
+#brand-logo {
+    max-width: 400px;
+    height: auto;
+    display: block;
+}
+
+#brand-logo-large {
+    max-width:80vw;
+    height: auto;
+    display: block;
+}
+
+.opening {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;
+    width: 100%;
+    background-color: #f4f4f4; 
+    text-align: center;
+}
 
 
