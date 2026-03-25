@@ -3,7 +3,6 @@
 //Forms that have information to add a new medication to a patient
 var addMedicationForm = document.getElementById('add-med-form');
 
-//Info from form needed to make a new medication
 
 
 
@@ -12,17 +11,18 @@ if(addMedicationForm){
     addMedicationForm.addEventListener("submit", async (event) => {
         //Prevents the page from automatically reloading
         event.preventDefault()
+
+        //Info from form needed to make a new medication
         var medicationName = document.getElementById('medication-name')
-        var dose = document.getElementById('dose').value;
+        var dose = Number(document.getElementById('dose').value);
         var startDateValue = document.getElementById("start-date").value;
         var startDate = startDateValue ? new Date(startDateValue) : null;
-        var frequency = document.getElementById('frequency').value;
-        var totalPills = document.getElementById('total-pills').value;
+        var frequency = Number(document.getElementById('frequency').value);
+        var totalPills = Number(document.getElementById('total-pills').value);
         var sideEffects = document.getElementById('side-effects')
         var additionalNotes = document.getElementById('additional-notes')
-        var patientFirstName = document.getElementById('patient-first-name')
-        var patientLastName = document.getElementById('patient-last-name')
-        var patientId = 0;
+        var patientFirstName = document.getElementById('patient-first-name').value;
+        var patientLastName = document.getElementById('patient-last-name').value;
 
         //make startDate into new Date object
         var endDate = new Date(startDate);
@@ -36,13 +36,17 @@ if(addMedicationForm){
         //call the end date function
         calculateEndDate(frequency, totalPills);
 
-        function findPatientId(patientFirstName, patientLastName){
+        async function findPatientId(patientFirstName, patientLastName){
             //fetch patient id using first and last name
             fetch('patient/getPatientId', {
-                method: "GET",
+                method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                body: JSON.stringify({
+                    patientFirstName: patientFirstName,
+                    patientLastName: patientLastName
+                })
             })
             .then(response => response.json())
             .then(data => {
@@ -59,7 +63,7 @@ if(addMedicationForm){
         }
 
         //call function to find patient id
-        findPatientId(patientFirstName, patientLastName)
+        var patientId = await findPatientId(patientFirstName, patientLastName)
 
         try {
             //tries to add a new medication!
@@ -70,7 +74,7 @@ if(addMedicationForm){
                 },
                 body: JSON.stringify({
                     prescription_name: medicationName.value,
-                    dose: dose.value,
+                    dose: dose,
                     start_date: startDate.value,
                     end_date: endDate.value,
                     frequency_hours: frequency.value,

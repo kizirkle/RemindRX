@@ -48,8 +48,11 @@ patientRouter.get("/:id", async(req,res) => {
 })
 
 //find patient id based on first and last name
-patientRouter.get("/getPatientId", async(req,res) => {
-    var {patientFirstName, patientLastName} = req.body
+patientRouter.post("/getPatientId", async(req,res) => {
+    var {patientFirstName, patientLastName} = req.body;
+    patientFirstName = patientFirstName.trim().toLowerCase();
+    patientLastName = patientLastName.trim().toLowerCase();
+
     try {
         var patients = await getPatients()
         for (var i = 0; i < patients.length; i++) {
