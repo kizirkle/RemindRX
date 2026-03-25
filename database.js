@@ -54,7 +54,8 @@ export async function createPatient(patient_first_name, patient_last_name, patie
     `, [patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password])
   return getPatientByEmail(patient_email)
 }
- 
+//createPatient("Jeff", "Frank", "8043007898", "frank@gmail.com", "RandomPasswords555!!!")
+
 //Create a new healthcare provider
 export async function createProvider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password) {
   await pool.query(`
@@ -63,6 +64,8 @@ export async function createProvider(provider_first_name, provider_last_name, pr
     `, [provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password])
   return getProviderByEmail(provider_email)
 }
+//createProvider("Bob", "Smith", "8042223333", "bob@gmail.com", "RandomPasswords444!!!")
+
 
 //Create a new entry the links a patient to their provider
 export async function createPatientProvider(patient_id, provider_id) {
