@@ -89,12 +89,12 @@ h3 {
 }
 
 .invalid {
-    border: 2px solid red; 
+    border: 2px solid red !important; 
 }
 
 #message {
     display: none; 
-    color: red; 
+    color: red !important; 
 }
 
 #provider-id-field {
@@ -178,8 +178,8 @@ input[type='radio']:checked:after {
     padding: 0 3rem;
     max-width: 1200px;
     margin: 0 auto;
-    flex-wrap: nowrap;       /* keep columns side by side */
-    align-items: stretch;    /* ensures columns are same height */
+    flex-wrap: nowrap;
+    align-items: stretch;
 }
 
 /* Text column (2/3) */
@@ -192,17 +192,17 @@ input[type='radio']:checked:after {
 .column.images {
     flex: 1;
     display: flex;
-    flex-direction: column;  /* stack images vertically */
+    flex-direction: column;
     gap: 1rem;
     box-sizing: border-box;
 }
 
 /* Images scale to fit width, keep aspect ratio, do not crop */
 .column.images img {
-    width: 100%;       /* fills column width */
-    height: auto;      /* keeps original aspect ratio */
+    width: 100%;
+    height: auto;
     display: block;
-    max-height: 100%;  /* prevents images from exceeding column height */
+    max-height: 100%;
 }
 
   #brand-title {
