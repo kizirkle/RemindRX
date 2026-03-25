@@ -83,3 +83,9 @@ export async function createPatientProvider(patient_id, provider_id) {
     `, [patient_id, provider_id])
 }
 
+export async function addMedication(prescription_name,dose,start_date,end_date,frequency_hours,num_pills,side_effects,additional_notes,patient_id,provider_id) {
+  await pool.query(`
+    INSERT INTO prescription(prescription_name,dose,start_date,end_date,frequency_hours,num_pills,side_effects,additional_notes,patient_id,provider_id)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [prescription_name,dose,start_date,end_date,frequency_hours,num_pills,side_effects,additional_notes,patient_id,provider_id])
+}
