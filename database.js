@@ -28,6 +28,15 @@ export async function getPatientByEmail(email) {
   return rows[0]
 }
 
+//Get patients by patient_id and return the corresponding patient object
+export async function getPatientById(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM patient
+    WHERE patient_id = ?
+    `, [patient_id])
+  return rows[0]
+}
+
 //Get providers by email address and return the corresponding provider object
 export async function getProviderByEmail(email) {
   var [rows] = await pool.query(`
