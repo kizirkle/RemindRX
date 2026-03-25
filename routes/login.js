@@ -48,7 +48,7 @@ loginRouter.post("/", async (req, res) => {
             }
         }
     } catch{
-        res.status(500).json({passed: false, message:'Error in Login'})
+        res.status(500).json({passed: false, message:'Error in Login.'})
     }
 })
 

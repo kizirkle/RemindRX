@@ -27,19 +27,19 @@ createAccountRouter.post("/", async (req, res) => {
                 //Checks if there is already a patient with the email in the database
                 if(password !== confirmed_password) {
                     //Returns error if password and confirmed_password do not match
-                    return res.json({passed: false, message: "Passwords do not match"})
+                    return res.json({passed: false, message: "Passwords do not match."})
                 } else {
                     //Checks if the password is valid 
                     var passwordProblems = checkPassword(password, confirmed_password)
                     if (passwordProblems.length !== 0) {
                         //Returns error if password is invalid, with array that contains the problems
-                        return res.json({passed: false, message: "Invalid password", passwordProblems: passwordProblems})
+                        return res.json({passed: false, message: "Invalid password.", passwordProblems: passwordProblems})
                     } else {
                         //Checks if provider exists for given provider ID
                         var providerExists = await getProviderById(provider_id)
                         if(providerExists === undefined) {
                             //Return error if there is not a provider with the given ID
-                            return res.json({passed: false, message: "No healthcare provider with ID"})
+                            return res.json({passed: false, message: "No healthcare provider with ID."})
                         }  else {
                             //Creates a new patient and returns the URL to the patient portal if the password is valid
                             var patient = await createPatient(first_name, last_name, phone_number, email, password)
@@ -60,12 +60,12 @@ createAccountRouter.post("/", async (req, res) => {
                 //Checks if there is already a provider with the email in the database
                 if(password !== confirmed_password) {
                     //Returns error if password and confirmed_password do not match
-                    return res.json({passed: false, message: "Passwords do not match"})
+                    return res.json({passed: false, message: "Passwords do not match."})
                 } else {
                     var passwordProblems = checkPassword(password)
                     if (passwordProblems.length !== 0) {
                         //Return error if password is invalid, with array that contains the problems
-                        return res.json({passed: false, message: "Invalid password", passwordProblems: passwordProblems})
+                        return res.json({passed: false, message: "Invalid password.", passwordProblems: passwordProblems})
                     } else {
                         //Creates a new provider and returns the URL to the provider portal if the password is valid
                         var provider = await createProvider(first_name, last_name, phone_number, email, password)

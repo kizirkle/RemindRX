@@ -1,6 +1,6 @@
 //Client side JavaScript
 
-//Forms that have the innformation to create a new patient or provider and log them in 
+//Forms that have the information to create a new patient or provider and log them in 
 var createAccountForm = document.getElementById('create-account-form')
 var loginForm = document.getElementById('login-form')
 
@@ -116,7 +116,6 @@ function systemResponse(data, type) {
         //If there was an error, report the given error and reload the current page
         //Stores the error message in session storge to be displayed when the page is reloaded
         sessionStorage.setItem('errorMessage', data.message)
-        console.log("here")
 
         if(data.message === "Invalid password") {
             passwordAlert(data)
@@ -216,13 +215,13 @@ window.onload = function () {
         }
 
         //Rermoves the error message from session storage after it has been reported 
-        sessionStorage.removeItem('errorMessage');
         sessionStorage.removeItem('short');
         sessionStorage.removeItem('noNumber');
         sessionStorage.removeItem('noLower');
         sessionStorage.removeItem('noUpper');
         sessionStorage.removeItem('noSpecial');     
    }
+   sessionStorage.removeItem('errorMessage');
 }
 
 //If the patient radio button is clicked when creating an account, add the proivder ID field
