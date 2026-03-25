@@ -41,7 +41,7 @@ describe('POST /login', () => {
 
     //There is patient in the database called with email frank@gmail.com and password RandomPasswords555!!!
     it('should not log in patient if they have an email but the wrong password', async () => {
-    const PatientWrongPassword = {
+        const PatientWrongPassword = {
             "choice": "patient",
             "entered_email": "frank@gmail.com",
             "entered_password": "Password5!Random!"
@@ -61,7 +61,7 @@ describe('POST /login', () => {
 
     //There is provider in the database called with email bob@gmail.com and password RandomPasswords444!!!
     it('should not log in provider if they have an email but the wrong password', async () => {
-    const ProviderWrongPassword = {
+        const ProviderWrongPassword = {
             "choice": "healthcare-provider",
             "entered_email": "bob@gmail.com",
             "entered_password": "Password5!Random!"
@@ -80,7 +80,7 @@ describe('POST /login', () => {
 
     //There is patient in the database called with email frank@gmail.com and password RandomPasswords555!!!
     it('should log in patient if they have an email and correct password', async () => {
-    const PatientRightPassword = {
+        const PatientRightPassword = {
             "choice": "patient",
             "entered_email": "frank@gmail.com",
             "entered_password": "RandomPasswords555!!!"
@@ -99,7 +99,7 @@ describe('POST /login', () => {
 
     //There is provider in the database with email bob@gmail.com and password RandomPasswords444!!!
     it('should log in provider if they have an email and correct password', async () => {
-    const ProviderRightPassword = {
+        const ProviderRightPassword = {
             "choice": "healthcare-provider",
             "entered_email": "bob@gmail.com",
             "entered_password": "RandomPasswords444!!!"
@@ -111,10 +111,61 @@ describe('POST /login', () => {
             .post('/login')
             .send(ProviderRightPassword)
             .expect('Content-Type', /json/)
-            .expect(200);
+            .expect(200)
         
         expect(response.body.passed).toBe(passed)
     })
 })
 
+
+describe('POST /create_account', () => {
+     //There is patient in the database name with email frank@gmail.com and password RandomPasswords555!!!
+    it('should not create an account if the patient email already exists', async () => {
+        const PatientEmailExists = {
+            "choice": "patient",
+            "first_name": "Jeff",
+            "last_name": "Frank",
+            "phone_number": "8043007898",
+            "email": "frank@gmail.com",
+            "password": "RandomPasswords555!!!",
+            "confirmed_password": "RandomPasswords555!!!",
+            "provider_id": "100001"
+        }   
+
+        const expectedMessage = "Account already exists."
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(PatientEmailExists)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.message).toBe(expectedMessage)
+    })
+
+    //There is provider in the database with email bob@gmail.com and password RandomPasswords444!!!
+     it('should not create an account if the provider email already exists', async () => {
+        const ProviderEmailExists = {
+            "choice": "healthcare_provider",
+            "first_name": "Bob",
+            "last_name": "Smith",
+            "phone_number": "8042223333",
+            "email": "bob@gmail.com",
+            "password": "RandomPasswords444!!!",
+            "confirmed_password": "RandomPasswords444!!!",
+            "provider_id": "100001"
+        }   
+
+        const expectedMessage = "Account already exists."
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(ProviderEmailExists)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.message).toBe(expectedMessage)
+    })
+
+})
 
