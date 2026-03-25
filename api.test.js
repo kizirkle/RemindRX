@@ -393,10 +393,106 @@ describe('POST /create_account', () => {
         expect(response.body.passwordProblems).toContain("no number")
     })
 
+    //Password missing special character -create patient-
+    it('should not create a patient account if password has no special character', async () => {
+        const PatientNoSpecial = {
+            "choice": "patient",
+            "first_name": "Squilliam",
+            "last_name": "Fancyson",
+            "phone_number": "8041112222",
+            "email": "Fancyson@gmail.com",
+            "password": "NoSpecialChar1abc",
+            "confirmed_password": "NoSpecialChar1abc",
+            
+        }
 
+        const response = await request(app)
+            .post('/create_account')
+            .send(PatientNoSpecial)
+            .expect('Content-Type', /json/)
+            .expect(200)
 
+        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.passwordProblems).toContain("no special character")
+    })
 
+    //Password missing special character -create provider-
+    it('should not create a provider account if password has no special character', async () => {
+        const ProviderNoSpecial = {
+            "choice": "healthcare_provider",
+            "first_name": "John",
+            "last_name": "Doctor",
+            "phone_number": "8049998888",
+            "email": "drdoctor@gmail.com",
+            "password": "NoSpecialChar1abc",
+            "confirmed_password": "NoSpecialChar1abc"
+        }
 
+        const response = await request(app)
+            .post('/create_account')
+            .send(ProviderNoSpecial)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.passwordProblems).toContain("no special character")
+    })
+
+    //Password failing multiple requirements -create patient-
+    it('should report multiple password problems when several requirements are missing', async () => {
+        const PatientBadPassword = {
+            "choice": "patient",
+            "first_name": "Squilliam",
+            "last_name": "Fancyson",
+            "phone_number": "8041112222",
+            "email": "Fancyson@gmail.com",
+            "password": "short",         
+            "confirmed_password": "short",
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(PatientBadPassword)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.passwordProblems).toContain("short")
+        expect(response.body.passwordProblems).toContain("no uppercase")
+        expect(response.body.passwordProblems).toContain("no number")
+        expect(response.body.passwordProblems).toContain("no special character")
+    })
+    //Password failing multiple requirements -create provider-
+    it('should report multiple password problems for provider when several requirements are missing', async () => {
+        const ProviderBadPassword = {
+            "choice": "healthcare_provider",
+            "first_name": "John",
+            "last_name": "Doctor",
+            "phone_number": "8049998888",
+            "email": "drdoctor@gmail.com",
+            "password": "short",       
+            "confirmed_password": "short"
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(ProviderBadPassword)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.passwordProblems).toContain("short")
+        expect(response.body.passwordProblems).toContain("no uppercase")
+        expect(response.body.passwordProblems).toContain("no number")
+        expect(response.body.passwordProblems).toContain("no special character")
+    })
 
 })
+
+
+
+
+
+
+
 
