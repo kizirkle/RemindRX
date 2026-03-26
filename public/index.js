@@ -27,8 +27,8 @@ var special = document.getElementById('special')
 var passwordList = document.getElementById('password-requirements-list')
 
 //Hidden provider ID field that appears when provider radio button is chosen 
-var providerIdField = document.getElementById("provider-id-field")
-var providerId = document.getElementById("provider-id")
+// var providerIdField = document.getElementById("provider-id-field")
+// var providerId = document.getElementById("provider-id")
 
 //Loging in/creating an account buttons
 var loginBtn = document.getElementById('login-btn')
@@ -58,8 +58,8 @@ if(createAccountForm){
                 phone_number: phoneNumber.value, 
                 email: email.value,
                 password: newPassword.value,
-                confirmed_password: confirmedPassword.value, 
-                provider_id: providerId.value
+                confirmed_password: confirmedPassword.value//, 
+                //provider_id: providerId.value
                 })
             })
 
@@ -225,17 +225,17 @@ window.onload = function () {
 }
 
 //If the patient radio button is clicked when creating an account, add the proivder ID field
-if(radioPatientCreate) {
-    radioPatientCreate.addEventListener("change", ()=> {
-        providerIdField.style.display = "block"
-        providerId.required = true
-    })
-}
+// if(radioPatientCreate) {
+//     radioPatientCreate.addEventListener("change", ()=> {
+//         providerIdField.style.display = "block"
+//         providerId.required = true
+//     })
+// }
 
-//If the provider radio button is clicked when creating an account, hide the proivder ID field
-if(radioProviderCreate) {
-    radioProviderCreate.addEventListener("change", ()=> {
-        providerIdField.style.display = "none"
-        providerId.required = false
-    })
-}
+// //If the provider radio button is clicked when creating an account, hide the proivder ID field
+// if(radioProviderCreate) {
+//     radioProviderCreate.addEventListener("change", ()=> {
+//         providerIdField.style.display = "none"
+//         providerId.required = false
+//     })
+// }

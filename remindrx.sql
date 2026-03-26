@@ -14,6 +14,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
+SET @@SESSION.SQL_LOG_BIN= 0;
+
+--
+-- GTID state at the beginning of the backup 
+--
+
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '83c45b9c-11a2-11f1-a518-f17faad63173:1-712';
 
 --
 -- Table structure for table `analysis`
@@ -67,7 +75,7 @@ CREATE TABLE `healthcare_provider` (
   `provider_email` varchar(50) DEFAULT NULL,
   `provider_password` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`provider_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,8 +84,32 @@ CREATE TABLE `healthcare_provider` (
 
 LOCK TABLES `healthcare_provider` WRITE;
 /*!40000 ALTER TABLE `healthcare_provider` DISABLE KEYS */;
-INSERT INTO `healthcare_provider` VALUES (1,'Bob','Smith','1112223333','email@gmail.com','MyPassword1!');
+INSERT INTO `healthcare_provider` VALUES (100000,'Bob','Smith','8042223333','bob@gmail.com','RandomPasswords444!!!');
 /*!40000 ALTER TABLE `healthcare_provider` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `medication`
+--
+
+DROP TABLE IF EXISTS `medication`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `medication` (
+  `medication_id` int NOT NULL AUTO_INCREMENT,
+  `medication_name` varchar(50) DEFAULT NULL,
+  `side_effects` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`medication_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `medication`
+--
+
+LOCK TABLES `medication` WRITE;
+/*!40000 ALTER TABLE `medication` DISABLE KEYS */;
+/*!40000 ALTER TABLE `medication` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -95,7 +127,7 @@ CREATE TABLE `patient` (
   `patient_email` varchar(100) DEFAULT NULL,
   `patient_password` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`patient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +136,7 @@ CREATE TABLE `patient` (
 
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
-INSERT INTO `patient` VALUES (1,'Zoe','Baker','2223334444','zoe@gmail.com','otherPassword!');
+INSERT INTO `patient` VALUES (1,'Jeff','Frank','8043007898','frank@gmail.com','RandomPasswords555!!!');
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +191,7 @@ CREATE TABLE `PatientProvider` (
 
 LOCK TABLES `PatientProvider` WRITE;
 /*!40000 ALTER TABLE `PatientProvider` DISABLE KEYS */;
-INSERT INTO `PatientProvider` VALUES (1,1);
+INSERT INTO `PatientProvider` VALUES (1,1),(1,2);
 /*!40000 ALTER TABLE `PatientProvider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,6 +257,7 @@ LOCK TABLES `reminder` WRITE;
 /*!40000 ALTER TABLE `reminder` DISABLE KEYS */;
 /*!40000 ALTER TABLE `reminder` ENABLE KEYS */;
 UNLOCK TABLES;
+SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -235,5 +268,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-22  9:21:19
-
+-- Dump completed on 2026-03-25 21:17:20

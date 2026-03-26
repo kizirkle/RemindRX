@@ -18,7 +18,7 @@ createAccountRouter.get("/", async(req,res) => {
 
 //Create a new provider or patient account 
 createAccountRouter.post("/", async (req, res) => {
-    var {choice, first_name, last_name, phone_number, email, password, confirmed_password, provider_id} = req.body
+    var {choice, first_name, last_name, phone_number, email, password, confirmed_password} = req.body //provider_id} = req.body
     try {
         if(choice === "patient") {
             //Attempts to create a new patient
@@ -35,18 +35,9 @@ createAccountRouter.post("/", async (req, res) => {
                         //Returns error if password is invalid, with array that contains the problems
                         return res.json({passed: false, message: "Invalid password.", passwordProblems: passwordProblems})
                     } else {
-                        //Checks if provider exists for given provider ID
-                        var providerExists = await getProviderById(provider_id)
-                        if(providerExists === undefined) {
-                            //Return error if there is not a provider with the given ID
-                            return res.json({passed: false, message: "No healthcare provider with ID."})
-                        }  else {
-                            //Creates a new patient and returns the URL to the patient portal if the password is valid
-                            var patient = await createPatient(first_name, last_name, phone_number, email, password)
-                            createPatientProvider(patient.patient_id, provider_id)
-                            return res.json({passed: true, patientPage: `/patient/${patient.patient_id}`})
-                           // return res.render('patientPortal.ejs', {patientName: first_name})
-                        }
+                        //Creates a new patient and returns the URL to the patient portal if the password is valid
+                        var patient = await createPatient(first_name, last_name, phone_number, email, password)
+                        return res.json({passed: true, patientPage: `/patient/${patient.patient_id}`})
                     }
                 }
             } else {
