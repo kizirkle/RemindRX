@@ -128,8 +128,7 @@ describe('POST /create_account', () => {
             "phone_number": "8043007898",
             "email": "frank@gmail.com",
             "password": "RandomPasswords555!!!",
-            "confirmed_password": "RandomPasswords555!!!",
-            "provider_id": "100001"
+            "confirmed_password": "RandomPasswords555!!!"
         }   
 
         const expectedMessage = "Account already exists."
@@ -152,8 +151,7 @@ describe('POST /create_account', () => {
             "phone_number": "8042223333",
             "email": "bob@gmail.com",
             "password": "RandomPasswords444!!!",
-            "confirmed_password": "RandomPasswords444!!!",
-            "provider_id": "100001"
+            "confirmed_password": "RandomPasswords444!!!"
         }   
 
         const expectedMessage = "Account already exists."
@@ -177,9 +175,8 @@ describe('POST /create_account', () => {
             "email": "Fancyson@gmail.com",
             "password": "ValidPassword1!",
             "confirmed_password": "DifferentPassword1!",
-            
         }
-         const expectedMessage = "Passwords do not match"
+         const expectedMessage = "Passwords do not match."
 
         const response = await request(app)
             .post('/create_account')
@@ -202,7 +199,7 @@ describe('POST /create_account', () => {
             "confirmed_password": "DifferentPassword1!"
         }
 
-        const expectedMessage = "Passwords do not match"
+        const expectedMessage = "Passwords do not match."
 
         const response = await request(app)
             .post('/create_account')
@@ -223,7 +220,6 @@ describe('POST /create_account', () => {
             "email": "Fancyson@gmail.com",
             "password": "Short1!",
             "confirmed_password": "Short1!",
-            
         }
 
         const response = await request(app)
@@ -232,7 +228,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("short")
     })
 
@@ -254,7 +250,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("short")
     })
 
@@ -268,7 +264,6 @@ describe('POST /create_account', () => {
             "email": "Fancyson@gmail.com",
             "password": "nouppercase1!abc",
             "confirmed_password": "nouppercase1!abc",
-           
         }
 
         const response = await request(app)
@@ -277,7 +272,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no uppercase")
     })
 
@@ -299,7 +294,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no uppercase")
     })
 
@@ -313,7 +308,6 @@ describe('POST /create_account', () => {
             "email": "Fancyson@gmail.com",
             "password": "NOLOWERCASE1!ABC",
             "confirmed_password": "NOLOWERCASE1!ABC",
-            
         }
 
         const response = await request(app)
@@ -322,7 +316,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no lowercase")
     })
 
@@ -344,7 +338,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no lowercase")
     })
 
@@ -357,8 +351,7 @@ describe('POST /create_account', () => {
             "phone_number": "8041112222",
             "email": "Fancyson@gmail.com",
             "password": "NoNumberHere!abc",
-            "confirmed_password": "NoNumberHere!abc",
-            
+            "confirmed_password": "NoNumberHere!abc"
         }
 
         const response = await request(app)
@@ -367,7 +360,7 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no number")
     })
 
@@ -389,10 +382,9 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe("Invalid password")
+        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no number")
     })
-
 
 
 
