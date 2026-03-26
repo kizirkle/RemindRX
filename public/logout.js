@@ -3,4 +3,5 @@ function logout() {
     localStorage.removeItem('provider_id');
     localStorage.removeItem('patient_id');
     sessionStorage.clear();
+    window.location.href = '/'
 }
