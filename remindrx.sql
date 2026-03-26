@@ -215,8 +215,8 @@ CREATE TABLE `prescription` (
   `patient_id` int NOT NULL,
   `provider_id` int NOT NULL,
   PRIMARY KEY (`prescription_id`),
-  KEY `patient_id` (`patient_id`),
-  KEY `provider_id` (`provider_id`),
+  KEY `patient_id` (`patient_id`) NOT NULL,
+  KEY `provider_id` (`provider_id`) NOT NULL,
   CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE SET NULL,
   CONSTRAINT `prescription_ibfk_3` FOREIGN KEY (`provider_id`) REFERENCES `healthcare_provider` (`provider_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
