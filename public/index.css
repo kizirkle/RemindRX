@@ -107,9 +107,6 @@ h3 {
     color: red; 
 }
 
-#provider-id-field {
-    display: none; 
-}
 
 #password-requirements-header {
     text-align: left;
@@ -281,5 +278,10 @@ input[type="tel"]:focus {
 
 .provider-error-spacing {
     padding-top: 20px;
+}
+
+#provider-names {
+    padding-top: 10px;
+    line-height: 30px;
 }
 
