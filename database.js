@@ -19,6 +19,15 @@ export async function getPatients() {
   return rows
 }
 
+export async function getProviderFromPatient(patientId) {
+  var [rows] = await pool.query(`
+      SELECT * FROM PatientProvider
+      WHERE patient_id = ?
+    `, [patientId])
+  return rows
+}
+// var providers = await getProviderFromPatient(6) 
+// console.log(providers)
 
 export async function getProviderNames(providerIds) {
   var [rows] = await pool.query(`
