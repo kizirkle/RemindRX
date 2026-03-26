@@ -12,8 +12,9 @@ var __dirname = dirname(__filename);
 
 //Opens form to add a new provider
 patientRouter.get("/:id/add_provider", async(req, res) => {
-    var filePath = path.join(__dirname, '../public/addProvider.html');
-    res.sendFile(filePath)
+    return res.render('addProvider.ejs', {
+        providerPortal: `/patient/${req.params.id}` 
+    })
 })
 
 //Connect provider to patient upon patient entering valid provider ID
@@ -41,6 +42,9 @@ patientRouter.post("/:id/add_provider", async(req, res) => {
 //Access patient portal of specific patient
 patientRouter.get("/:id", async(req,res) => {
     var patient = await getPatientById(req.params.id)
+    if (!patient) {
+    return res.status(404).send("Patient not found");
+    }
     var providersForPatient = await getProviderFromPatient(patient.patient_id) 
     var providerNameList = []
     if (providersForPatient.length !== 0) {
@@ -50,7 +54,7 @@ patientRouter.get("/:id", async(req,res) => {
         providerNames.forEach((provider) => {
             providerNameList.push(`${provider.provider_first_name} ${provider.provider_last_name}`)
         })
-    }
+    } 
     return res.render('patientPortal.ejs', {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
         providerPortal: `/patient/${req.params.id}/add_provider`, 
