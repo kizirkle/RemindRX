@@ -19,6 +19,38 @@ export async function getPatients() {
   return rows
 }
 
+export async function getProviderFromPatient(patientId) {
+  var [rows] = await pool.query(`
+      SELECT * FROM PatientProvider
+      WHERE patient_id = ?
+    `, [patientId])
+  return rows
+}
+// var providers = await getProviderFromPatient(6) 
+// console.log(providers)
+
+export async function getProviderNames(providerIds) {
+  var [rows] = await pool.query(`
+      SELECT provider_first_name, provider_last_name FROM healthcare_provider
+      WHERE provider_id IN (?)
+    `, [providerIds])
+  return rows
+}
+
+
+export async function getProviderIds(patientId) {
+  var [rows] = await pool.query(`
+      SELECT provider_id FROM PatientProvider
+      WHERE patient_id = ?
+    `, [patientId])
+  return rows
+  }
+// const names = await getProviderIds(1)
+// console.log(names)
+
+// const name = await getProviderNames([100000, 1000001])
+// console.log(name)
+
 //Get patients by email address and return the corresponding patient object
 export async function getPatientByEmail(email) {
   var [rows] = await pool.query(`

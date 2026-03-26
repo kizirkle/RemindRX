@@ -8,6 +8,13 @@
     </head>
     <body>
         <h1 id="patient-name">Welcome, <%= patientName %></h1>
+        <h2 id="patient-name">Healthcare Providers</h2>
+            <div id="provider-names">
+                <% providers.forEach(provider => { %>
+                    <span><%= provider %></span><br>
+                <% }) %>
+            </div>
+        
         <button id="add-medication-btn" onclick="window.location.href='<%= providerPortal %>'">Add Healthcare Provider</button>
         <button id="logout" href="/" onclick="localStorage.clear()">Logout</button>
     </body>
