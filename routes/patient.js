@@ -2,7 +2,7 @@ import express from 'express'
 const patientRouter = express.Router()
 import path from 'path'
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider} from '../database.js'
+import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames} from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';
@@ -41,11 +41,20 @@ patientRouter.post("/:id/add_provider", async(req, res) => {
 //Access patient portal of specific patient
 patientRouter.get("/:id", async(req,res) => {
     var patient = await getPatientById(req.params.id)
+    var providersById = await getProviderIds(patient.patient_id)
+    var providerIds = providersById.map(provider => provider.provider_id)
+    var providerNames = await getProviderNames(providerIds)
+    var providerNameList = []
+    providerNames.forEach((provider) => {
+        providerNameList.push(`${provider.provider_first_name} ${provider.provider_last_name}`)
+    })
     return res.render('patientPortal.ejs', {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
-        providerPortal: `/patient/${req.params.id}/add_provider`
+        providerPortal: `/patient/${req.params.id}/add_provider`, 
+        providers: providerNameList
     })
 })
+
 
 
 export default patientRouter

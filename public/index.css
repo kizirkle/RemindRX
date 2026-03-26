@@ -280,3 +280,8 @@ input[type="tel"]:focus {
     padding-top: 20px;
 }
 
+#provider-names {
+    padding-top: 10px;
+    line-height: 30px;
+}
+
