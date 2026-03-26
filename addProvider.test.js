@@ -68,7 +68,7 @@ describe('POST /patient/:id/addProvider', () => {
     })
 
     //There is patient in the database named Jeff Frank with patient_id = 1 and healthcare provider Bob Smith added 
-    //who has provider_id = 100000. There is no provider with last name Jones.
+    //who has provider_id = 100000. 
     it('should not add provider if the provider has already been added to the patient account', async () => {
         const NoProviderWithID = {
             "patient_id": "1",
