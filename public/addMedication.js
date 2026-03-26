@@ -30,7 +30,7 @@ if(addMedicationForm){
         //calculates end date based on frequency and number of pills
         function calculateEndDate(frequency, totalPills){
             var days = totalPills / frequency;
-            endDate = endDate.setDate(endDate.getDate() + days);
+            endDate.setDate(endDate.getDate() + days);
         }
 
         //call the end date function
@@ -38,29 +38,31 @@ if(addMedicationForm){
 
         async function findPatientId(patientFirstName, patientLastName){
             //fetch patient id using first and last name
-            fetch('patient/getPatientId', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    patientFirstName: patientFirstName,
-                    patientLastName: patientLastName
+            try{
+                fetch('/patient/getPatientId', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        patientFirstName: patientFirstName,
+                        patientLastName: patientLastName
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
+                var data = await response.json();
+            
                 if (data.passed) {
                     return data.patient_id;
                 } else {
                     console.log("No patient found with that name.")
                     return null;
                 }
+            } catch (error) {
+                console.log("Error finding patient id:", error);
+                return null;
             }
-            )
-            .catch(error => {
-                console.log("Error finding patient id:", error)
-            })
+            
+            
         }
 
         //call function to find patient id
@@ -76,14 +78,14 @@ if(addMedicationForm){
                 body: JSON.stringify({
                     prescription_name: medicationName.value,
                     dose: dose,
-                    start_date: startDate.value,
-                    end_date: endDate.value,
-                    frequency_hours: frequency.value,
-                    total_pills: totalPills.value,
+                    start_date: startDateValue,
+                    end_date: endDate.toISOString().split('T')[0],
+                    frequency_hours: frequency,
+                    total_pills: totalPills,
                     side_effects: sideEffects.value,
                     additional_notes: additionalNotes.value,
                     patient_id: patientId,
-                    provider_id: 1
+                    provider_id: localStorage.getItem('provider_id')
 
                 })
             })
