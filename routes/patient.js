@@ -56,13 +56,12 @@ patientRouter.post("/getPatientId", async(req,res) => {
     try {
         var patients = await getPatients()
         for (var i = 0; i < patients.length; i++) {
-            if (patients[i].patient_first_name === patientFirstName && patients[i].patient_last_name === patientLastName) {
+            if (patients[i].patient_first_name.toLowerCase() === patientFirstName && 
+            patients[i].patient_last_name.toLowerCase() === patientLastName) {
                 return res.json({passed: true, patient_id: patients[i].patient_id})
             }
-            else{
-                return res.json({passed: false, message: "No patient found with that name."})
-            }
         }
+        return res.json({passed: false, message: "No patient found with that name."})
     } catch (error) {
         res.status(500).json({passed: false, message:'Error finding patient id.'})
     }

@@ -51,9 +51,10 @@ if(addMedicationForm){
             .then(response => response.json())
             .then(data => {
                 if (data.passed) {
-                    patientId = data.patient_id
+                    return data.patient_id;
                 } else {
                     console.log("No patient found with that name.")
+                    return null;
                 }
             }
             )
@@ -87,10 +88,39 @@ if(addMedicationForm){
                 })
             })
             var data = await response.json()
-
+            systemResponse(data, "provider")
         }
         catch (error) {
             console.log("ERROR: Failed to submit, error from addMedication.js:", error);
         }
     })
+}
+
+//returns an error or returns to provider page!
+function systemResponse(data, type) {
+    //Changes the color of the passwords to red 
+
+    if(!data.passed) {
+        //If there was an error, report the given error and reload the current page
+        //Stores the error message in session storge to be displayed when the page is reloaded
+        sessionStorage.setItem('errorMessage', data.message)
+        //Reloads the page
+        location.reload()
+    } else {
+        //If there is not an error, send user to their personal portal 
+            window.location.href = `/provider/${localStorage.getItem('provider_id')}`
+    }
+}
+
+//Each time the page is reloaded, report the error from the previous log in or sign up attempt if one exists
+window.onload = function () {
+    //Attempt to get the error message from session storage
+    var errorMessage = sessionStorage.getItem('errorMessage')
+    if (errorMessage) {
+        //If there is an error, displays it
+        message.textContent = errorMessage
+        message.style.display = "block"
+    }
+    //Clears the error message from session storage so that it does not persist on future reloads
+    sessionStorage.removeItem('errorMessage')
 }

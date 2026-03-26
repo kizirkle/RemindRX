@@ -131,8 +131,10 @@ function systemResponse(data, type) {
     } else {
         //If there is not an error, send user to their personal portal 
         if(type === 'patient') {
+            localStorage.setItem('patient_id', data.patient_id);
             window.location.href = data.patientPage
         } else {
+            localStorage.setItem('provider_id', data.provider_id);
             window.location.href = data.providerPage
         }
     }
