@@ -31,7 +31,9 @@ loginRouter.post("/", async (req, res) => {
                 return res.status(401).json({passed: false, message: "Incorrect password."})
             } else {
                 //Logs the user in and returns the URL to the patient portal
-                return res.json({passed: true, patientPage: `/patient/${patient.patient_id}`})
+                return res.json({passed: true,
+                                patientPage: `/patient/${patient.patient_id}`,
+                                patient_id: patient.patient_id})
             }
         } else {
             //Attempt to log in a provider
@@ -44,7 +46,9 @@ loginRouter.post("/", async (req, res) => {
                 res.status(401).json({passed: false, message: "Incorrect password."})
             } else {
                 //Logs the user in and returns the URL to the provider portal
-                return res.json({passed: true, providerPage: `/provider/${provider.provider_id}`})
+                return res.json({passed: true,
+                                providerPage: `/provider/${provider.provider_id}`,
+                                provider_id: provider.provider_id})
             }
         }
     } catch{

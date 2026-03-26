@@ -18,10 +18,10 @@ addMedicationRouter.get("/", async(req,res) => {
 
 //add a new medication to the database
 addMedicationRouter.post("/", async (req, res) => {
-    var {prescription_name,dose,start_date,end_date,frequency_hours,num_pills,side_effects,additional_notes,patient_id,provider_id} = req.body
+    var {prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id} = req.body
     try {
 
-        await addMedication(prescription_name,dose,start_date,end_date,frequency_hours,num_pills,side_effects,additional_notes,patient_id,provider_id)
+        await addMedication(prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id)
         return res.json({passed: true})
     } catch (error) {
         console.error(error)

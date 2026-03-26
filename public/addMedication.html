@@ -27,9 +27,9 @@
                 <input id="dose" placeholder="Dose" required>
                 <input type="date" id="start-date" placeholder="Start Date" required>
                 <input type="number" min="1" max="24" id="frequency" placeholder="Frequency (hours)" required>
-                <input type="number" id="num-pills" placeholder="Number of Pills" required>
-                <textarea id="side-effects" placeholder="Side Effects"></textarea>
-                <textarea id="additional-notes" placeholder="Additional Notes"></textarea>
+                <input type="number" id="total-pills" placeholder="Total Number of Pills" required>
+                <textarea id="side-effects" type='text' placeholder="Side Effects"></textarea>
+                <textarea id="additional-notes" type='text' placeholder="Additional Notes"></textarea>
             </div> 
             <div>
                 <label>Patient Information</label>
@@ -37,6 +37,8 @@
                 <input id="patient-last-name" placeholder="Patient Last Name" required>
             </div>
             <button type="submit" id="add-medication-btn">Add Medication</button>
+            <!-- Error message displayed on reload if the form failed -->
+            <span id="message" style="display: none"></span>
         </form>
         <script src="addMedication.js"></script>
     </body>
