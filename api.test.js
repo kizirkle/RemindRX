@@ -3,6 +3,56 @@ import app from './app'
 
 
 describe('POST /login', () => {
+
+    // Default data to use for generic test function ("correct" values are the default)
+    const defaultData = {
+        "choice": "patient",
+        "entered_email": "frank@gmail.com",
+        "entered_password": "RandomPasswords555!!!"
+    }
+
+    // Default expectation data (Some are empty and should be overwritten when creating the test)
+    const defaultExpectations = {
+        "message": undefined,
+        "passed": undefined,
+        "statusCode": 200
+    }
+
+    // Generic test function for easier reuse and concise tests
+    function createLoginTest(patientOverrides = {}, expectOverrides = {}){
+        return async () => {
+            const PatientData = {
+                ...defaultData,
+                ...patientOverrides
+            }
+
+            const Expectations = {
+                ...defaultExpectations,
+                ...expectOverrides
+            }
+
+            const response = await request(app)
+                .post('/login')
+                .send(PatientData)
+                .expect('Content-Type', /json/)
+                .expect(Expectations.statusCode);
+
+            if (Expectations.message !== undefined) {
+                expect(response.body.message).toBe(Expectations.message);
+            }
+            if (Expectations.error !== undefined) {
+                expect(response.body.passed).toBe(Expectations.passed);
+            }
+        }
+    }
+
+    it("Should not log patient in, but with my generic function", createLoginTest({
+        entered_email: "fail@gmail.com",
+        entered_password: "Password5!Random!"
+    }, {
+        message: "No account found. Create a new account or enter a different email."
+    }))
+
     it('should not log the patient in if there is no account with email', async () => {
         const PatientNoEmailInSystem = {
             "choice": "patient",
