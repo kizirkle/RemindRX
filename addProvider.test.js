@@ -1,7 +1,6 @@
 import request from 'supertest'
 import app from './app'
 
-jest.mock('./app')
 
 describe('POST /patient/:id/addProvider', () => {
 
@@ -13,7 +12,7 @@ describe('POST /patient/:id/addProvider', () => {
             "provider_id": "555555",
             "provider_first_name": "Bob", 
             "provider_last_name": "Smith"
-        }   
+        }  
 
         const expectedMessage = 'No healthcare provider found.'
 
