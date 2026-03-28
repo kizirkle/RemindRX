@@ -33,7 +33,7 @@ addMedicationRouter.post("/", async (req, res) => {
         var medication = await getMedicationsByName(prescription_name)
         if(medication) {
             //If the medication has already been added, returns an error message
-            return res.json({passed: false, message: `${prescription_name} has already been added for ${patient_first_name} ${patient_last_name} `})
+            return res.json({passed: false, message: `${prescription_name} has already been added for ${patient_first_name} ${patient_last_name}.`})
         }
         if(dose > total_pills) {
             //If the dose is greater than the total number of pills, returns an error message
