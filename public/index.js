@@ -65,7 +65,6 @@ if(createAccountForm){
 
             //Gets the response from the API call which will either contain an error message or URL to personal portal
             var data = await response.json()
-            console.log(data.passwordProblems)
 
             //Calls function to either return an error or sends the patient or provider to their personal portal
             systemResponse(data, type)
@@ -117,7 +116,7 @@ function systemResponse(data, type) {
         //Stores the error message in session storge to be displayed when the page is reloaded
         sessionStorage.setItem('errorMessage', data.message)
 
-        if(data.message === "Invalid password") {
+        if(data.message === "Invalid password.") {
             passwordAlert(data)
         } else {
             sessionStorage.setItem("short", "false")
@@ -164,7 +163,6 @@ function passwordAlert(data) {
         sessionStorage.setItem("noUpper", "false")
     }
     if (passwordProblems.includes("no special character")) {
-        console.log("no special")
         sessionStorage.setItem("noSpecial", "true")
     } else {
         sessionStorage.setItem("noSpecial", "false")

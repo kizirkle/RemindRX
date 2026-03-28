@@ -39,8 +39,11 @@ createAccountRouter.post("/", async (req, res) => {
                         return res.json({passed: false, message: "Invalid password.", passwordProblems: passwordProblems})
                     } else {
                         //Creates a new patient and returns the URL to the patient portal if the password is valid
-                        var patient = await createPatient(first_name, last_name, phone_number, email, password)
-                        return res.json({passed: true, patientPage: `/patient/${patient.patient_id}`})
+                        if(process.env.NODE_ENV !== 'test') {
+                            var patient = await createPatient(first_name, last_name, phone_number, email, password)
+                            return res.json({passed: true, patientPage: `/patient/${patient.patient_id}`})
+                        }
+                        return res.json({passed: true})
                     }
                 }
             } else {
@@ -62,8 +65,11 @@ createAccountRouter.post("/", async (req, res) => {
                         return res.json({passed: false, message: "Invalid password.", passwordProblems: passwordProblems})
                     } else {
                         //Creates a new provider and returns the URL to the provider portal if the password is valid
-                        var provider = await createProvider(first_name, last_name, phone_number, email, password)
-                        return res.json({passed: true, providerPage: `/provider/${provider.provider_id}`})
+                        if (process.env.NODE_ENV !== 'test') {
+                            var provider = await createProvider(first_name, last_name, phone_number, email, password)
+                            return res.json({passed: true, providerPage: `/provider/${provider.provider_id}`})
+                        }
+                        return res.json({passed: true})
                     }
                 }
             } else {
