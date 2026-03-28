@@ -191,7 +191,7 @@ describe('POST /create_account', () => {
 
     it("[C5] Should handle an invalid format for provider without a server error", createCreateAccountTest({
         choice: "health-provider",
-        email: "bob@"
+        email: "drdoctor@"
     }, {
         statusCannotBe: 500
     }))

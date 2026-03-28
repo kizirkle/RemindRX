@@ -46,16 +46,26 @@ describe('POST /login', () => {
         }
     }
 
-    // Should not log in if email is not in logs (Patient account)
-    it("Should not log the patient in if there is no account with email", createLoginTest({
+    // -------------------------------------------------------------------------
+    // L1 - Verify login with email not in database
+    // Pre-condition: No account exists with the email entered, user is a patient
+    // Test data: entered_email: fail@gmail.com, entered_password: Password5!Random!
+    // Expected: "No account found. Create a new account or enter a different email."
+    // -------------------------------------------------------------------------
+    it("[L1] Should not log the patient in if there is no account with email", createLoginTest({
         entered_email: "fail@gmail.com",
         entered_password: "Password5!Random!"
     }, {
         message: "No account found. Create a new account or enter a different email."
     }))
 
-    // Should not log in if email is not in logs (Provider account)
-    it("Should not log the provider in if there is no account with email", createLoginTest({
+    // -------------------------------------------------------------------------
+    // L2 - Verify login with email not in database
+    // Pre-condition: No account exists with the email entered, user is a healthcare provider
+    // Test data: entered_email: fail@gmail.com, entered_password: Password5!Random!
+    // Expected: "No account found. Create a new account or enter a different email."
+    // -------------------------------------------------------------------------
+    it("[L2] Should not log the provider in if there is no account with email", createLoginTest({
         choice: "healthcare-provider",
         entered_email: "fail@gmail.com",
         entered_password: "Password5!Random!"
@@ -63,15 +73,25 @@ describe('POST /login', () => {
         message: "No account found. Create a new account or enter a different email."
     }))
 
-    // Should not log in given incorrect password (Patient account)
-    it("Should not log in patient if they have an email but the wrong password", createLoginTest({
+    // -------------------------------------------------------------------------
+    // L3 - Verify login with incorrect password
+    // Pre-condition: Account exists, user is a patient
+    // Test data: entered_email: frank@gmail.com, entered_password: Password5!Random!
+    // Expected: "Incorrect password."
+    // -------------------------------------------------------------------------
+    it("[L3] Should not log in patient if they have an email but the wrong password", createLoginTest({
         entered_password: "Password5!Random!"
     }, {
         message: "Incorrect password.",
         statusCode: 401
     }))
 
-    // Should not log in given incorrect password (Provider account)
+    // -------------------------------------------------------------------------
+    // L4 - Verify login with incorrect password
+    // Pre-condition: Account exists, user is a healthcare provider
+    // Test data: entered_email: bob@gmail.com, entered_password: Password5!Random!
+    // Expected: "Incorrect password."
+    // -------------------------------------------------------------------------
     it("Should not log in provider if they have an email but the wrong password", createLoginTest({
         choice: "healthcare-provider",
         entered_email: "bob@gmail.com",
@@ -81,12 +101,22 @@ describe('POST /login', () => {
         statusCode: 401
     }))
 
-    // Should log in given correct email and password (Patient account)
-    it("Should log in patient if they have an email and correct password", createLoginTest({}, {
+    // -------------------------------------------------------------------------
+    // L5 - Verify login with valid data
+    // Pre-condition: Account exists, user is a patient
+    // Test data: entered_email: frank@gmail.com, entered_password: RandomPasswords555!!!
+    // Expected: passed: true
+    // -------------------------------------------------------------------------
+    it("[L5] Should log in patient if they have an email and correct password", createLoginTest({}, {
         passed: true
     }))
 
-    // Should log in given correct email and password (Provider account)
+    // -------------------------------------------------------------------------
+    // L6 - Verify login with valid data
+    // Pre-condition: Account exists, user is a healthcare provider
+    // Test data: entered_email: bob@gmail.com, entered_password: RandomPasswords444!!!
+    // Expected: passed: true
+    // -------------------------------------------------------------------------
     it("Should log in provider if they have an email and correct password", createLoginTest({
         choice: "healthcare-provider",
         entered_email: "bob@gmail.com",
