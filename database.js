@@ -130,3 +130,13 @@ export async function addMedication(prescription_name,dose,start_date,end_date,f
     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id])
 }
+
+export async function getMedicationsByName(prescription_name) {
+  var [rows] = await pool.query(`
+    SELECT * FROM prescription
+    WHERE prescription_name = ?
+    `, [prescription_name])
+    return rows[0]
+}
+
+
