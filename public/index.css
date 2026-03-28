@@ -285,3 +285,14 @@ input[type="tel"]:focus {
     line-height: 30px;
 }
 
+#med-specs {
+    text-align: center;
+}
+
+#side-effects {
+    height: 75px; 
+}
+
+#additional-notes {
+    height: 75px; 
+}
