@@ -6,10 +6,10 @@ describe('POST /create_account', () => {
     // Default data to use for generic test function ("correct" values are the default)
     const defaultData = {
         "choice": "patient",
-        "first_name": "Squilliam",
-        "last_name": "Fancyson",
+        "first_name": "Jeff",
+        "last_name": "Doe",
         "phone_number": "8041112222",
-        "email": "Fancyson@gmail.com",
+        "email": "Jeff.doe@gmail.com",
         "password": "ValidPassword1!",
         "confirmed_password": "ValidPassword1!",
     }
@@ -69,8 +69,10 @@ describe('POST /create_account', () => {
     // -------------------------------------------------------------------------
     // C1 - Verify account creation with valid information
     // Pre-condition: User is not already registered
-    // Test data: First: Squilliam, Last: Fancyson, Email: Fancyson@gmail.com
-    //            Password: ValidPassword1!, Confirm: ValidPassword1!
+    // Test data: 
+    //      (Patient) first_name: Jeff, last_name: Doe, email: Jeff.doe@gmail.com
+    //                password: ValidPassword1!, confirmed_password: ValidPassword1!
+    //     (Provider) first_name: John, last_name: Doctor, email: bob@gmail.com
     // Expected: Account created successfully (passed: true)
     // Note: In test mode (NODE_ENV=test), the DB write is skipped but passed: true is returned
     // -------------------------------------------------------------------------
@@ -87,7 +89,9 @@ describe('POST /create_account', () => {
     // -------------------------------------------------------------------------
     // C2 - Verify account creation with an already registered email (Duplicate Email)
     // Pre-condition: Email already exists in database
-    // Test data: Email: Jeff.doe@gmail.com (patient frank@gmail.com / provider bob@gmail.com)
+    // Test data:
+    //      (Patient) email: frank@gmail.com
+    //     (Provider) email: bob@gmail.com
     // Expected: "Account already exists."
     // -------------------------------------------------------------------------
     it("[C2] Should not create an account if the patient email already exists", createCreateAccountTest({
@@ -116,7 +120,7 @@ describe('POST /create_account', () => {
     // -------------------------------------------------------------------------
     // C3 - Verify account creation with mismatched passwords
     // Pre-condition: User is not already registered
-    // Test data: Password: Test@1234, Confirm: Test@111
+    // Test data: password: ValidPassword1!, confirmed_password: DifferentPassword1!
     // Expected: "Passwords do not match."
     // -------------------------------------------------------------------------
     it("[C3] Should not create a patient account if passwords do not match", createCreateAccountTest({
@@ -135,8 +139,8 @@ describe('POST /create_account', () => {
     // -------------------------------------------------------------------------
     // C4 - Verify account creation with missing required fields
     // Pre-condition: User is on the Create Account page
-    // Test data: First name left blank, all other fields filled
-    // Expected: "Please fill in all required fields"
+    // Test data: email: "missingfields@gmail.com", all other fields empty
+    // Expected: "Please fill in all required fields" (passed: false)
     // Note: Required field enforcement (blank first_name, last_name, phone_number)
     //       is handled by the HTML `required` attribute on the frontend.
     //       The backend trims names and still processes the request.
@@ -170,25 +174,33 @@ describe('POST /create_account', () => {
     // -------------------------------------------------------------------------
     // C5 - Verify account creation with an invalid email format
     // Pre-condition: User is on the Create Account page
-    // Test data: Email: Jeff.doe@ (malformed)
-    // Expected: "Please enter a valid email address"
+    // Test data: 
+    //      (Patient) email: Jeff.doe@ (malformed)
+    //     (Provider) email: drdoctor@ (malformed)
+    // Expected: "Please enter a valid email address" (statusCannotBe: 500)
     // Note: Email format validation is enforced by the HTML `type="email"` input
     //       on the frontend and is NOT validated server-side. This test confirms
     //       the backend still processes the request without crashing, and that
     //       a malformed email does not match an existing account.
     // -------------------------------------------------------------------------
-    it("[C5] Should handle an invalid email format without a server error", createCreateAccountTest({
-        email: "Fancyson@"
+    it("[C5] Should handle an invalid email format for patient without a server error", createCreateAccountTest({
+        email: "Jeff.doe@"
+    }, {
+        statusCannotBe: 500
+    }))
+
+    it("[C5] Should handle an invalid format for provider without a server error", createCreateAccountTest({
+        choice: "health-provider",
+        email: "bob@"
     }, {
         statusCannotBe: 500
     }))
 
     // -------------------------------------------------------------------------
-    // C6 - Verify account creation with a password that does not meet requirements
+    // C6 - Verify account creation with a password that does not meet requirements: Too short
     // Pre-condition: User is on the Create Account page
-    // Test data: Password: 123, Confirm: 123
-    // Expected: Password must be at least 12 chars, 1 uppercase, 1 lowercase,
-    //           1 number, 1 special character
+    // Test data: password: Short1!, confirmed_password: Short1!
+    // Expected: "Invalid password.", passwordProblems contains "short"
     // -------------------------------------------------------------------------
     it("[C6] Should not create a patient account if password is too short", createCreateAccountTest({
         password: "Short1!",
@@ -207,6 +219,12 @@ describe('POST /create_account', () => {
         passwordProblems: "short"
     }))
 
+    // -------------------------------------------------------------------------
+    // C6 - Verify account creation with a password that does not meet requirements: No uppercase
+    // Pre-condition: User is on the Create Account page
+    // Test data: password: nouppercase1!abc, confirmed_password: nouppercase1!abc
+    // Expected: "Invalid password.", passwordProblems contains "no uppercase"
+    // -------------------------------------------------------------------------
     it("[C6] Should not create a patient account if password has no uppercase letter", createCreateAccountTest({
         password: "nouppercase1!abc",
         confirmed_password: "nouppercase1!abc"
@@ -224,6 +242,12 @@ describe('POST /create_account', () => {
         passwordProblems: "no uppercase"
     }))
 
+    // -------------------------------------------------------------------------
+    // C6 - Verify account creation with a password that does not meet requirements: No lowercase
+    // Pre-condition: User is on the Create Account page
+    // Test data: password: NOLOWERCASE1!ABC, confirmed_password: NOWLOWERCASE1!ABC
+    // Expected: "Invalid password.", passwordProblems contains "no lowercase"
+    // -------------------------------------------------------------------------
     it("[C6] Should not create a patient account if password has no lowercase letter", createCreateAccountTest({
         password: "NOLOWERCASE1!ABC",
         confirmed_password: "NOLOWERCASE1!ABC"
@@ -241,6 +265,12 @@ describe('POST /create_account', () => {
         passwordProblems: "no lowercase"
     }))
 
+    // -------------------------------------------------------------------------
+    // C6 - Verify account creation with a password that does not meet requirements: No number
+    // Pre-condition: User is on the Create Account page
+    // Test data: password: NoNumberHere!abc, confirmed_password: NoNumberHere!abc
+    // Expected: "Invalid password.", passwordProblems contains "no number"
+    // -------------------------------------------------------------------------
     it("[C6] Should not create a patient account if password has no number", createCreateAccountTest({
         password: "NoNumberHere!abc",
         confirmed_password: "NoNumberHere!abc"
