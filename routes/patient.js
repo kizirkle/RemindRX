@@ -66,24 +66,23 @@ patientRouter.get("/:id", async(req,res) => {
 })
 
 
-//find patient id based on first and last name
-patientRouter.post("/getPatientId", async(req,res) => {
-    var {patientFirstName, patientLastName} = req.body;
-    patientFirstName = patientFirstName.trim().toLowerCase();
-    patientLastName = patientLastName.trim().toLowerCase();
+// find patient id based on first and last name
+// patientRouter.post("/getPatientId", async(req,res) => {
+//     var {patientFirstName, patientLastName} = req.body;
+//     patientFirstName = patientFirstName.trim().toLowerCase();
+//     patientLastName = patientLastName.trim().toLowerCase();
 
-    try {
-        var patients = await getPatients()
-        for (var i = 0; i < patients.length; i++) {
-            if (patients[i].patient_first_name.toLowerCase() === patientFirstName && 
-            patients[i].patient_last_name.toLowerCase() === patientLastName) {
-                return res.json({passed: true, patient_id: patients[i].patient_id})
-            }
-        }
-        return res.json({passed: false, message: "No patient found with that name."})
-    } catch (error) {
-        res.status(500).json({passed: false, message:'Error finding patient id.'})
-    }
-})
-
+//     try {
+//         var patients = await getPatients()
+//         for (var i = 0; i < patients.length; i++) {
+//             if (patients[i].patient_first_name.toLowerCase() === patientFirstName && 
+//             patients[i].patient_last_name.toLowerCase() === patientLastName) {
+//                 return res.json({passed: true, patient_id: patients[i].patient_id})
+//             }
+//         }
+//         return res.json({passed: false, message: "No patient found with that name."})
+//     } catch (error) {
+//         res.status(500).json({passed: false, message:'Error finding patient id.'})
+//     }
+// })
 export default patientRouter
