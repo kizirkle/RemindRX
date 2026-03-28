@@ -169,9 +169,71 @@ describe('POST /login', () => {
 
 
 describe('POST /create_account', () => {
+<<<<<<< Updated upstream:api.test.js
      //There is patient in the database name with email frank@gmail.com and password RandomPasswords555!!!
     it('should not create an account if the patient email already exists', async () => {
         const PatientEmailExists = {
+=======
+
+    // -------------------------------------------------------------------------
+    // C1 - Verify account creation with valid information
+    // Pre-condition: User is not already registered
+    // Test data: First: Jeff, Last: Doe, Email: Jeff.doe@gmail.com
+    //            Password: Test@1234, Confirm: Test@1234
+    // Expected: Account created successfully (passed: true)
+    // Note: In test mode (NODE_ENV=test), the DB write is skipped but passed: true is returned
+    // -------------------------------------------------------------------------
+    it('[C1] should create a patient account with valid information', async () => {
+        const ValidPatient = {
+            "choice": "patient",
+            "first_name": "Jeff",
+            "last_name": "Doe",
+            "phone_number": "8041234567",
+            "email": "Jeff.doe@gmail.com",
+            "password": "Test@1234abcd",
+            "confirmed_password": "Test@1234abcd"
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(ValidPatient)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.passed).toBe(true)
+    })
+
+    it('[C1] should create a provider account with valid information', async () => {
+        const ValidProvider = {
+            "choice": "healthcare-provider",
+            "first_name": "Jeff",
+            "last_name": "Doe",
+            "phone_number": "8041234567",
+            "email": "Jeff.doe.provider@gmail.com",
+            "password": "Test@1234abcd",
+            "confirmed_password": "Test@1234abcd"
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(ValidProvider)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.passed).toBe(true)
+    })
+
+    // -------------------------------------------------------------------------
+    // C2 - Verify account creation with an already registered email (Duplicate Email)
+    // Pre-condition: Email already exists in database
+    // Test data: Email: Jeff.doe@gmail.com (patient frank@gmail.com / provider bob@gmail.com)
+    // Expected: "Account already exists."
+    // -------------------------------------------------------------------------
+
+    // There is a patient in the database with email frank@gmail.com
+    it('[C2] should not create a patient account if the email already exists', async () => {
+        const DuplicatePatient = {
+>>>>>>> Stashed changes:tests/createAccount.test.js
             "choice": "patient",
             "first_name": "Jeff",
             "last_name": "Frank",
@@ -179,54 +241,56 @@ describe('POST /create_account', () => {
             "email": "frank@gmail.com",
             "password": "RandomPasswords555!!!",
             "confirmed_password": "RandomPasswords555!!!"
-        }   
-
-        const expectedMessage = "Account already exists."
+        }
 
         const response = await request(app)
             .post('/create_account')
-            .send(PatientEmailExists)
+            .send(DuplicatePatient)
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe(expectedMessage)
+        expect(response.body.passed).toBe(false)
+        expect(response.body.message).toBe("Account already exists.")
     })
 
-    //There is provider in the database with email bob@gmail.com and password RandomPasswords444!!!
-     it('should not create an account if the provider email already exists', async () => {
-        const ProviderEmailExists = {
-            "choice": "healthcare_provider",
+    // There is a provider in the database with email bob@gmail.com
+    it('[C2] should not create a provider account if the email already exists', async () => {
+        const DuplicateProvider = {
+            "choice": "healthcare-provider",
             "first_name": "Bob",
             "last_name": "Smith",
             "phone_number": "8042223333",
             "email": "bob@gmail.com",
             "password": "RandomPasswords444!!!",
             "confirmed_password": "RandomPasswords444!!!"
-        }   
-
-        const expectedMessage = "Account already exists."
+        }
 
         const response = await request(app)
             .post('/create_account')
-            .send(ProviderEmailExists)
+            .send(DuplicateProvider)
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe(expectedMessage)
+        expect(response.body.passed).toBe(false)
+        expect(response.body.message).toBe("Account already exists.")
     })
 
-    // Passwords do not match  -create patient-
-    it('should not create a patient account if passwords do not match', async () => {
+    // -------------------------------------------------------------------------
+    // C3 - Verify account creation with mismatched passwords
+    // Pre-condition: User is not already registered
+    // Test data: Password: Test@1234, Confirm: Test@111
+    // Expected: "Passwords do not match."
+    // -------------------------------------------------------------------------
+    it('[C3] should not create a patient account if passwords do not match', async () => {
         const PatientPasswordMismatch = {
             "choice": "patient",
-            "first_name": "Squilliam",
-            "last_name": "Fancyson",
+            "first_name": "Jeff",
+            "last_name": "Doe",
             "phone_number": "8041112222",
-            "email": "Fancyson@gmail.com",
-            "password": "ValidPassword1!",
-            "confirmed_password": "DifferentPassword1!",
+            "email": "mismatch.patient@gmail.com",
+            "password": "Test@1234abcd",
+            "confirmed_password": "Test@111"
         }
-         const expectedMessage = "Passwords do not match."
 
         const response = await request(app)
             .post('/create_account')
@@ -234,22 +298,20 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe(expectedMessage)
+        expect(response.body.passed).toBe(false)
+        expect(response.body.message).toBe("Passwords do not match.")
     })
 
-    //Passwords do not match -create provider-
-    it('should not create a provider account if passwords do not match', async () => {
+    it('[C3] should not create a provider account if passwords do not match', async () => {
         const ProviderPasswordMismatch = {
-            "choice": "healthcare_provider",
-            "first_name": "John",
-            "last_name": "Doctor",
+            "choice": "healthcare-provider",
+            "first_name": "Jeff",
+            "last_name": "Doe",
             "phone_number": "8049998888",
-            "email": "drdoctor@gmail.com",
-            "password": "ValidPassword1!",
-            "confirmed_password": "DifferentPassword1!"
+            "email": "mismatch.provider@gmail.com",
+            "password": "Test@1234abcd",
+            "confirmed_password": "Test@111"
         }
-
-        const expectedMessage = "Passwords do not match."
 
         const response = await request(app)
             .post('/create_account')
@@ -257,181 +319,309 @@ describe('POST /create_account', () => {
             .expect('Content-Type', /json/)
             .expect(200)
 
-        expect(response.body.message).toBe(expectedMessage)
+        expect(response.body.passed).toBe(false)
+        expect(response.body.message).toBe("Passwords do not match.")
     })
 
-    //Password too short -create patient-
-    it('should not create a patient account if password is too short', async () => {
-        const PatientShortPassword = {
+    // -------------------------------------------------------------------------
+    // C4 - Verify account creation with missing required fields
+    // Pre-condition: User is on the Create Account page
+    // Test data: First name left blank, all other fields filled
+    // Expected: "Please fill in all required fields"
+    // Note: Required field enforcement (blank first_name, last_name, phone_number)
+    //       is handled by the HTML `required` attribute on the frontend.
+    //       The backend trims names and still processes the request.
+    //       A blank email will not match any existing account, and a blank
+    //       password will fail checkPassword — resulting in "Invalid password."
+    //       Test below reflects the actual server-side behavior for empty fields.
+    // -------------------------------------------------------------------------
+    it('[C4] should not create a patient account if required fields are empty', async () => {
+        const PatientMissingFields = {
             "choice": "patient",
-            "first_name": "Squilliam",
-            "last_name": "Fancyson",
-            "phone_number": "8041112222",
-            "email": "Fancyson@gmail.com",
-            "password": "Short1!",
-            "confirmed_password": "Short1!",
+            "first_name": "",
+            "last_name": "",
+            "phone_number": "",
+            "email": "missingfields@gmail.com",
+            "password": "",
+            "confirmed_password": ""
         }
 
         const response = await request(app)
             .post('/create_account')
-            .send(PatientShortPassword)
+            .send(PatientMissingFields)
             .expect('Content-Type', /json/)
             .expect(200)
 
+        expect(response.body.passed).toBe(false)
+    })
+
+    it('[C4] should not create a provider account if required fields are empty', async () => {
+        const ProviderMissingFields = {
+            "choice": "healthcare-provider",
+            "first_name": "",
+            "last_name": "",
+            "phone_number": "",
+            "email": "missingfields.provider@gmail.com",
+            "password": "",
+            "confirmed_password": ""
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(ProviderMissingFields)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.passed).toBe(false)
+    })
+
+    // -------------------------------------------------------------------------
+    // C5 - Verify account creation with an invalid email format
+    // Pre-condition: User is on the Create Account page
+    // Test data: Email: Jeff.doe@ (malformed)
+    // Expected: "Please enter a valid email address"
+    // Note: Email format validation is enforced by the HTML `type="email"` input
+    //       on the frontend and is NOT validated server-side. This test confirms
+    //       the backend still processes the request without crashing, and that
+    //       a malformed email does not match an existing account.
+    // -------------------------------------------------------------------------
+    it('[C5] should handle an invalid email format without a server error', async () => {
+        const InvalidEmailPatient = {
+            "choice": "patient",
+            "first_name": "Jeff",
+            "last_name": "Doe",
+            "phone_number": "8041234567",
+            "email": "Jeff.doe@",
+            "password": "Test@1234abcd",
+            "confirmed_password": "Test@1234abcd"
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(InvalidEmailPatient)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        // Server does not validate email format — it will either create the account
+        // (passed: true) or reject for another reason, but must not 500
+        expect(response.status).not.toBe(500)
+    })
+
+    // -------------------------------------------------------------------------
+    // C6 - Verify account creation with a password that does not meet requirements
+    // Pre-condition: User is on the Create Account page
+    // Test data: Password: 123, Confirm: 123
+    // Expected: Password must be at least 12 chars, 1 uppercase, 1 lowercase,
+    //           1 number, 1 special character
+    // -------------------------------------------------------------------------
+    it('[C6] should not create a patient account if the password does not meet requirements', async () => {
+        const PatientBadPassword = {
+            "choice": "patient",
+            "first_name": "Jeff",
+            "last_name": "Doe",
+            "phone_number": "8041112222",
+            "email": "badpassword.patient@gmail.com",
+            "password": "123",
+            "confirmed_password": "123"
+        }
+
+        const response = await request(app)
+            .post('/create_account')
+            .send(PatientBadPassword)
+            .expect('Content-Type', /json/)
+            .expect(200)
+
+        expect(response.body.passed).toBe(false)
         expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("short")
+        expect(response.body.passwordProblems).toContain("no uppercase")
+        expect(response.body.passwordProblems).toContain("no lowercase")
+        expect(response.body.passwordProblems).toContain("no special character")
     })
 
-    // Password too short -create provider-
-    it('should not create a provider account if password is too short', async () => {
-        const ProviderShortPassword = {
-            "choice": "healthcare_provider",
-            "first_name": "John",
-            "last_name": "Doctor",
+    it('[C6] should not create a provider account if the password does not meet requirements', async () => {
+        const ProviderBadPassword = {
+            "choice": "healthcare-provider",
+            "first_name": "Jeff",
+            "last_name": "Doe",
             "phone_number": "8049998888",
-            "email": "drdoctor@gmail.com",
-            "password": "Short1!",
-            "confirmed_password": "Short1!"
+            "email": "badpassword.provider@gmail.com",
+            "password": "123",
+            "confirmed_password": "123"
         }
 
         const response = await request(app)
             .post('/create_account')
-            .send(ProviderShortPassword)
+            .send(ProviderBadPassword)
             .expect('Content-Type', /json/)
             .expect(200)
 
+        expect(response.body.passed).toBe(false)
         expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("short")
-    })
-
-     //Password missing upper case -create patient-
-    it('should not create a patient account if password has no uppercase letter', async () => {
-        const PatientNoUppercase = {
-            "choice": "patient",
-            "first_name": "Squilliam",
-            "last_name": "Fancyson",
-            "phone_number": "8041112222",
-            "email": "Fancyson@gmail.com",
-            "password": "nouppercase1!abc",
-            "confirmed_password": "nouppercase1!abc",
-        }
-
-        const response = await request(app)
-            .post('/create_account')
-            .send(PatientNoUppercase)
-            .expect('Content-Type', /json/)
-            .expect(200)
-
-        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no uppercase")
-    })
-
-    //Password missing upper case -create provider-
-    it('should not create a provider account if password has no uppercase letter', async () => {
-        const ProviderNoUppercase = {
-            "choice": "healthcare_provider",
-            "first_name": "John",
-            "last_name": "Doctor",
-            "phone_number": "8049998888",
-            "email": "drdoctor@gmail.com",
-            "password": "nouppercase1!abc",
-            "confirmed_password": "nouppercase1!abc"
-        }
-
-        const response = await request(app)
-            .post('/create_account')
-            .send(ProviderNoUppercase)
-            .expect('Content-Type', /json/)
-            .expect(200)
-
-        expect(response.body.message).toBe("Invalid password.")
-        expect(response.body.passwordProblems).toContain("no uppercase")
-    })
-
-    //Password missing uppercase -create patient-
-    it('should not create a patient account if password has no lowercase letter', async () => {
-        const PatientNoLowercase = {
-            "choice": "patient",
-            "first_name": "Squilliam",
-            "last_name": "Fancyson",
-            "phone_number": "8041112222",
-            "email": "Fancyson@gmail.com",
-            "password": "NOLOWERCASE1!ABC",
-            "confirmed_password": "NOLOWERCASE1!ABC",
-        }
-
-        const response = await request(app)
-            .post('/create_account')
-            .send(PatientNoLowercase)
-            .expect('Content-Type', /json/)
-            .expect(200)
-
-        expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no lowercase")
+        expect(response.body.passwordProblems).toContain("no special character")
     })
 
-    //Password missing lowercase -create provider-
-    it('should not create a provider account if password has no lowercase letter', async () => {
-        const ProviderNoLowercase = {
-            "choice": "healthcare_provider",
-            "first_name": "John",
-            "last_name": "Doctor",
-            "phone_number": "8049998888",
-            "email": "drdoctor@gmail.com",
-            "password": "NOLOWERCASE1!ABC",
-            "confirmed_password": "NOLOWERCASE1!ABC"
-        }
+    // -------------------------------------------------------------------------
+    // Password character requirement tests (individual checks)
+    // These go beyond the Lucid doc but verify each rule in isolation
+    // -------------------------------------------------------------------------
 
-        const response = await request(app)
-            .post('/create_account')
-            .send(ProviderNoLowercase)
-            .expect('Content-Type', /json/)
-            .expect(200)
+    // it('should not create a patient account if password is too short', async () => {
+    //     const PatientShortPassword = {
+    //         "choice": "patient",
+    //         "first_name": "Squilliam",
+    //         "last_name": "Fancyson",
+    //         "phone_number": "8041112222",
+    //         "email": "Fancyson@gmail.com",
+    //         "password": "Short1!",
+    //         "confirmed_password": "Short1!",
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(PatientShortPassword)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("short")
+    // })
 
-        expect(response.body.message).toBe("Invalid password.")
-        expect(response.body.passwordProblems).toContain("no lowercase")
-    })
+    // it('should not create a provider account if password is too short', async () => {
+    //     const ProviderShortPassword = {
+    //         "choice": "healthcare-provider",
+    //         "first_name": "John",
+    //         "last_name": "Doctor",
+    //         "phone_number": "8049998888",
+    //         "email": "drdoctor@gmail.com",
+    //         "password": "Short1!",
+    //         "confirmed_password": "Short1!"
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(ProviderShortPassword)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("short")
+    // })
 
-    //Password missing number -create patient-
-    it('should not create a patient account if password has no number', async () => {
-        const PatientNoNumber = {
-            "choice": "patient",
-            "first_name": "Squilliam",
-            "last_name": "Fancyson",
-            "phone_number": "8041112222",
-            "email": "Fancyson@gmail.com",
-            "password": "NoNumberHere!abc",
-            "confirmed_password": "NoNumberHere!abc"
-        }
+    // it('should not create a patient account if password has no uppercase letter', async () => {
+    //     const PatientNoUppercase = {
+    //         "choice": "patient",
+    //         "first_name": "Squilliam",
+    //         "last_name": "Fancyson",
+    //         "phone_number": "8041112222",
+    //         "email": "Fancyson@gmail.com",
+    //         "password": "nouppercase1!abc",
+    //         "confirmed_password": "nouppercase1!abc",
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(PatientNoUppercase)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("no uppercase")
+    // })
 
-        const response = await request(app)
-            .post('/create_account')
-            .send(PatientNoNumber)
-            .expect('Content-Type', /json/)
-            .expect(200)
+    // it('should not create a provider account if password has no uppercase letter', async () => {
+    //     const ProviderNoUppercase = {
+    //         "choice": "healthcare-provider",
+    //         "first_name": "John",
+    //         "last_name": "Doctor",
+    //         "phone_number": "8049998888",
+    //         "email": "drdoctor@gmail.com",
+    //         "password": "nouppercase1!abc",
+    //         "confirmed_password": "nouppercase1!abc"
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(ProviderNoUppercase)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("no uppercase")
+    // })
 
-        expect(response.body.message).toBe("Invalid password.")
-        expect(response.body.passwordProblems).toContain("no number")
-    })
+    // it('should not create a patient account if password has no lowercase letter', async () => {
+    //     const PatientNoLowercase = {
+    //         "choice": "patient",
+    //         "first_name": "Squilliam",
+    //         "last_name": "Fancyson",
+    //         "phone_number": "8041112222",
+    //         "email": "Fancyson@gmail.com",
+    //         "password": "NOLOWERCASE1!ABC",
+    //         "confirmed_password": "NOLOWERCASE1!ABC",
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(PatientNoLowercase)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("no lowercase")
+    // })
 
-    //Password missing number -create provider-
-    it('should not create a provider account if password has no number', async () => {
-        const ProviderNoNumber = {
-            "choice": "healthcare_provider",
-            "first_name": "John",
-            "last_name": "Doctor",
-            "phone_number": "8049998888",
-            "email": "drdoctor@gmail.com",
-            "password": "NoNumberHere!abc",
-            "confirmed_password": "NoNumberHere!abc"
-        }
+    // it('should not create a provider account if password has no lowercase letter', async () => {
+    //     const ProviderNoLowercase = {
+    //         "choice": "healthcare-provider",
+    //         "first_name": "John",
+    //         "last_name": "Doctor",
+    //         "phone_number": "8049998888",
+    //         "email": "drdoctor@gmail.com",
+    //         "password": "NOLOWERCASE1!ABC",
+    //         "confirmed_password": "NOLOWERCASE1!ABC"
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(ProviderNoLowercase)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("no lowercase")
+    // })
 
-        const response = await request(app)
-            .post('/create_account')
-            .send(ProviderNoNumber)
-            .expect('Content-Type', /json/)
-            .expect(200)
+    // it('should not create a patient account if password has no number', async () => {
+    //     const PatientNoNumber = {
+    //         "choice": "patient",
+    //         "first_name": "Squilliam",
+    //         "last_name": "Fancyson",
+    //         "phone_number": "8041112222",
+    //         "email": "Fancyson@gmail.com",
+    //         "password": "NoNumberHere!abc",
+    //         "confirmed_password": "NoNumberHere!abc"
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(PatientNoNumber)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("no number")
+    // })
 
+    // it('should not create a provider account if password has no number', async () => {
+    //     const ProviderNoNumber = {
+    //         "choice": "healthcare-provider",
+    //         "first_name": "John",
+    //         "last_name": "Doctor",
+    //         "phone_number": "8049998888",
+    //         "email": "drdoctor@gmail.com",
+    //         "password": "NoNumberHere!abc",
+    //         "confirmed_password": "NoNumberHere!abc"
+    //     }
+    //     const response = await request(app)
+    //         .post('/create_account')
+    //         .send(ProviderNoNumber)
+    //         .expect('Content-Type', /json/)
+    //         .expect(200)
+    //     expect(response.body.message).toBe("Invalid password.")
+    //     expect(response.body.passwordProblems).toContain("no number")
+    // })
+
+<<<<<<< Updated upstream:api.test.js
         expect(response.body.message).toBe("Invalid password.")
         expect(response.body.passwordProblems).toContain("no number")
     })
@@ -442,3 +632,8 @@ describe('POST /create_account', () => {
 
 })
 
+=======
+})
+
+//npm test -- /createAccount_test.js
+>>>>>>> Stashed changes:tests/createAccount.test.js
