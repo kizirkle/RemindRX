@@ -5,16 +5,18 @@ describe('POST /addMedication', () => {
 
     // Default data to use for generic test function ("correct" values are the default)
     const defaultData = {
-        "medication-name": "test_medicine",
+        "prescription_name": "test_medicine",
         "dose": 1,
-        "start-date": new Date(),
-        "frequency": 24,
-        "total-pills": 10,
-        "side-effects": "None",
-        "additional-notes": "None",
-        "patient-first-name": "Jeff",
-        "patient-last-name": "Frank",
-        "patient-id": "100000"
+        "start_date": new Date(),
+        "end_date": new Date(),
+        "frequency_hours": 24,
+        "total_pills": 10,
+        "side_effects": "None",
+        "additional_notes": "None",
+        "patient_first_name": "Jeff",
+        "patient_last_name": "Frank",
+        "patient_id": "100000",
+        "provider_id": "100000"
     }
 
     // Default expectation data (Some are empty and should be overwritten when creating the test)
@@ -59,7 +61,7 @@ describe('POST /addMedication', () => {
     // Expected: "No patient found."
     // -------------------------------------------------------------------------
     it("[M1] Should not add medication given invalid user ID", createAddMedicationTest({
-        "patient-id": 0
+        patient_id: 0
     }, {
         message: "No patient found."
     }))
@@ -71,7 +73,7 @@ describe('POST /addMedication', () => {
     // Expected: "No patient found."
     // -------------------------------------------------------------------------
     it("[M2] Should not add medication given invalid first name", createAddMedicationTest({
-        "patient-first-name": "John"
+        patient_first_name: "John"
     }, {
         message: "No patient found."
     }))
@@ -83,7 +85,7 @@ describe('POST /addMedication', () => {
     // Expected: "No patient found."
     // -------------------------------------------------------------------------
     it("[M3] Should not add medication given invalid last name", createAddMedicationTest({
-        "patient-last-name": "Byrne"
+        patient_last_name: "Byrne"
     }, {
         message: "No patient found."
     }))
@@ -95,9 +97,9 @@ describe('POST /addMedication', () => {
     // Expected: "No patient found."
     // -------------------------------------------------------------------------
     it("[M4] Should not add medication when patient is not associated with provider", createAddMedicationTest({
-        "patient-first-name": "Sheldon",
-        "patient-last-name": "Dean",
-        "patient-id": "10001"
+        patient_first_name: "Sheldon",
+        patient_last_name: "Dean",
+        patient_id: "10001"
     }, {
         message: "No patient found."
     }))
@@ -109,7 +111,7 @@ describe('POST /addMedication', () => {
     // Expected: "Tylenol has already been added for Jeff Frank.""
     // -------------------------------------------------------------------------
     it("[M5] Should not add medication if it has already been added", createAddMedicationTest({
-        "medication-name": "Tylenol"
+        prescription_name: "Tylenol"
     }, {
         message: "Tylenol has already been added for Jeff Frank."
     }))
@@ -121,8 +123,8 @@ describe('POST /addMedication', () => {
     // Expected: "Dose must be less than total number of pills."
     // -------------------------------------------------------------------------
     it("[M6] Should not add medication if dose is greater than total number of pills", createAddMedicationTest({
-        "dose": 6,
-        "total-pills": 5
+        dose: 6,
+        total_pills: 5
     }, {
         message: "Dose must be less than total number of pills."
     }))
@@ -135,7 +137,7 @@ describe('POST /addMedication', () => {
     // Expected: passed: true
     // -------------------------------------------------------------------------
     it("[M7] Should add medication if inputs are valid", createAddMedicationTest({
-        "medicine-name": "Test Medicine"
+        prescription_name: "Test Medicine"
     }, {
         passed: true
     }))
