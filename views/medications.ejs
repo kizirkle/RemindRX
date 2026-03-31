@@ -1,0 +1,49 @@
+<!-- Medications -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Medications</title>
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
+    </head>
+    <body>
+        <h1 id="patient-name">Medications</h1>
+        <div id="table-format">
+            <table>
+            <thead>
+                <tr>
+                    <th>Medication</th>
+                    <th>Healthcare Provider</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total Pills</th>
+                    <th>Dose</th>
+                    <th>Frequency</th>
+                    <th>Side Effects</th>
+                    <th>Additional Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through the users array and add rows -->
+                <% medications.forEach(medication => { %>
+                    <tr>
+                        <td><%= medication.prescription_name %></td>
+                        <td><%= medication.provider_first_name %> <%= medication.provider_last_name %></td>
+                        <td><%= medication.start_date %></td>
+                        <td><%= medication.end_date %></td>
+                        <td><%= medication.total_pills %></td>
+                        <td><%= medication.dose %></td>
+                        <td>Every <%= medication.frequency_hours %> <%= medication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                        <td><%= medication.side_effects %></td>
+                        <td><%= medication.additional_notes %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+        
+        <button id="return-home-btn" onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
+        <br>
+        <script src="/logout.js"></script>
+    </body>
+</html>

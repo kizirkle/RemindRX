@@ -3,6 +3,7 @@
 //Forms that have information to add a new medication to a patient
 var addMedicationForm = document.getElementById('add-med-form');
 var message = document.getElementById('message')
+
 //when the form is submitted, calculate the end date, find the patient id, and add a new medication
 addMedicationForm.addEventListener("submit", async (event) => {
     //Prevents the page from automatically reloading

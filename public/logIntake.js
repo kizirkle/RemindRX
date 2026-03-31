@@ -1,15 +1,46 @@
 //Form that has the information to connect patient to provider
-var addProviderForm = document.getElementById("add-provider-form")
+var addProviderForm = document.getElementById("log-intake-form")
 
-//Information from form needed to connect patient to provider
-var providerId = document.getElementById("provider-id")
-var providerFirstName = document.getElementById("provider-first-name")
-var providerLastName = document.getElementById("provider-last-name")
+//Gets the prescription ID of selected medication
+var medicationSelect = document.getElementById("medication-select")
+var prescriptionId = ""
+medicationSelect.addEventListener("change", (event) => {
+    prescriptionId = event.target.value
+})
 
-//Error message that is diplayed if adding provider failed
+//Radiobuttons to indicate status
+var radioTaken = document.getElementById("radio-taken")
+var radioMissed = document.getElementById("radio-missed")
+
+//Information to be diplayed if taken
+var intakeDate = document.getElementById("intake-date")
+var intakeTime = document.getElementById("intake-time")
+
+//Information needed to submit
+var intakeDate = document.getElementById('intake-date')
+var intakeTime = document.getElementById('intake-time')
+var additionalNotes = document.getElementById('additional-notes')
+
+//Error message that is diplayed if log intake failed
 var message = document.getElementById('message')
 
-//Adds a new patient-provider association or returns error
+//Requires the time and date fields to be filled out when medication was taken
+radioTaken.addEventListener("change", ()=> {
+    intakeDate.style.display = "block"
+    intakeDate.required = true
+    intakeTime.style.display = "block"
+    intakeTime.required = true
+})
+
+//Hides the time and date fields when medication was not taken
+radioMissed.addEventListener("change", ()=> {
+    intakeDate.style.display = "none"
+    intakeDate.required = false
+    intakeTime.style.display = "none"
+    intakeTime.required = false
+})
+
+
 addProviderForm.addEventListener("submit", async (event)=> {
     //Prevents the page from automatically reloading
     event.preventDefault()
@@ -19,18 +50,23 @@ addProviderForm.addEventListener("submit", async (event)=> {
     var urlSections = currentUrl.split('/')
     var patientId = urlSections[4]
 
+    //Checks if the medication was taken or missed
+    var medStatus = document.querySelector('input[name="status"]:checked').value
+
     try {
         //Attempts to log user in
-        var response = await fetch(`/patient/${patientId}/add_provider`, {
+        var response = await fetch(`/patient/${patientId}/log`, {
         method: "POST", 
         headers: {
             'Content-Type': 'application/json' 
         },
         body: JSON.stringify({
+            status: medStatus,
+            intake_date: intakeDate.value,
+            intake_time: intakeTime.value, 
+            additional_notes: additionalNotes.value,
             patient_id: patientId,
-            provider_id: providerId.value,
-            provider_first_name: providerFirstName.value, 
-            provider_last_name: providerLastName.value
+            prescription_id: prescriptionId
             })
         })
 
@@ -70,4 +106,3 @@ window.onload = function () {
     }
     sessionStorage.removeItem('errorMessage');
 }
-

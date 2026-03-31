@@ -4,15 +4,23 @@
 <html>
     <head>
         <title>Provider Portal</title>
-        <link rel="stylesheet" href="../index.css">
-        <link rel="fav icon" type="image/x-icon" href="../image/pill.png">
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
     <body>
         <h1 id="patient-name">Welcome, <%= providerName %></h1>
+        <h2 id="patient-name">Patients</h2>
+            <div id="name-list">
+                <% patients.forEach(patient => { %>
+                    <span><%= patient %></span><br>
+                <% }) %>
+            </div>
         <button id="add-medication-btn" onclick="location.href='/addMedication'">Add Medication</button>
         <br>
+        <button id="add-medication-btn" onclick="window.location.href='<%= providerProfile %>'">View Profile</button>
+        <br>
         <button onclick="logout()">Log Out</button>
-        <script src="../logout.js"></script>
+        <script src="/logout.js"></script>
     </body>
 </html>
 
