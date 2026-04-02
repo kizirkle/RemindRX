@@ -1,7 +1,7 @@
 import express from 'express'
 const providerRouter = express.Router()
 
-import {getProviderById, getPatientFromProvider, getPatientIds, getPatientNames} from '../database.js'
+import {getProviderById, getPatientFromProvider, getPatientIds, getPatientNames, getPatientNamesFromProvider, getPatientById, getAllMedicationsForPatient, getPatientLogs} from '../database.js'
 
 //View provider profile
 providerRouter.get("/:id/profile", async(req, res) => {
@@ -29,6 +29,41 @@ providerRouter.get("/:id/profile", async(req, res) => {
     })
 })
 
+//Selecting a patient to view log
+providerRouter.get("/:id/patient_log", async(req,res) => {
+    var provider = await getProviderById(req.params.id)
+    if (!provider) {
+        return res.status(404).send("Provider not found");
+    }
+    var patients = await getPatientNamesFromProvider(provider.provider_id)
+    return res.render('choosePatientLog.ejs', {
+        providerName: `${provider.provider_first_name} ${provider.provider_last_name}`,
+        providerPortal: `/provider/${req.params.id}`,
+        patients: patients
+    })
+})
+
+providerRouter.get("/:providerId/patient_log/:patientId", async(req,res)=> {
+    var provider = await getProviderById(req.params.providerId)
+    if (!provider) {
+        return res.status(404).send("Provider not found");
+    }
+    var patient = await getPatientById(req.params.patientId)
+    if (!patient) {
+        return res.status(404).send("Patient not found");
+    }
+    var medications = await getAllMedicationsForPatient(patient.patient_id)
+    var patientLogs = await getPatientLogs(patient.patient_id)
+    return res.render('viewPatientLog.ejs', {
+        patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
+        medications: medications, 
+        patientLog: patientLogs,
+        providerPortal: `/provider/${req.params.providerId}/profile`,
+        anotherPatient: `/provider/${req.params.providerId}/patient_log`,
+
+    })
+})
+
 //Access provider portal of specific provider
 providerRouter.get("/:id", async(req,res) => {
     var provider = await getProviderById(req.params.id)
@@ -48,8 +83,10 @@ providerRouter.get("/:id", async(req,res) => {
     return res.render('providerPortal.ejs', {
         providerName: `${provider.provider_first_name} ${provider.provider_last_name}`,
         providerProfile: `/provider/${req.params.id}/profile`,
-        patients: patientNameList
+        choosePatientLog: `/provider/${req.params.id}/patient_log`,
+        patients: patientNameList, 
     })
 })
+
 
 export default providerRouter

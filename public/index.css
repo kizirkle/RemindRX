@@ -347,4 +347,8 @@ th {
   text-align: center;
 }
 
+#correctMessage {
+    color: rgb(117, 126, 255)
+}
+
 

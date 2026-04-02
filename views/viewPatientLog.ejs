@@ -1,0 +1,72 @@
+<!-- View Patinet logs -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Patient Log</title>
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
+    </head>
+    <body>
+        <h1 id="patient-name"><%= patientName %></h1>
+         <% medications.forEach(medication => { %>
+                <h2 style="text-align: center; padding: 10px"><%= medication.prescription_name %></h2>
+                <div id="table-format">
+                <table>
+                    <thead>
+                        <tr style="background-color: #907ca277;">
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total Pills</th>
+                            <th>Dose</th>
+                            <th>Frequency</th>
+                            <th>Side Effects</th>
+                            <th>Additional Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><%= medication.start_date %></td>
+                                <td><%= medication.end_date %></td>
+                                <td><%= medication.total_pills %></td>
+                                <td><%= medication.dose %></td>
+                                <td>Every <%= medication.frequency_hours %> <%= medication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                                <td><%= medication.side_effects %></td>
+                                <td><%= medication.additional_notes %></td>
+                            </tr>
+                    </tbody>
+                </table>
+                <br>
+                <div id="table-format">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Intake Time</th>
+                                <th>Additional Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Loop through the patient log array and choose element with medication name -->
+                        <% patientLog.forEach(log => { %>
+                            <% if (log.prescription_name === medication.prescription_name) { %>
+                                <tr>
+                                    <td><%= log.status %></td>
+                                    <td><%= log.report_date %></td>
+                                    <td><%= log.intake_time %></td>
+                                    <td><%= log.additional_notes %></td>
+                                </tr>
+                            <% } %>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                    <br>
+                <% }); %>   
+                 
+        <button id="return-home-btn" onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
+        <br>
+        <button id="another-patient" onclick="window.location.href='<%= anotherPatient %>'">Select Another Patient</button>
+        <br>
+        <script src="/logout.js"></script>
+    </body>
+</html>

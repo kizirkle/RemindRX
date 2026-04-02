@@ -19,11 +19,28 @@ export async function getPatients() {
   return rows
 }
 
+
 export async function getProviderFromPatient(patientId) {
   var [rows] = await pool.query(`
       SELECT * FROM PatientProvider
       WHERE patient_id = ?
     `, [patientId])
+  return rows
+}
+
+export async function getPatientNamesFromProvider(providerId) {
+  var [rows] = await pool.query(`
+      SELECT
+        PP.provider_id,
+        PP.patient_id,
+        p.patient_first_name,
+        p.patient_last_name
+      FROM 
+        PatientProvider AS PP
+      INNER JOIN
+        patient AS p ON PP.patient_id = p.patient_id
+      WHERE PP.provider_id = ?
+    `, [providerId])
   return rows
 }
 
@@ -34,8 +51,6 @@ export async function getPatientFromProvider(providerId) {
     `, [providerId])
   return rows
 }
-// var providers = await getProviderFromPatient(6) 
-// console.log(providers)
 
 export async function getProviderNames(providerIds) {
   var [rows] = await pool.query(`
@@ -167,7 +182,7 @@ export async function getMedicationNamesByPatientId(patient_id) {
     return rows
 }
 
-export async function getMedicationsForPatient(patient_id) {
+export async function getCurrentMedicationsForPatient(patient_id) {
   var [rows] = await pool.query(`
     SELECT 
       P.prescription_name, 
@@ -191,6 +206,50 @@ export async function getMedicationsForPatient(patient_id) {
     return rows
 }
 
+export async function getAllMedicationsForPatient(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT 
+      P.prescription_name, 
+      P.dose, 
+      DATE_FORMAT(P.start_date, '%m/%d/%Y') AS start_date, 
+      DATE_FORMAT(P.end_date, '%m/%d/%Y') AS end_date, 
+      P.total_pills, 
+      P.frequency_hours, 
+      P.side_effects, 
+      P.additional_notes, 
+      P.patient_id, 
+      H.provider_first_name,
+      H.provider_last_name
+    FROM 
+      prescription AS P 
+    INNER JOIN
+      healthcare_provider AS H ON P.provider_id = H.provider_id
+    WHERE P.patient_id = ? 
+    ORDER BY P.prescription_name ASC;
+    `, [patient_id])
+    return rows
+}
+
+
+export async function getPatientLogs(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT 
+      L.status, 
+      DATE_FORMAT(L.report_date, '%m/%d/%Y') AS report_date, 
+      DATE_FORMAT(L.intake_time, '%h:%i %p') AS intake_time, 
+      L.additional_notes,
+      P.prescription_name,
+      L.patient_id
+    FROM 
+      patient_log AS L 
+    INNER JOIN
+      prescription AS P ON P.prescription_id = L.prescription_id
+      ORDER BY CAST(report_date AS DATE) ASC, CAST(intake_time AS TIME) ASC;
+    `, [patient_id])
+    return rows
+}
+
+
 //Get prescription by ID
 export async function getPrescriptionById(prescription_id) {
   var [rows] = await pool.query(`
@@ -201,9 +260,9 @@ export async function getPrescriptionById(prescription_id) {
 }
 
 //Create a new log entry
-export async function createLogEntry(status, intake_date, intake_time, additional_notes, patient_id, prescription_id) {
+export async function createLogEntry(status, report_date, intake_time, additional_notes, patient_id, prescription_id) {
   await pool.query(`
-    INSERT INTO patient_log(status, intake_date, intake_time, additional_notes, patient_id, prescription_id)
+    INSERT INTO patient_log(status, report_date, intake_time, additional_notes, patient_id, prescription_id)
     VALUES(?, ?, ?, ?, ?, ?)
-    `, [status, intake_date, intake_time, additional_notes, patient_id, prescription_id])
+    `, [status, report_date, intake_time, additional_notes, patient_id, prescription_id])
 }

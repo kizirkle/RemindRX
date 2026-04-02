@@ -12,30 +12,22 @@ medicationSelect.addEventListener("change", (event) => {
 var radioTaken = document.getElementById("radio-taken")
 var radioMissed = document.getElementById("radio-missed")
 
-//Information to be diplayed if taken
-var intakeDate = document.getElementById("intake-date")
-var intakeTime = document.getElementById("intake-time")
-
 //Information needed to submit
-var intakeDate = document.getElementById('intake-date')
+var reportDate = document.getElementById('report-date')
 var intakeTime = document.getElementById('intake-time')
 var additionalNotes = document.getElementById('additional-notes')
 
-//Error message that is diplayed if log intake failed
-var message = document.getElementById('message')
+//Message to be displayed when intake is logged
+var message = document.getElementById('correctMessage')
 
 //Requires the time and date fields to be filled out when medication was taken
 radioTaken.addEventListener("change", ()=> {
-    intakeDate.style.display = "block"
-    intakeDate.required = true
     intakeTime.style.display = "block"
     intakeTime.required = true
 })
 
 //Hides the time and date fields when medication was not taken
 radioMissed.addEventListener("change", ()=> {
-    intakeDate.style.display = "none"
-    intakeDate.required = false
     intakeTime.style.display = "none"
     intakeTime.required = false
 })
@@ -62,7 +54,7 @@ addProviderForm.addEventListener("submit", async (event)=> {
         },
         body: JSON.stringify({
             status: medStatus,
-            intake_date: intakeDate.value,
+            report_date: reportDate.value,
             intake_time: intakeTime.value, 
             additional_notes: additionalNotes.value,
             patient_id: patientId,
@@ -74,35 +66,23 @@ addProviderForm.addEventListener("submit", async (event)=> {
         var data = await response.json()
 
         //Calls function to either return an error or sends the patient or provider to their personal portal
-        systemResponse(data)
+        sessionStorage.setItem('confirmationMessage', "Medication logged.")
+
+        window.location.reload()
     }
     catch(error) {
          console.log("ERROR: failed to submit, error from addProvider.js:", error);
     }
 })
 
-function systemResponse(data) {
-    //Changes the color of the passwords to red 
-
-    if(!data.passed) {
-        //If there was an error, report the given error and reload the current page
-        //Stores the error message in session storge to be displayed when the page is reloaded
-        sessionStorage.setItem('errorMessage', data.message)
-
-        location.reload()
-    } else {
-        //If there is not an error, send user to their patient portal 
-        window.location.href = data.patientPage
-    }
-}
 
 window.onload = function () {
     //Attempt to get the error message from session storage
-    var errorMessage = sessionStorage.getItem('errorMessage')
-    if (errorMessage) {
+    var confirmationMessage = sessionStorage.getItem('confirmationMessage')
+    if (confirmationMessage) {
         //If there is an error, displays it
-        message.textContent = errorMessage
+        message.textContent = confirmationMessage
         message.style.display = "block"
     }
-    sessionStorage.removeItem('errorMessage');
+    sessionStorage.removeItem('confirmationMessage');
 }

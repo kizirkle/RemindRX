@@ -57,8 +57,6 @@ addMedicationForm.addEventListener("submit", async (event) => {
             })
         })
         var data = await response.json()
-        console.log(patientId.value)
-        console.log(localStorage.getItem('provider_id'))
         systemResponse(data, "provider")
     }
     catch (error) {

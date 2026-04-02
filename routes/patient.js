@@ -2,7 +2,7 @@ import express from 'express'
 const patientRouter = express.Router()
 import path from 'path'
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getMedicationsForPatient, getMedicationNamesByPatientId, getPrescriptionById, createLogEntry} from '../database.js'
+import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getCurrentMedicationsForPatient, getMedicationNamesByPatientId, getPrescriptionById, createLogEntry} from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';
@@ -49,7 +49,7 @@ patientRouter.get("/:id/medications", async(req, res) => {
     if (!patient) {
         return res.status(404).send("Patient not found");
     }
-    var medications = await getMedicationsForPatient(patient.patient_id)
+    var medications = await getCurrentMedicationsForPatient(patient.patient_id)
     return res.render('medications.ejs', {
         patientPortal: `/patient/${req.params.id}`, 
         medications: medications
@@ -71,12 +71,12 @@ patientRouter.get("/:id/log", async(req, res) => {
 
 //Logs medication status for patient
 patientRouter.post("/:id/log", async(req, res) => {
-    var{status, intake_date, intake_time, additional_notes, patient_id, prescription_id} = req.body
+    var{status, report_date, intake_time, additional_notes, patient_id, prescription_id} = req.body
     try {
         if(status === "taken") {
-            createLogEntry(status, intake_date, intake_time, additional_notes, patient_id, prescription_id)
+            createLogEntry(status, report_date, intake_time, additional_notes, patient_id, prescription_id)
         } else {
-            createLogEntry(status, null, null, additional_notes, patient_id, prescription_id)
+            createLogEntry(status, report_date, null, additional_notes, patient_id, prescription_id)
         }
         return res.json({passed: true, patientPage: `/patient/${patient_id}`})
     } catch{
