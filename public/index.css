@@ -105,6 +105,7 @@ h3 {
 #message {
     display: none; 
     color: red; 
+    text-align: center; 
 }
 
 

@@ -58,7 +58,7 @@ providerRouter.get("/:providerId/patient_log/:patientId", async(req,res)=> {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
         medications: medications, 
         patientLog: patientLogs,
-        providerPortal: `/provider/${req.params.providerId}/profile`,
+        providerPortal: `/provider/${req.params.providerId}`,
         anotherPatient: `/provider/${req.params.providerId}/patient_log`,
 
     })

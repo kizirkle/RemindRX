@@ -4,6 +4,14 @@
 var addMedicationForm = document.getElementById('add-med-form');
 var message = document.getElementById('message')
 
+//Button to return to portal
+var providerPortal = document.getElementById('return-home-btn')
+
+providerPortal.addEventListener("click", () => {
+    console.log("here")
+    window.location.href = `/provider/${localStorage.getItem('provider_id')}`
+})
+
 //when the form is submitted, calculate the end date, find the patient id, and add a new medication
 addMedicationForm.addEventListener("submit", async (event) => {
     //Prevents the page from automatically reloading
@@ -71,26 +79,32 @@ function systemResponse(data, type) {
     if(!data.passed) {
         //If there was an error, report the given error and reload the current page
         //Stores the error message in session storge to be displayed when the page is reloaded
-        sessionStorage.setItem('errorMessage', data.message)
+        sessionStorage.setItem('response', data.message)
         //Reloads the page
         location.reload()
     } else {
         //If there is not an error, send user to their personal portal 
-        window.location.href = `/provider/${localStorage.getItem('provider_id')}`
+        //window.location.href = `/provider/${localStorage.getItem('provider_id')}`
+        sessionStorage.setItem('response', "Medication added.")
+        location.reload()
     }
 }
 
 //Each time the page is reloaded, report the error from the previous log in or sign up attempt if one exists
 window.onload = function () {
     //Attempt to get the error message from session storage
-    var errorMessage = sessionStorage.getItem('errorMessage')
-    if (errorMessage) {
-        //If there is an error, displays it
-        message.textContent = errorMessage
+    var response = sessionStorage.getItem('response')
+    if (response) {
+        //If added, the message is purple
+        if(response === "Medication added.") {
+            message.style.color = "rgb(117, 126, 255)"
+        }
+        //If there is an error, displays it in red
+        message.textContent = response
         message.style.display = "block"
     }
     //Clears the error message from session storage so that it does not persist on future reloads
-    sessionStorage.removeItem('errorMessage')
+    sessionStorage.removeItem('response')
 }
 
 

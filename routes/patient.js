@@ -2,7 +2,7 @@ import express from 'express'
 const patientRouter = express.Router()
 import path from 'path'
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getCurrentMedicationsForPatient, getMedicationNamesByPatientId, getPrescriptionById, createLogEntry} from '../database.js'
+import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getCurrentMedicationsForPatient, getMedicationNamesByPatientId, createLogEntry, deletePatientAccount} from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';
@@ -109,6 +109,13 @@ patientRouter.get("/:id/profile", async(req, res) => {
         addProvider: `/patient/${req.params.id}/add_provider`, 
         patientPortal: `/patient/${req.params.id}`
     })
+})
+
+//View patient profile
+patientRouter.delete("/:id/profile", async(req, res) => {
+    await deletePatientAccount(req.params.id)
+    var filePath = path.join(__dirname, '../public/deleteAccount.html');
+    res.sendFile(filePath)
 })
 
 

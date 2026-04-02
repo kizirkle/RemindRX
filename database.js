@@ -266,3 +266,11 @@ export async function createLogEntry(status, report_date, intake_time, additiona
     VALUES(?, ?, ?, ?, ?, ?)
     `, [status, report_date, intake_time, additional_notes, patient_id, prescription_id])
 }
+
+//Delete patient
+export async function deletePatientAccount(patient_id) {
+  await pool.query(`
+    DELETE FROM patient 
+    WHERE patient_id = ?
+    `, [patient_id])
+}
