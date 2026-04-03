@@ -2,7 +2,7 @@ import express from 'express'
 const addMedicationRouter = express.Router()
 import path from 'path'
 
-import {addMedication, getPatientById, getPatientProvider, getMedicationsByName} from '../database.js'
+import {addMedication, getPatientById, getPatientProvider, getCurrentMedicationsByName} from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';
@@ -30,8 +30,8 @@ addMedicationRouter.post("/", async (req, res) => {
             //If the patient is not associated with the provider, returns an error message
             return res.json({passed: false, message: `No patient found.`})
         }
-        var medication = await getMedicationsByName(prescription_name)
-        if(medication) {
+        var medication = await getCurrentMedicationsByName(prescription_name, patient_id)
+        if(medication.length !== 0) {
             //If the medication has already been added, returns an error message
             return res.json({passed: false, message: `${prescription_name} has already been added for ${patient_first_name} ${patient_last_name}.`})
         }

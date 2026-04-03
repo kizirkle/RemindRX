@@ -19,6 +19,7 @@ export async function getPatients() {
   return rows
 }
 
+
 export async function getProviderFromPatient(patientId) {
   var [rows] = await pool.query(`
       SELECT * FROM PatientProvider
@@ -26,14 +27,44 @@ export async function getProviderFromPatient(patientId) {
     `, [patientId])
   return rows
 }
-// var providers = await getProviderFromPatient(6) 
-// console.log(providers)
+
+export async function getPatientNamesFromProvider(providerId) {
+  var [rows] = await pool.query(`
+      SELECT
+        PP.provider_id,
+        PP.patient_id,
+        p.patient_first_name,
+        p.patient_last_name
+      FROM 
+        PatientProvider AS PP
+      INNER JOIN
+        patient AS p ON PP.patient_id = p.patient_id
+      WHERE PP.provider_id = ?
+    `, [providerId])
+  return rows
+}
+
+export async function getPatientFromProvider(providerId) {
+  var [rows] = await pool.query(`
+      SELECT * FROM PatientProvider
+      WHERE provider_id = ?
+    `, [providerId])
+  return rows
+}
 
 export async function getProviderNames(providerIds) {
   var [rows] = await pool.query(`
       SELECT provider_first_name, provider_last_name FROM healthcare_provider
       WHERE provider_id IN (?)
     `, [providerIds])
+  return rows
+}
+
+export async function getPatientNames(patientIds) {
+  var [rows] = await pool.query(`
+      SELECT patient_first_name, patient_last_name FROM patient
+      WHERE patient_id IN (?)
+    `, [patientIds])
   return rows
 }
 
@@ -45,11 +76,15 @@ export async function getProviderIds(patientId) {
     `, [patientId])
   return rows
   }
-// const names = await getProviderIds(1)
-// console.log(names)
 
-// const name = await getProviderNames([100000, 1000001])
-// console.log(name)
+export async function getPatientIds(providerId) {
+var [rows] = await pool.query(`
+    SELECT patient_id FROM PatientProvider
+    WHERE provider_id = ?
+  `, [providerId])
+return rows
+}
+
 
 //Get patients by email address and return the corresponding patient object
 export async function getPatientByEmail(email) {
@@ -131,12 +166,106 @@ export async function addMedication(prescription_name,dose,start_date,end_date,f
     `, [prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id])
 }
 
-export async function getMedicationsByName(prescription_name) {
+export async function getCurrentMedicationsByName(prescription_name, patient_id) {
   var [rows] = await pool.query(`
     SELECT * FROM prescription
-    WHERE prescription_name = ?
-    `, [prescription_name])
-    return rows[0]
+    WHERE prescription_name = ? AND patient_id = ? AND end_date >= CURDATE()
+    `, [prescription_name, patient_id])
+    return rows
+}
+
+export async function getCurrentMedicationsForPatient(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT 
+      P.prescription_name, 
+      P.dose, 
+      DATE_FORMAT(P.start_date, '%m/%d/%Y') AS start_date, 
+      DATE_FORMAT(P.end_date, '%m/%d/%Y') AS end_date, 
+      P.total_pills, 
+      P.frequency_hours, 
+      P.side_effects, 
+      P.additional_notes, 
+      P.patient_id, 
+      P.prescription_id,
+      H.provider_first_name,
+      H.provider_last_name
+    FROM 
+      prescription AS P 
+    INNER JOIN
+      healthcare_provider AS H ON P.provider_id = H.provider_id
+    WHERE P.patient_id = ? AND P.end_date >= CURDATE()
+    ORDER BY P.prescription_name ASC;
+    `, [patient_id])
+    return rows
+}
+
+export async function getPastMedicationsForPatient(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT 
+      P.prescription_name, 
+      P.dose, 
+      DATE_FORMAT(P.start_date, '%m/%d/%Y') AS start_date, 
+      DATE_FORMAT(P.end_date, '%m/%d/%Y') AS end_date, 
+      P.total_pills, 
+      P.frequency_hours, 
+      P.side_effects, 
+      P.additional_notes, 
+      P.patient_id, 
+      P.prescription_id,
+      H.provider_first_name,
+      H.provider_last_name
+    FROM 
+      prescription AS P 
+    INNER JOIN
+      healthcare_provider AS H ON P.provider_id = H.provider_id
+    WHERE P.patient_id = ? AND P.end_date < CURDATE()
+    ORDER BY P.prescription_name ASC;
+    `, [patient_id])
+    return rows
 }
 
 
+export async function getPatientLogs(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT 
+      L.status, 
+      DATE_FORMAT(L.report_date, '%m/%d/%Y') AS report_date, 
+      DATE_FORMAT(L.intake_time, '%h:%i %p') AS intake_time, 
+      L.additional_notes,
+      P.prescription_name,
+      P.prescription_id,
+      L.patient_id
+    FROM 
+      patient_log AS L 
+    INNER JOIN
+      prescription AS P ON P.prescription_id = L.prescription_id
+      ORDER BY CAST(report_date AS DATE) ASC, CAST(intake_time AS TIME) ASC;
+    `, [patient_id])
+    return rows
+}
+
+
+//Get prescription by ID
+export async function getPrescriptionById(prescription_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM prescription
+    WHERE prescription_id = ?
+    `, [prescription_id])
+    return rows[0]
+}
+
+//Create a new log entry
+export async function createLogEntry(status, report_date, intake_time, additional_notes, patient_id, prescription_id) {
+  await pool.query(`
+    INSERT INTO patient_log(status, report_date, intake_time, additional_notes, patient_id, prescription_id)
+    VALUES(?, ?, ?, ?, ?, ?)
+    `, [status, report_date, intake_time, additional_notes, patient_id, prescription_id])
+}
+
+//Delete patient
+export async function deletePatientAccount(patient_id) {
+  await pool.query(`
+    DELETE FROM patient 
+    WHERE patient_id = ?
+    `, [patient_id])
+}

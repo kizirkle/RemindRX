@@ -105,6 +105,7 @@ h3 {
 #message {
     display: none; 
     color: red; 
+    text-align: center; 
 }
 
 
@@ -136,6 +137,14 @@ form.login div {
     align-items: center;
     gap: 10px;
     margin-bottom: 8px;
+}
+
+form.log-intake div {
+    display: flex;
+    align-items: left;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 16px;
 }
 
 /* Radio Button edits*/
@@ -267,7 +276,7 @@ input[type="tel"]:focus {
     text-align: center;
 }
 
-.add-provider {
+.form {
     text-align: left; 
     display: flex;
     flex-direction: column;
@@ -277,12 +286,22 @@ input[type="tel"]:focus {
 }
 
 .provider-error-spacing {
-    padding-top: 20px;
+    padding-top: 12px;
 }
 
-#provider-names {
+#names-profile {
+    padding-top: 10px;
+    line-height: 20px;
+    padding-left: 30px;
+}
+
+#name-list {
     padding-top: 10px;
     line-height: 30px;
+}
+
+#provider-heading {
+    text-align: center;
 }
 
 #med-specs {
@@ -296,3 +315,42 @@ input[type="tel"]:focus {
 #additional-notes {
     height: 75px; 
 }
+
+#profile-info {
+    display: flex; 
+    flex-direction: column;
+    text-align: left; 
+    gap: 4px;
+}
+
+#centered {
+    display: flex;
+    justify-content: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 90%;
+  border: 1px solid black; 
+  padding: 20px;
+  margin: auto; 
+  min-width: 1000px;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 12px; 
+  text-align: center;
+}
+
+th {
+  background-color: rgba(157, 164, 255, 0.466); /* Optional: Light grey header */
+  text-align: center;
+}
+
+#correctMessage {
+    color: rgb(117, 126, 255)
+}
+
+
+

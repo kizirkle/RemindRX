@@ -1,0 +1,147 @@
+<!-- View Patinet logs -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Patient Log</title>
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
+    </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
+    <body>
+        <h1 id="patient-name" style="margin-top: 30px">Patient Log: <B><%= patientName %></B></h1>
+        <h2 id="current-medications" style="font-size: 25px; padding: 10px;"><u>Current Medications</u></h2>
+         <% currentMedications.forEach(currentMedication => { %>
+                <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= currentMedication.prescription_name %></h3>
+                <div id="table-format">
+                <table>
+                    <thead>
+                        <tr style="background-color: #907ca277;">
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total Pills</th>
+                            <th>Dose</th>
+                            <th>Frequency</th>
+                            <th>Side Effects</th>
+                            <th>Additional Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><%= currentMedication.start_date %></td>
+                                <td><%= currentMedication.end_date %></td>
+                                <td><%= currentMedication.total_pills %></td>
+                                <td><%= currentMedication.dose %></td>
+                                <td>Every <%= currentMedication.frequency_hours %> <%= currentMedication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                                <td><%= currentMedication.side_effects %></td>
+                                <td><%= currentMedication.additional_notes %></td>
+                            </tr>
+                    </tbody>
+                </table>
+                <br>
+                <div id="table-format">
+                        <!-- Loop through the patient log array and choose element with prescription ID for current prescription -->
+                        <% var counter = 0; %>
+                        <% patientLog.forEach(log => { %>
+                            <% if (log.prescription_id === currentMedication.prescription_id) { %>
+                                <% if (counter === 0) { %>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Status<% counter %></th>
+                                                <th>Date</th>
+                                                <th>Intake Time</th>
+                                                <th>Patient Notes</th>
+                                            </tr>
+                                        </thead>
+                                    <% counter = 1 %>
+                                <% } %>
+                                <tbody>
+                                <tr>
+                                    <style>
+                                    .status-taken { color: rgb(53, 130, 53); }
+                                    .status-pending { color: rgb(221, 45, 45); }
+                                    </style>
+                                    <td class="<%= log.status === 'taken' ? 'status-taken' : 'status-pending' %>">
+                                        <%= log.status %>
+                                    </td>
+                                    <td><%= log.report_date %></td>
+                                    <td><%= log.intake_time %></td>
+                                    <td><%= log.additional_notes %></td>
+                                </tr>
+                            <% } %>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                    <br>
+                <% }); %> 
+                <br>
+                <h2 id="past-medications" style="font-size: 25px; padding-bottom: 10px;"><u>Past Medications</u></h2>
+                <% pastMedications.forEach(pastMedication => { %>
+                <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= pastMedication.prescription_name %></h3>
+                <div id="table-format">
+                <table>
+                    <thead>
+                        <tr style="background-color: #907ca277;">
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total Pills</th>
+                            <th>Dose</th>
+                            <th>Frequency</th>
+                            <th>Side Effects</th>
+                            <th>Additional Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><%= pastMedication.start_date %></td>
+                                <td><%= pastMedication.end_date %></td>
+                                <td><%= pastMedication.total_pills %></td>
+                                <td><%= pastMedication.dose %></td>
+                                <td>Every <%= pastMedication.frequency_hours %> <%= pastMedication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                                <td><%= pastMedication.side_effects %></td>
+                                <td><%= pastMedication.additional_notes %></td>
+                            </tr>
+                    </tbody>
+                </table>
+                <br>
+                <div id="table-format">
+                     <% var counter = 0; %>
+                        <% patientLog.forEach(log => { %>
+                            <% if (log.prescription_id === pastMedication.prescription_id) { %>
+                                <% if (counter === 0) { %>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Status<% counter %></th>
+                                                <th>Date</th>
+                                                <th>Intake Time</th>
+                                                <th>Patient Notes</th>
+                                            </tr>
+                                        </thead>
+                                    <% counter = 1 %>
+                                <% } %>
+                                <tbody>
+                                <tr>
+                                    <td class="<%= log.status === 'taken' ? 'red' : 'green' %>">
+                                        <%= log.status %> 
+                                    </td>
+                                    <td><%= log.report_date %></td>
+                                    <td><%= log.intake_time %></td>
+                                    <td><%= log.additional_notes %></td>
+                                </tr>
+                            <% } %>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                    <br>
+                <% }); %>   
+                 
+        <button id="another-patient" style="margin-bottom: 7px;" onclick="window.location.href='<%= anotherPatient %>'">Select Another Patient</button>
+        <br>
+        <button style="margin-bottom: 30px;" id="return-home-btn" onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
+        <br>
+        <script src="/logout.js"></script>
+    </body>
+</html>

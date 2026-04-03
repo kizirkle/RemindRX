@@ -4,15 +4,22 @@
 <html>
     <head>
         <title>Provider Portal</title>
-        <link rel="stylesheet" href="../index.css">
-        <link rel="fav icon" type="image/x-icon" href="../image/pill.png">
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
     <body>
-        <h1 id="patient-name">Welcome, <%= providerName %></h1>
+        <h1 id="patient-name">Welcome, <B><%= providerName %></B></h1>
         <button id="add-medication-btn" onclick="location.href='/addMedication'">Add Medication</button>
         <br>
+        <button id="view-patient-log-btn" onclick="window.location.href='<%= choosePatientLog %>'">View Patient Log</button>
+        <br>
+        <button id="add-medication-btn" onclick="window.location.href='<%= providerProfile %>'">View Profile</button>
+        <br>
         <button onclick="logout()">Log Out</button>
-        <script src="../logout.js"></script>
+        <script src="/logout.js"></script>
     </body>
 </html>
 

@@ -3,22 +3,24 @@
 <html>
     <head>
         <title>Patient Portal</title>
-        <link rel="stylesheet" href="../index.css">
-        <link rel="fav icon" type="image/x-icon" href="../image/pill.png">
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 300px;">
+    </div>
     <body>
-        <h1 id="patient-name">Welcome, <%= patientName %></h1>
-        <h2 id="patient-name">Healthcare Providers</h2>
-            <div id="provider-names">
-                <% providers.forEach(provider => { %>
-                    <span><%= provider %></span><br>
-                <% }) %>
-            </div>
-        
-        <button id="add-medication-btn" onclick="window.location.href='<%= providerPortal %>'">Add Healthcare Provider</button>
+        <h1 id="patient-name">Welcome, <B><%= patientName %></B></h1>
+        <button id="medications-btn" onclick="window.location.href='<%= medications %>'">View Medications</button>
+        <br>
+        <button id="log-intake-btn" onclick="window.location.href='<%= logIntake %>'">Log Intake</button>
+        <br>
+        <button id="add-medication-btn" onclick="window.location.href='<%= addProvider %>'">Add Provider</button>
+        <br>
+        <button id="add-medication-btn" onclick="window.location.href='<%= patientProfile %>'">View Profile</button>
         <br>
         <button onclick="logout()">Log Out</button>
         <br>
-        <script src="../logout.js"></script>
+        <script src="/logout.js"></script>
     </body>
 </html>

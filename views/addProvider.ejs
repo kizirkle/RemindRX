@@ -1,27 +1,29 @@
-<!-- addMed -->
-
+<!-- Add Healthcare Provider Form -->
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Add Healthcare Provider</title>
+        <title>Add Provider</title>
         <link rel="stylesheet" href="/index.css">
         <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
     <body>
-        <h1>Add Healthcare Provider</h1>
+        <h1>Add <B>Provider</B></h1>
         <!-- Add Healthcare Provider form -->
         <form id="add-provider-form">
-            <!-- Add Medication Name -->
-             <div class="add-provider">
+            <!-- Provider Information -->
+             <div class="form">
                 <input id="provider-first-name" placeholder="Provider First Name" required>
                 <input id="provider-last-name" placeholder="Provider Last Name" required>
                 <input id="provider-id" placeholder="Provider ID" required>
             </div> 
-            <button type="submit" id="add-provider-btn">Add Provider</button>
+            <!-- Error message displayed on reload if add provider failed -->
+             <span class="provider-error-spacing" id="message" style="display: none"></span>
+            <button type="submit" id="add-provider-btn" style="margin-top: 20px;">Add Provider</button>
         </form>
-        <button onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
-        <!-- Error message displayed on reload if login failed -->
-        <span class="provider-error-spacing" id="message" style="display: none"></span>
+        <button onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
         <script src="/addProvider.js"></script>
     </body>
 </html>

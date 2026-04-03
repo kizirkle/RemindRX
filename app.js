@@ -1,4 +1,4 @@
-//Server side JavaScript
+//Server side JavaScript to intialize pages
 
 import express from 'express'
 

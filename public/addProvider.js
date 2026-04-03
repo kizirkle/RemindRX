@@ -6,7 +6,6 @@ var providerId = document.getElementById("provider-id")
 var providerFirstName = document.getElementById("provider-first-name")
 var providerLastName = document.getElementById("provider-last-name")
 
-
 //Error message that is diplayed if adding provider failed
 var message = document.getElementById('message')
 
