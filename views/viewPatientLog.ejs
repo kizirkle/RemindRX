@@ -10,7 +10,7 @@
         <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
     </div>
     <body>
-        <h1 id="patient-name" style="margin-top: 30px">Patient: <B><%= patientName %></B></h1>
+        <h1 id="patient-name" style="margin-top: 30px">Patient Log: <B><%= patientName %></B></h1>
         <h2 id="current-medications" style="font-size: 25px; padding: 10px;"><u>Current Medications</u></h2>
          <% currentMedications.forEach(currentMedication => { %>
                 <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= currentMedication.prescription_name %></h3>
