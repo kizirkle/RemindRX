@@ -6,8 +6,11 @@
         <link rel="stylesheet" href="/index.css">
         <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
     <body>
-        <h1 id="patient-name"><%= patientName %></h1>
+        <h1 id="patient-name" style="margin-top: 30px">Patient: <B><%= patientName %></B></h1>
         <h2 id="current-medications" style="font-size: 25px; padding: 10px;"><u>Current Medications</u></h2>
          <% currentMedications.forEach(currentMedication => { %>
                 <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= currentMedication.prescription_name %></h3>
@@ -38,19 +41,23 @@
                 </table>
                 <br>
                 <div id="table-format">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Intake Time</th>
-                                <th>Patient Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <!-- Loop through the patient log array and choose element with medication name -->
+                        <!-- Loop through the patient log array and choose element with prescription ID for current prescription -->
+                        <% var counter = 0; %>
                         <% patientLog.forEach(log => { %>
                             <% if (log.prescription_id === currentMedication.prescription_id) { %>
+                                <% if (counter === 0) { %>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Status<% counter %></th>
+                                                <th>Date</th>
+                                                <th>Intake Time</th>
+                                                <th>Patient Notes</th>
+                                            </tr>
+                                        </thead>
+                                    <% counter = 1 %>
+                                <% } %>
+                                <tbody>
                                 <tr>
                                     <td><%= log.status %></td>
                                     <td><%= log.report_date %></td>
@@ -94,19 +101,22 @@
                 </table>
                 <br>
                 <div id="table-format">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Intake Time</th>
-                                <th>Patient Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <!-- Loop through the patient log array and choose element with medication name -->
+                     <% var counter = 0; %>
                         <% patientLog.forEach(log => { %>
                             <% if (log.prescription_id === pastMedication.prescription_id) { %>
+                                <% if (counter === 0) { %>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Status<% counter %></th>
+                                                <th>Date</th>
+                                                <th>Intake Time</th>
+                                                <th>Patient Notes</th>
+                                            </tr>
+                                        </thead>
+                                    <% counter = 1 %>
+                                <% } %>
+                                <tbody>
                                 <tr>
                                     <td><%= log.status %></td>
                                     <td><%= log.report_date %></td>
@@ -120,7 +130,7 @@
                     <br>
                 <% }); %>   
                  
-        <button id="another-patient" onclick="window.location.href='<%= anotherPatient %>'">Select Another Patient</button>
+        <button id="another-patient" style="margin-bottom: 7px;" onclick="window.location.href='<%= anotherPatient %>'">Select Another Patient</button>
         <br>
         <button style="margin-bottom: 30px;" id="return-home-btn" onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
         <br>

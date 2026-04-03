@@ -2,12 +2,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Patient Profile</title>
+        <title>Provider Profile</title>
         <link rel="stylesheet" href="/index.css">
         <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
     <body>
-        <h1 id="patient-name">Provider Profile</h1>
+        <h1 id="patient-name" style="margin-bottom: 0">Provider <B>Profile</B></h1>
         <div id="centered">
             <div id="profile-info">
                 <p><b>Name</b>: <%= providerName %></p>
@@ -20,8 +23,8 @@
                             <li><%= patient %></li>
                         <% }) %>
                         </div>
-                <button onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
-                <button onclick="logout()">Log Out</button>
+                    <button onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
+                    <button onclick="logout()">Log Out</button>
             </div>
         </div>
         <script src="/logout.js"></script>

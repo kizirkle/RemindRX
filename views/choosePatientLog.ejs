@@ -6,8 +6,11 @@
         <link rel="stylesheet" href="/index.css">
         <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
     <body>
-        <h1>Patient Log</h1>
+        <h1>Patient <B>Log</B></h1>
         <!-- Choose patinet form -->
         <form class="log-intake" id="patient-selection-form">
              <div class="form">
@@ -18,10 +21,10 @@
                         <option name="choice" value="<%= patient.patient_id%>"> <%= patient.patient_first_name%> <%= patient.patient_last_name%></option>
                     <% }); %>
                 </select>
-            <button type="submit" id="log-btn" >Submit</button>
-            <button onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
+                <button type="submit" >Submit</button>
+            <div>
         </form>
-        </div>
+        <button onclick="window.location.href='<%= providerPortal %>'" style="margin-top: 5px">Return to Portal</button>
         <script src="/choosePatientLog.js"></script>
     </body>
 </html>

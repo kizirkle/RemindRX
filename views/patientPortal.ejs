@@ -6,13 +6,16 @@
         <link rel="stylesheet" href="/index.css">
         <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 300px;">
+    </div>
     <body>
-        <h1 id="patient-name">Welcome, <%= patientName %></h1>
-        <button id="add-medication-btn" onclick="window.location.href='<%= addProvider %>'">Add Healthcare Provider</button>
-        <br>
-        <button id="medications-btn" onclick="window.location.href='<%= medications %>'">Medications</button>
+        <h1 id="patient-name">Welcome, <B><%= patientName %></B></h1>
+        <button id="medications-btn" onclick="window.location.href='<%= medications %>'">View Medications</button>
         <br>
         <button id="log-intake-btn" onclick="window.location.href='<%= logIntake %>'">Log Intake</button>
+        <br>
+        <button id="add-medication-btn" onclick="window.location.href='<%= addProvider %>'">Add Healthcare Provider</button>
         <br>
         <button id="add-medication-btn" onclick="window.location.href='<%= patientProfile %>'">View Profile</button>
         <br>
