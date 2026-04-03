@@ -7,7 +7,9 @@
         <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
     </head>
     <body>
-        <h1 id="patient-name">Medications</h1>
+        <h1>Medications</h1>
+        <h2 id="current-medications" style="font-size: 25px; padding-top: 10px;"><u>Current Medications</u></h2>
+        <br>
         <div id="table-format">
             <table>
             <thead>
@@ -25,17 +27,52 @@
             </thead>
             <tbody>
                 <!-- Loop through the medications array and add rows -->
-                <% medications.forEach(medication => { %>
+                <% currentMedications.forEach(currentMedication => { %>
                     <tr>
-                        <td><%= medication.prescription_name %></td>
-                        <td><%= medication.provider_first_name %> <%= medication.provider_last_name %></td>
-                        <td><%= medication.start_date %></td>
-                        <td><%= medication.end_date %></td>
-                        <td><%= medication.total_pills %></td>
-                        <td><%= medication.dose %></td>
-                        <td>Every <%= medication.frequency_hours %> <%= medication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
-                        <td><%= medication.side_effects %></td>
-                        <td><%= medication.additional_notes %></td>
+                        <td><%= currentMedication.prescription_name %></td>
+                        <td><%= currentMedication.provider_first_name %> <%= currentMedication.provider_last_name %></td>
+                        <td><%= currentMedication.start_date %></td>
+                        <td><%= currentMedication.end_date %></td>
+                        <td><%= currentMedication.total_pills %></td>
+                        <td><%= currentMedication.dose %></td>
+                        <td>Every <%= currentMedication.frequency_hours %> <%= currentMedication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                        <td><%= currentMedication.side_effects %></td>
+                        <td><%= currentMedication.additional_notes %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <br>
+        <h2 id="past-medications" style="font-size: 25px;"><u>Past Medications</u></h2>
+        <br>
+        <div id="table-format">
+            <table>
+            <thead>
+                <tr>
+                    <th>Medication</th>
+                    <th>Healthcare Provider</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total Pills</th>
+                    <th>Dose</th>
+                    <th>Frequency</th>
+                    <th>Side Effects</th>
+                    <th>Additional Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through the medications array and add rows -->
+                <% pastMedications.forEach(pastMedication => { %>
+                    <tr>
+                        <td><%= pastMedication.prescription_name %></td>
+                        <td><%= pastMedication.provider_first_name %> <%= pastMedication.provider_last_name %></td>
+                        <td><%= pastMedication.start_date %></td>
+                        <td><%= pastMedication.end_date %></td>
+                        <td><%= pastMedication.total_pills %></td>
+                        <td><%= pastMedication.dose %></td>
+                        <td>Every <%= pastMedication.frequency_hours %> <%= pastMedication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                        <td><%= pastMedication.side_effects %></td>
+                        <td><%= pastMedication.additional_notes %></td>
                     </tr>
                 <% }); %>
             </tbody>

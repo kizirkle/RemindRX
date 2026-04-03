@@ -2,7 +2,7 @@ import express from 'express'
 const patientRouter = express.Router()
 import path from 'path'
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getCurrentMedicationsForPatient, getMedicationNamesByPatientId, createLogEntry, deletePatientAccount} from '../database.js'
+import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getCurrentMedicationsForPatient, getPastMedicationsForPatient, createLogEntry, deletePatientAccount} from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';
@@ -49,10 +49,12 @@ patientRouter.get("/:id/medications", async(req, res) => {
     if (!patient) {
         return res.status(404).send("Patient not found");
     }
-    var medications = await getCurrentMedicationsForPatient(patient.patient_id)
+    var currentMedications = await getCurrentMedicationsForPatient(patient.patient_id)
+    var pastMedications = await getPastMedicationsForPatient(patient.patient_id)
     return res.render('medications.ejs', {
         patientPortal: `/patient/${req.params.id}`, 
-        medications: medications
+        currentMedications: currentMedications, 
+        pastMedications: pastMedications
     })
 })
 
@@ -62,7 +64,7 @@ patientRouter.get("/:id/log", async(req, res) => {
     if (!patient) {
         return res.status(404).send("Patient not found");
     }
-    var medications = await getMedicationNamesByPatientId(patient.patient_id)
+    var medications = await getCurrentMedicationsForPatient(patient.patient_id)
     return res.render('logIntake.ejs', {
         patientPortal: `/patient/${req.params.id}`, 
         medications: medications
@@ -125,20 +127,9 @@ patientRouter.get("/:id", async(req,res) => {
     if (!patient) {
         return res.status(404).send("Patient not found");
     }
-    var providersForPatient = await getProviderFromPatient(patient.patient_id) 
-    var providerNameList = []
-    if (providersForPatient.length !== 0) {
-        var providersById = await getProviderIds(patient.patient_id)
-        var providerIds = providersById.map(provider => provider.provider_id)
-        var providerNames = await getProviderNames(providerIds)
-        providerNames.forEach((provider) => {
-            providerNameList.push(`${provider.provider_first_name} ${provider.provider_last_name}`)
-        })
-    } 
     return res.render('patientPortal.ejs', {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
         addProvider: `/patient/${req.params.id}/add_provider`, 
-        providers: providerNameList, 
         patientProfile: `/patient/${req.params.id}/profile`,
         medications: `/patient/${req.params.id}/medications`, 
         logIntake: `/patient/${req.params.id}/log`

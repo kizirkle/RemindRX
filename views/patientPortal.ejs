@@ -8,13 +8,6 @@
     </head>
     <body>
         <h1 id="patient-name">Welcome, <%= patientName %></h1>
-        <h2 id="patient-name">Healthcare Providers</h2>
-            <div id="name-list">
-                <% providers.forEach(provider => { %>
-                    <span><%= provider %></span><br>
-                <% }) %>
-            </div>
-        
         <button id="add-medication-btn" onclick="window.location.href='<%= addProvider %>'">Add Healthcare Provider</button>
         <br>
         <button id="medications-btn" onclick="window.location.href='<%= medications %>'">Medications</button>

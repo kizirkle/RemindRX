@@ -166,19 +166,11 @@ export async function addMedication(prescription_name,dose,start_date,end_date,f
     `, [prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id])
 }
 
-export async function getMedicationsByName(prescription_name) {
+export async function getCurrentMedicationsByName(prescription_name, patient_id) {
   var [rows] = await pool.query(`
     SELECT * FROM prescription
-    WHERE prescription_name = ?
-    `, [prescription_name])
-    return rows[0]
-}
-
-export async function getMedicationNamesByPatientId(patient_id) {
-  var [rows] = await pool.query(`
-    SELECT prescription_id, prescription_name FROM prescription
-    WHERE patient_id = ? AND end_date >= CURDATE()
-    `, [patient_id])
+    WHERE prescription_name = ? AND patient_id = ? AND end_date >= CURDATE()
+    `, [prescription_name, patient_id])
     return rows
 }
 
@@ -194,6 +186,7 @@ export async function getCurrentMedicationsForPatient(patient_id) {
       P.side_effects, 
       P.additional_notes, 
       P.patient_id, 
+      P.prescription_id,
       H.provider_first_name,
       H.provider_last_name
     FROM 
@@ -206,7 +199,7 @@ export async function getCurrentMedicationsForPatient(patient_id) {
     return rows
 }
 
-export async function getAllMedicationsForPatient(patient_id) {
+export async function getPastMedicationsForPatient(patient_id) {
   var [rows] = await pool.query(`
     SELECT 
       P.prescription_name, 
@@ -218,13 +211,14 @@ export async function getAllMedicationsForPatient(patient_id) {
       P.side_effects, 
       P.additional_notes, 
       P.patient_id, 
+      P.prescription_id,
       H.provider_first_name,
       H.provider_last_name
     FROM 
       prescription AS P 
     INNER JOIN
       healthcare_provider AS H ON P.provider_id = H.provider_id
-    WHERE P.patient_id = ? 
+    WHERE P.patient_id = ? AND P.end_date < CURDATE()
     ORDER BY P.prescription_name ASC;
     `, [patient_id])
     return rows
@@ -239,6 +233,7 @@ export async function getPatientLogs(patient_id) {
       DATE_FORMAT(L.intake_time, '%h:%i %p') AS intake_time, 
       L.additional_notes,
       P.prescription_name,
+      P.prescription_id,
       L.patient_id
     FROM 
       patient_log AS L 
