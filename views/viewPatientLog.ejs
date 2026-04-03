@@ -8,8 +8,7 @@
     </head>
     <body>
         <h1 id="patient-name"><%= patientName %></h1>
-        <br>
-        <h2 id="current-medications" style="font-size: 25px; padding-bottom: 10px;"><u>Current Medications</u></h2>
+        <h2 id="current-medications" style="font-size: 25px; padding: 10px;"><u>Current Medications</u></h2>
          <% currentMedications.forEach(currentMedication => { %>
                 <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= currentMedication.prescription_name %></h3>
                 <div id="table-format">
