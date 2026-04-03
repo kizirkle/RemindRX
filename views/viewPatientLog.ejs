@@ -59,7 +59,13 @@
                                 <% } %>
                                 <tbody>
                                 <tr>
-                                    <td><%= log.status %></td>
+                                    <style>
+                                    .status-taken { color: rgb(53, 130, 53); }
+                                    .status-pending { color: rgb(221, 45, 45); }
+                                    </style>
+                                    <td class="<%= log.status === 'taken' ? 'status-taken' : 'status-pending' %>">
+                                        <%= log.status %>
+                                    </td>
                                     <td><%= log.report_date %></td>
                                     <td><%= log.intake_time %></td>
                                     <td><%= log.additional_notes %></td>
@@ -118,7 +124,9 @@
                                 <% } %>
                                 <tbody>
                                 <tr>
-                                    <td><%= log.status %></td>
+                                    <td class="<%= log.status === 'taken' ? 'red' : 'green' %>">
+                                        <%= log.status %> 
+                                    </td>
                                     <td><%= log.report_date %></td>
                                     <td><%= log.intake_time %></td>
                                     <td><%= log.additional_notes %></td>
