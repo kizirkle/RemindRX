@@ -1,0 +1,30 @@
+<!-- Delete Provider Account -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Remove Provider</title>
+        <link rel="stylesheet" href="/index.css">
+        <link rel="fav icon" type="image/x-icon" href="/image/pill.png">
+    </head>
+    <div id="logo-container">
+        <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
+    </div>
+    <body>
+        <h1>Remove <B>Provider</B></h1>
+        <form class="log-intake" id="remove-provider-form">
+             <div class="form">
+                <label style="font-size: 18px;">Provider</label>
+                <select name="provider" id="provider-select" required>
+                    <option value="">--Select an option--</option>
+                    <% providers.forEach(provider => { %>
+                        <option value="<%= provider.provider_id%>"> <%= provider.provider_first_name%> <%= provider.provider_last_name%></option>
+                    <% }); %>
+                </select>
+                <button type="submit" id="remove-provider-btn">Remove</button>
+            <div>
+        </form>
+        <button onclick="window.location.href='<%= patientProfile %>'">Return to Profile</button>
+        <script src="/removeProvider.js"></script>
+    </body>
+
+</html>

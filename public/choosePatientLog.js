@@ -1,5 +1,9 @@
+//Choose Patient Log Javascript
+
 var patientChoiceForm = document.getElementById("patient-selection-form")
-patientChoiceForm.addEventListener("submit", () => {
+
+//Navigates to patient log page when patient is chosen
+patientChoiceForm.addEventListener("submit", (event) => {
     event.preventDefault()
     const dropDown = document.getElementById("patient-select")
     const patientId = dropDown.value

@@ -77,13 +77,15 @@ describe('POST /create_account', () => {
     // Note: In test mode (NODE_ENV=test), the DB write is skipped but passed: true is returned
     // -------------------------------------------------------------------------
     it("[C1] Should create a patient account with valid information", createCreateAccountTest({}, {
-        passed: true
+        passed: true, 
+        statusCode: 201
     }))
 
     it("[C1] Should create a provider account with valid information", createCreateAccountTest({
         choice: "healthcare-provider"
     }, {
-        passed: true
+        passed: true, 
+        statusCode: 201
     }))
 
     // -------------------------------------------------------------------------

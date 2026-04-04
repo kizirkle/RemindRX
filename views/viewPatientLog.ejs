@@ -1,4 +1,4 @@
-<!-- View Patinet logs -->
+<!-- View patient logs -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,11 +10,13 @@
         <img src="/image/remindrx_logo.svg" alt="RemindRx Logo" id="brand-logo" style="width: 275px;">
     </div>
     <body>
+        <!-- Diplays name of patient -->
         <h1 id="patient-name" style="margin-top: 30px">Patient Log: <B><%= patientName %></B></h1>
         <h2 id="current-medications" style="font-size: 25px; padding: 10px;"><u>Current Medications</u></h2>
          <% currentMedications.forEach(currentMedication => { %>
                 <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= currentMedication.prescription_name %></h3>
                 <div id="table-format">
+                <!-- Displays current medication data in a table -->
                 <table>
                     <thead>
                         <tr style="background-color: #907ca277;">
@@ -40,36 +42,37 @@
                     </tbody>
                 </table>
                 <br>
+                <!-- Displays patient log for the medication -->
                 <div id="table-format">
-                        <!-- Loop through the patient log array and choose element with prescription ID for current prescription -->
-                        <% var counter = 0; %>
-                        <% patientLog.forEach(log => { %>
-                            <% if (log.prescription_id === currentMedication.prescription_id) { %>
-                                <% if (counter === 0) { %>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Status<% counter %></th>
-                                                <th>Date</th>
-                                                <th>Intake Time</th>
-                                                <th>Patient Notes</th>
-                                            </tr>
-                                        </thead>
-                                    <% counter = 1 %>
-                                <% } %>
-                                <tbody>
-                                <tr>
-                                    <style>
-                                    .status-taken { color: rgb(53, 130, 53); }
-                                    .status-pending { color: rgb(221, 45, 45); }
-                                    </style>
-                                    <td class="<%= log.status === 'taken' ? 'status-taken' : 'status-pending' %>">
-                                        <%= log.status %>
-                                    </td>
-                                    <td><%= log.report_date %></td>
-                                    <td><%= log.intake_time %></td>
-                                    <td><%= log.additional_notes %></td>
-                                </tr>
+                    <!-- Loop through the patient log array and choose element with prescription ID for current prescription -->
+                    <% var counter = 0; %>
+                    <% patientLog.forEach(log => { %>
+                        <% if (log.prescription_id === currentMedication.prescription_id) { %>
+                            <% if (counter === 0) { %>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Status<% counter %></th>
+                                            <th>Date</th>
+                                            <th>Intake Time</th>
+                                            <th>Patient Notes</th>
+                                        </tr>
+                                    </thead>
+                                <% counter = 1 %>
+                            <% } %>
+                            <tbody>
+                            <tr>
+                                <style>
+                                .status-taken { color: rgb(53, 130, 53); }
+                                .status-pending { color: rgb(221, 45, 45); }
+                                </style>
+                                <td class="<%= log.status === 'taken' ? 'status-taken' : 'status-pending' %>">
+                                    <%= log.status %>
+                                </td>
+                                <td><%= log.report_date %></td>
+                                <td><%= log.intake_time %></td>
+                                <td><%= log.additional_notes %></td>
+                            </tr>
                             <% } %>
                         <% }); %>
                         </tbody>
@@ -77,10 +80,12 @@
                     <br>
                 <% }); %> 
                 <br>
+
                 <h2 id="past-medications" style="font-size: 25px; padding-bottom: 10px;"><u>Past Medications</u></h2>
                 <% pastMedications.forEach(pastMedication => { %>
                 <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= pastMedication.prescription_name %></h3>
                 <div id="table-format">
+                <!-- Displays past medication data in a table -->
                 <table>
                     <thead>
                         <tr style="background-color: #907ca277;">
@@ -106,7 +111,9 @@
                     </tbody>
                 </table>
                 <br>
+                <!-- Displays patient log for the medication -->
                 <div id="table-format">
+                    <!-- Loop through the patient log array and choose element with prescription ID for past prescription -->
                      <% var counter = 0; %>
                         <% patientLog.forEach(log => { %>
                             <% if (log.prescription_id === pastMedication.prescription_id) { %>

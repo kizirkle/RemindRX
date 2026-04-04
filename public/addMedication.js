@@ -64,8 +64,10 @@ addMedicationForm.addEventListener("submit", async (event) => {
                 provider_id: localStorage.getItem('provider_id')
             })
         })
-        var data = await response.json()
-        systemResponse(data, "provider")
+        if(response.ok) {
+            var data = await response.json()
+            systemResponse(data, "provider")
+        }
     }
     catch (error) {
         console.log("ERROR: Failed to submit, error from addMedication.js:", error);
@@ -106,37 +108,3 @@ window.onload = function () {
     //Clears the error message from session storage so that it does not persist on future reloads
     sessionStorage.removeItem('response')
 }
-
-
-    // async function findPatientId(patientFirstName, patientLastName){
-    //     //fetch patient id using first and last name
-    //     try{
-    //         var response = await fetch('/patient/getPatientId', {
-    //             method: "POST",
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 patientFirstName: patientFirstName,
-    //                 patientLastName: patientLastName
-    //             })
-    //         })
-    //         var data = await response.json();
-    //         console.log(data)
-        
-    //         if (data.passed) {
-    //             return data.patient_id;
-    //         } else {
-    //             console.log("No patient found with that name.")
-    //             return null;
-    //         }
-    //     } catch (error) {
-    //         console.log("Error finding patient id:", error);
-    //         return null;
-    //     }
-        
-        
-    // }
-
-    // //call function to find patient id
-    // var patientId = await findPatientId(patientFirstName, patientLastName)

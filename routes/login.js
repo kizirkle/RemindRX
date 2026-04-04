@@ -25,15 +25,15 @@ loginRouter.post("/", async (req, res) => {
             var patient = await getPatientByEmail(entered_email)
             if(patient === undefined) {
                 //Return error if there is not a patient with the given email
-                return res.json({passed: false, message: "No account found. Create a new account or enter a different email."})
+                return res.status(200).json({passed: false, message: "No account found. Create a new account or enter a different email."})
             } else if(patient.patient_password != entered_password) {
                 //Return error if there if the password is not correct for the given email
-                return res.status(401).json({passed: false, message: "Incorrect password."})
+                return res.status(200).json({passed: false, message: "Incorrect password."})
             } else {
                 //Logs the user in and returns the URL to the patient portal
-                return res.json({passed: true,
-                                patientPage: `/patient/${patient.patient_id}`,
-                                patient_id: patient.patient_id})
+                return res.status(200).json({passed: true,
+                    patientPage: `/patient/${patient.patient_id}`,
+                    patient_id: patient.patient_id})
             }
         } else {
             //Attempt to log in a provider
@@ -43,7 +43,7 @@ loginRouter.post("/", async (req, res) => {
                 res.json({passed: false, message: "No account found. Create a new account or enter a different email."})
             } else if(provider.provider_password != entered_password) {
                 //Return error if there if the password is not correct for the given email
-                res.status(401).json({passed: false, message: "Incorrect password."})
+                res.status(200).json({passed: false, message: "Incorrect password."})
             } else {
                 //Logs the user in and returns the URL to the provider portal
                 return res.json({passed: true,

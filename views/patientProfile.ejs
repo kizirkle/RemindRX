@@ -1,4 +1,4 @@
-<!-- Patient portal -->
+<!-- Patient profile -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +12,7 @@
     <body>
         <h1 id="patient-name" style="margin-bottom: 0">Patient <B>Profile</B></h1>
         <div id="centered">
+            <!-- Provides information about the patient -->
             <div id="profile-info">
                 <p><b>Name</b>: <%= patientName %></p>
                 <p><b>Patient ID</b>: <%= patientId %></p>
@@ -19,13 +20,28 @@
                 <p><b>Phone number</b>: <%= patientPhoneNumber %></p>
                 <h2 id="provider-heading">Healthcare Providers</h2>
                     <div id="names-profile">
+                        <!-- Displays each provider -->
+                        <% var count = 0 %>
                         <% providers.forEach(provider => { %>
+                            <% count = 1 %>
                             <li><%= provider %></li>
                         <% }) %>
                     </div>
-                <button id="add-medication-btn" onclick="window.location.href='<%= addProvider %>'">Add Provider</button>
+                <!-- Displays message if no providers have been added -->
+                <% if(count === 0) { %>
+                    <div>
+                        <p style="text-align: center; margin: 0">No Providers<p>
+                    </div>
+                <% } %>
+                <!-- Pages to navigate to -->
+                <button id="add-provider" onclick="window.location.href='<%= addProvider %>'">Add Provider</button>
+                <!-- Displays Remove Provider button if there are providers associated -->
+                <% if (count === 1) { %>
+                    <button id="remove-provider" onclick="window.location.href='<%= removeProvider %>'">Remove Provider</button>
+                <% } %>
                 <button onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
                 <button onclick="logout()">Log Out</button>
+                <button onclick="window.location.href='<%= deleteAccount %>'">Delete Account</button>
             </div>
         </div>
         <script src="/logout.js"></script>

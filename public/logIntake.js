@@ -46,29 +46,27 @@ addProviderForm.addEventListener("submit", async (event)=> {
     var medStatus = document.querySelector('input[name="status"]:checked').value
 
     try {
-        //Attempts to log user in
+        //Attempts to log medication status
         var response = await fetch(`/patient/${patientId}/log`, {
-        method: "POST", 
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-            status: medStatus,
-            report_date: reportDate.value,
-            intake_time: intakeTime.value, 
-            additional_notes: additionalNotes.value,
-            patient_id: patientId,
-            prescription_id: prescriptionId
+            method: "POST", 
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({
+                status: medStatus,
+                report_date: reportDate.value,
+                intake_time: intakeTime.value, 
+                additional_notes: additionalNotes.value,
+                patient_id: patientId,
+                prescription_id: prescriptionId
+                })
             })
-        })
+        if(response.ok) {
+            //Calls function to either return an error or sends the patient or provider to their personal portal
+            sessionStorage.setItem('confirmationMessage', "Medication logged.")
 
-        //Gets the response from the API call which will either contain an error message or URL to personal portal
-        var data = await response.json()
-
-        //Calls function to either return an error or sends the patient or provider to their personal portal
-        sessionStorage.setItem('confirmationMessage', "Medication logged.")
-
-        window.location.reload()
+            window.location.reload()
+        }
     }
     catch(error) {
          console.log("ERROR: failed to submit, error from addProvider.js:", error);
@@ -77,10 +75,10 @@ addProviderForm.addEventListener("submit", async (event)=> {
 
 
 window.onload = function () {
-    //Attempt to get the error message from session storage
+    //If medication was logged, gets the confirmation message
     var confirmationMessage = sessionStorage.getItem('confirmationMessage')
     if (confirmationMessage) {
-        //If there is an error, displays it
+        //Display confirmation message
         message.textContent = confirmationMessage
         message.style.display = "block"
     }

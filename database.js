@@ -13,21 +13,126 @@ export var pool = mysql.createPool( {
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-//Get all patients
-export async function getPatients() {
-  var [rows] = await pool.query("SELECT * FROM patient")
-  return rows
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//Patients
+
+//Create a new patient
+export async function createPatient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password) {
+  await pool.query(`
+    INSERT INTO patient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password)
+    VALUES(?, ?, ?, ?, ?)
+    `, [patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password])
+    return getPatientByEmail(patient_email)
 }
 
-
-export async function getProviderFromPatient(patientId) {
+//Get patient by patient ID and return the corresponding patient 
+export async function getPatientById(patient_id) {
   var [rows] = await pool.query(`
-      SELECT * FROM PatientProvider
-      WHERE patient_id = ?
-    `, [patientId])
+    SELECT * FROM patient
+    WHERE patient_id = ?
+    `, [patient_id])
+  return rows[0]
+}
+
+//Gets the first and last names of the patients with the given patient IDs
+export async function getPatientNames(patientIds) {
+  var [rows] = await pool.query(`
+      SELECT patient_first_name, patient_last_name FROM patient
+      WHERE patient_id IN (?)
+    `, [patientIds])
   return rows
 }
 
+//Get patients by email address and return the corresponding patient object
+export async function getPatientByEmail(email) {
+  var [rows] = await pool.query(`
+    SELECT * FROM patient
+    WHERE patient_email = ?
+    `, [email])
+  return rows[0]
+}
+
+//Delete patient
+export async function deletePatientAccount(patient_id) {
+  await pool.query(`
+    DELETE FROM patient 
+    WHERE patient_id = ?
+    `, [patient_id])
+}
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//Providers
+
+//Create a new healthcare provider
+export async function createProvider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password) {
+  await pool.query(`
+    INSERT INTO healthcare_provider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password)
+    VALUES(?, ?, ?, ?, ?)
+    `, [provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password])
+    return getProviderByEmail(provider_email)
+}
+
+//Get provider by provider ID and return the correponding provider
+export async function getProviderById(provider_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM healthcare_provider
+    WHERE provider_id = ?
+    `, [provider_id])
+  return rows[0]
+}
+
+//Gets the first and last names of the providers with the given provider IDs
+export async function getProviderNames(providerIds) {
+  var [rows] = await pool.query(`
+      SELECT provider_first_name, provider_last_name FROM healthcare_provider
+      WHERE provider_id IN (?)
+    `, [providerIds])
+  return rows
+}
+
+//Get providers by email address and return the corresponding provider object
+export async function getProviderByEmail(email) {
+  var [rows] = await pool.query(`
+    SELECT * FROM healthcare_provider
+    WHERE provider_email = ?
+    `, [email])
+  return rows[0]
+}
+
+//Delete provider
+export async function deleteProviderAccount(healthcare_provider_id) {
+  await pool.query(`
+    DELETE FROM healthcare_provider 
+    WHERE provider_id = ?
+    `, [healthcare_provider_id])
+}
+
+
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//Patient-Provider associations
+
+//Create a new entry the links a patient to their provider
+export async function createPatientProvider(patient_id, provider_id) {
+  await pool.query(`
+    INSERT INTO PatientProvider VALUES (?,?)
+    `, [patient_id, provider_id])
+}
+
+//Get row from table of patient provider associatation with the given patient ID and provider ID
+export async function getPatientProvider(patient_id, provider_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM PatientProvider
+    WHERE patient_id = ?
+    AND provider_id = ?
+    `, [patient_id, provider_id])
+  return rows[0]
+}
+
+//Gets the first and last name of the patients associated with the provider
 export async function getPatientNamesFromProvider(providerId) {
   var [rows] = await pool.query(`
       SELECT
@@ -44,121 +149,54 @@ export async function getPatientNamesFromProvider(providerId) {
   return rows
 }
 
-export async function getPatientFromProvider(providerId) {
+//Gets the first and last name of the patients associated with the provider
+export async function getProviderNamesFromPatient(patientId) {
   var [rows] = await pool.query(`
-      SELECT * FROM PatientProvider
+      SELECT
+        PP.provider_id,
+        PP.patient_id,
+        h.provider_first_name,
+        h.provider_last_name
+      FROM 
+        PatientProvider AS PP
+      INNER JOIN
+        healthcare_provider AS h ON PP.provider_id = h.provider_id
+      WHERE PP.patient_id = ?
+    `, [patientId])
+  return rows
+}
+
+//Gets the patient IDs for the patients that are associated with provider
+export async function getPatientIdsFromProviders(providerId) {
+  var [rows] = await pool.query(`
+      SELECT patient_id FROM PatientProvider
       WHERE provider_id = ?
     `, [providerId])
   return rows
 }
 
-export async function getProviderNames(providerIds) {
-  var [rows] = await pool.query(`
-      SELECT provider_first_name, provider_last_name FROM healthcare_provider
-      WHERE provider_id IN (?)
-    `, [providerIds])
-  return rows
-}
-
-export async function getPatientNames(patientIds) {
-  var [rows] = await pool.query(`
-      SELECT patient_first_name, patient_last_name FROM patient
-      WHERE patient_id IN (?)
-    `, [patientIds])
-  return rows
-}
-
-
-export async function getProviderIds(patientId) {
+//Gets the provider IDs for the patients that are associated with provider
+export async function getProviderIdsFromPatientId(patientId) {
   var [rows] = await pool.query(`
       SELECT provider_id FROM PatientProvider
       WHERE patient_id = ?
     `, [patientId])
   return rows
-  }
-
-export async function getPatientIds(providerId) {
-var [rows] = await pool.query(`
-    SELECT patient_id FROM PatientProvider
-    WHERE provider_id = ?
-  `, [providerId])
-return rows
 }
 
-
-//Get patients by email address and return the corresponding patient object
-export async function getPatientByEmail(email) {
-  var [rows] = await pool.query(`
-    SELECT * FROM patient
-    WHERE patient_email = ?
-    `, [email])
-  return rows[0]
-}
-
-//Get patients by patient_id and return the corresponding patient object
-export async function getPatientById(patient_id) {
-  var [rows] = await pool.query(`
-    SELECT * FROM patient
-    WHERE patient_id = ?
-    `, [patient_id])
-  return rows[0]
-}
-
-//Get providers by email address and return the corresponding provider object
-export async function getProviderByEmail(email) {
-  var [rows] = await pool.query(`
-    SELECT * FROM healthcare_provider
-    WHERE provider_email = ?
-    `, [email])
-  return rows[0]
-}
-
-//Get provider by provider_id and return the correponding provider
-export async function getProviderById(provider_id) {
-  var [rows] = await pool.query(`
-    SELECT * FROM healthcare_provider
-    WHERE provider_id = ?
-    `, [provider_id])
-  return rows[0]
-}
-
-export async function getPatientProvider(patient_id, provider_id) {
-  var [rows] = await pool.query(`
-    SELECT * FROM PatientProvider
-    WHERE patient_id = ?
-    AND provider_id = ?
-    `, [patient_id, provider_id])
-  return rows[0]
-}
-
-//Create a new patient
-export async function createPatient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password) {
+//Delete patient provider association by provider ID
+export async function deletePatientProvider(patient_id,provider_id) {
   await pool.query(`
-    INSERT INTO patient(patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password)
-    VALUES(?, ?, ?, ?, ?)
-    `, [patient_first_name, patient_last_name, patient_phone_number, patient_email, patient_password])
-  return getPatientByEmail(patient_email)
-}
-//createPatient("Jeff", "Frank", "8043007898", "frank@gmail.com", "RandomPasswords555!!!")
-
-//Create a new healthcare provider
-export async function createProvider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password) {
-  await pool.query(`
-    INSERT INTO healthcare_provider(provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password)
-    VALUES(?, ?, ?, ?, ?)
-    `, [provider_first_name, provider_last_name, provider_phone_number, provider_email, provider_password])
-  return getProviderByEmail(provider_email)
-}
-//createProvider("Bob", "Smith", "8042223333", "bob@gmail.com", "RandomPasswords444!!!")
-
-
-//Create a new entry the links a patient to their provider
-export async function createPatientProvider(patient_id, provider_id) {
-  await pool.query(`
-    INSERT INTO PatientProvider VALUES (?,?)
+    DELETE FROM PatientProvider 
+    WHERE patient_id = ? AND provider_id = ?
     `, [patient_id, provider_id])
 }
 
+
+//-----------------------------------------------------------------------------------------------------------------------------
+//Prescriptions/Medications
+
+//Create a new prescription with associated medication
 export async function addMedication(prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id) {
   await pool.query(`
     INSERT INTO prescription(prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id)
@@ -166,6 +204,16 @@ export async function addMedication(prescription_name,dose,start_date,end_date,f
     `, [prescription_name,dose,start_date,end_date,frequency_hours,total_pills,side_effects,additional_notes,patient_id,provider_id])
 }
 
+//Get prescription by prescription ID
+export async function getPrescriptionById(prescription_id) {
+  var [rows] = await pool.query(`
+    SELECT * FROM prescription
+    WHERE prescription_id = ?
+    `, [prescription_id])
+    return rows[0]
+}
+
+//Gets the current medications with the medication name and patient ID
 export async function getCurrentMedicationsByName(prescription_name, patient_id) {
   var [rows] = await pool.query(`
     SELECT * FROM prescription
@@ -174,6 +222,7 @@ export async function getCurrentMedicationsByName(prescription_name, patient_id)
     return rows
 }
 
+//Gets all current medications for patient and necessary information
 export async function getCurrentMedicationsForPatient(patient_id) {
   var [rows] = await pool.query(`
     SELECT 
@@ -199,6 +248,7 @@ export async function getCurrentMedicationsForPatient(patient_id) {
     return rows
 }
 
+//Gets all past medications for patient and necessary information
 export async function getPastMedicationsForPatient(patient_id) {
   var [rows] = await pool.query(`
     SELECT 
@@ -225,6 +275,18 @@ export async function getPastMedicationsForPatient(patient_id) {
 }
 
 
+//-----------------------------------------------------------------------------------------------------------------------------
+//Patient logs
+
+//Create a new log entry
+export async function createLogEntry(status, report_date, intake_time, additional_notes, patient_id, prescription_id) {
+  await pool.query(`
+    INSERT INTO patient_log(status, report_date, intake_time, additional_notes, patient_id, prescription_id)
+    VALUES(?, ?, ?, ?, ?, ?)
+    `, [status, report_date, intake_time, additional_notes, patient_id, prescription_id])
+}
+
+//Gets all patient logs for the patient with given ID
 export async function getPatientLogs(patient_id) {
   var [rows] = await pool.query(`
     SELECT 
@@ -245,27 +307,3 @@ export async function getPatientLogs(patient_id) {
 }
 
 
-//Get prescription by ID
-export async function getPrescriptionById(prescription_id) {
-  var [rows] = await pool.query(`
-    SELECT * FROM prescription
-    WHERE prescription_id = ?
-    `, [prescription_id])
-    return rows[0]
-}
-
-//Create a new log entry
-export async function createLogEntry(status, report_date, intake_time, additional_notes, patient_id, prescription_id) {
-  await pool.query(`
-    INSERT INTO patient_log(status, report_date, intake_time, additional_notes, patient_id, prescription_id)
-    VALUES(?, ?, ?, ?, ?, ?)
-    `, [status, report_date, intake_time, additional_notes, patient_id, prescription_id])
-}
-
-//Delete patient
-export async function deletePatientAccount(patient_id) {
-  await pool.query(`
-    DELETE FROM patient 
-    WHERE patient_id = ?
-    `, [patient_id])
-}

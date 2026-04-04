@@ -104,7 +104,8 @@ describe('POST /patient/:id/addProvider', () => {
         provider_first_name: "John",
         provider_last_name: "Doe"
     }, {
-        passed: true
+        passed: true, 
+        statusCode: 201
     }))
 
 })

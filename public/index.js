@@ -1,4 +1,4 @@
-//Client side JavaScript
+//Create Account and Log In Java Script
 
 //Forms that have the information to create a new patient or provider and log them in 
 var createAccountForm = document.getElementById('create-account-form')
@@ -62,12 +62,13 @@ if(createAccountForm){
                 //provider_id: providerId.value
                 })
             })
+            if(response.ok) {
+                //Gets the response from the API call which will either contain an error message or URL to personal portal
+                var data = await response.json()
 
-            //Gets the response from the API call which will either contain an error message or URL to personal portal
-            var data = await response.json()
-
-            //Calls function to either return an error or sends the patient or provider to their personal portal
-            systemResponse(data, type)
+                //Calls function to either return an error or sends the patient or provider to their personal portal
+                systemResponse(data, type)
+            }
         }
         catch(error) {
             console.log("ERROR: Failed to submit, error from index.js:", error);
@@ -94,12 +95,13 @@ if(loginForm) {
                 entered_password: password.value,
                 })
             })
+            if(response.ok) {
+                //Gets the response from the API call which will either contain an error message or URL to personal portal
+                var data = await response.json()
 
-            //Gets the response from the API call which will either contain an error message or URL to personal portal
-            var data = await response.json()
-
-            //Calls function to either return an error or sends the patient or provider to their personal portal
-            systemResponse(data, type)
+                //Calls function to either return an error or sends the patient or provider to their personal portal
+                systemResponse(data, type)
+            }
         }
         catch(error) {
             console.log("ERROR: failed to submit, error from index.js:", error);
@@ -223,19 +225,3 @@ window.onload = function () {
    }
    sessionStorage.removeItem('errorMessage');
 }
-
-//If the patient radio button is clicked when creating an account, add the proivder ID field
-// if(radioPatientCreate) {
-//     radioPatientCreate.addEventListener("change", ()=> {
-//         providerIdField.style.display = "block"
-//         providerId.required = true
-//     })
-// }
-
-// //If the provider radio button is clicked when creating an account, hide the proivder ID field
-// if(radioProviderCreate) {
-//     radioProviderCreate.addEventListener("change", ()=> {
-//         providerIdField.style.display = "none"
-//         providerId.required = false
-//     })
-// }
