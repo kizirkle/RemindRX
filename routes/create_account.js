@@ -1,8 +1,15 @@
+//Create Account Router
+
 import express from 'express'
 const createAccountRouter = express.Router()
 import path from 'path'
 
-import {getPatientByEmail, getProviderByEmail, createPatient, createProvider, createPatientProvider, getProviderById} from '../database.js'
+import {
+        getPatientByEmail, 
+        getProviderByEmail, 
+        createPatient, 
+        createProvider
+    } from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';

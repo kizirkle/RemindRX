@@ -18,7 +18,7 @@
                 <p><b>Provider ID</b>: <%= providerId %></p>
                 <p><b>Email</b>: <%= providerEmail %></p>
                 <p><b>Phone number</b>: <%= providerPhoneNumber %></p>
-                <h2 id="patient-name">Patients</h2>
+                <h2 style="text-align: center;">Patients</h2>
                     <div id="names-profile">
                         <!-- Displays each patient -->
                         <% var count = 0 %>
@@ -30,7 +30,7 @@
                     <!-- Displays message if no patients have been added -->
                     <% if(count === 0) { %>
                         <div>
-                            <p style="text-align: center; margin: 0">No Patients<p>
+                            <p style="text-align: center; margin: 0;">No Patients<p>
                         </div>
                     <% } %>
                     <!-- Pages to navigate to -->

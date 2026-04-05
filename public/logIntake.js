@@ -62,7 +62,7 @@ addProviderForm.addEventListener("submit", async (event)=> {
                 })
             })
         if(response.ok) {
-            //Calls function to either return an error or sends the patient or provider to their personal portal
+            //Creates confirmation message when medication has successfully been logged
             sessionStorage.setItem('confirmationMessage', "Medication logged.")
 
             window.location.reload()

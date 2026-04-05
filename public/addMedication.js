@@ -85,8 +85,7 @@ function systemResponse(data, type) {
         //Reloads the page
         location.reload()
     } else {
-        //If there is not an error, send user to their personal portal 
-        //window.location.href = `/provider/${localStorage.getItem('provider_id')}`
+        //If there is not an error, confirm that medication has been added
         sessionStorage.setItem('response', "Medication added.")
         location.reload()
     }

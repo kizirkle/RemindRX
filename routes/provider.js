@@ -1,7 +1,19 @@
+//Provider Router
+
 import express from 'express'
 const providerRouter = express.Router()
 
-import {getProviderById, getPatientIdsFromProviders, getPatientNames, getPatientNamesFromProvider, getPatientById, getPastMedicationsForPatient, getPatientLogs, getCurrentMedicationsForPatient, deleteProviderAccount, deletePatientProvider} from '../database.js'
+import {
+        getProviderById, 
+        getPatientIdsFromProviders, 
+        getPatientNames, 
+        getPatientNamesFromProvider, 
+        getPatientById, 
+        getPastMedicationsForPatient, 
+        getPatientLogs, 
+        getCurrentMedicationsForPatient, 
+        deleteProviderAccount, deletePatientProvider
+    } from '../database.js'
 
 //View provider profile
 providerRouter.get("/:id/profile", async(req, res) => {

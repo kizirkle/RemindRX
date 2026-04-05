@@ -1,8 +1,15 @@
+//Add Medications Router
+
 import express from 'express'
 const addMedicationRouter = express.Router()
 import path from 'path'
 
-import {addMedication, getPatientById, getPatientProvider, getCurrentMedicationsByName} from '../database.js'
+import {
+        addMedication, 
+        getPatientById, 
+        getPatientProvider, 
+        getCurrentMedicationsByName
+    } from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';

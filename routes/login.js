@@ -1,8 +1,13 @@
+//Log In Router
+
 import express from 'express'
 const loginRouter = express.Router()
 import path from 'path'
 
-import {getPatientByEmail, getProviderByEmail} from '../database.js'
+import {
+        getPatientByEmail, 
+        getProviderByEmail
+    } from '../database.js'
 
 //Allowing for file paths to be created 
 import { fileURLToPath } from 'node:url';

@@ -1,10 +1,39 @@
-//Patient route
+//Patient Router
 
 import express from 'express'
 const patientRouter = express.Router()
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderNames, getProviderIdsFromPatientId, getCurrentMedicationsForPatient, getPastMedicationsForPatient, createLogEntry, deletePatientAccount, deletePatientProvider, getProviderNamesFromPatient} from '../database.js'
+import {
+        getPatientById, 
+        getProviderById, 
+        getPatientProvider, 
+        createPatientProvider, 
+        getProviderNames, 
+        getProviderNamesFromPatient,
+        getProviderIdsFromPatientId, 
+        getCurrentMedicationsForPatient, 
+        getPastMedicationsForPatient, 
+        createLogEntry, 
+        deletePatientAccount, 
+        deletePatientProvider, 
+    } from '../database.js'
 
+
+//Opens form to add a new provider
+patientRouter.get("/:id/reminders", async(req, res) => {
+    var date = new Date()
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var dayOfWeek = days[date.getDay()]
+    var day = date.getDate()
+    var month = months[date.getMonth()]
+    var year = date.getFullYear()
+    var currentDate = `${dayOfWeek}, ${month} ${day}, ${year}`
+    return res.status(200).render('reminders.ejs', {
+        date: currentDate,
+        patientPortal: `/patient/${req.params.id}/`
+    })
+})
 
 //Opens form to add a new provider
 patientRouter.get("/:id/add_provider", async(req, res) => {
@@ -77,7 +106,7 @@ patientRouter.post("/:id/log", async(req, res) => {
         }
         return res.status(201).json({passed: true, patientPage: `/patient/${patient_id}`})
     } catch{
-        res.status(500).json({passed: false, message:'Error in Add Provider.'})
+        res.status(500).json({passed: false, message:'Error in Log Intake.'})
     }
 })
 
