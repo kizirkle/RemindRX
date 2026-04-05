@@ -114,7 +114,7 @@ providerRouter.delete("/:providerId/remove_patient/:patientId", async(req, res) 
         return res.status(404).send("Patient not found");
     }
     await deletePatientProvider(req.params.patientId, req.params.providerId)
-    return res.status(200).json({success: true, redirect: `/provider/${req.params.patientId}/profile`})
+    return res.status(200).json({success: true, redirect: `/provider/${req.params.providerId}/profile`})
 })
 
 //Access provider portal of specific provider

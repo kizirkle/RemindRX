@@ -26,8 +26,8 @@ createAccountRouter.get("/", async(req,res) => {
 //Create a new provider or patient account 
 createAccountRouter.post("/", async (req, res) => {
     var {choice, first_name, last_name, phone_number, email, password, confirmed_password, provider_id} = req.body
-    first_name = first_name.trim().toLowerCase();
-    last_name = last_name.trim().toLowerCase();
+    //first_name = first_name.trim().toLowerCase();
+    //last_name = last_name.trim().toLowerCase();
 
     try {
         if(choice === "patient") {
