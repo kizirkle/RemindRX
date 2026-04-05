@@ -41,7 +41,8 @@ createAccountRouter.post("/", async (req, res) => {
                         //Creates a new patient and returns the URL to the patient portal if the password is valid
                         if(process.env.NODE_ENV !== 'test') {
                             var patient = await createPatient(first_name, last_name, phone_number, email, password)
-                            return res.status(201).json({passed: true, patientPage: `/patient/${patient.patient_id}`})
+                            return res.status(201).json({
+                                passed: true, patientPage: `/patient/${patient.patient_id}`,patient_id: patient.patient_id})
                         }
                         return res.status(201).json({passed: true})
                     }
@@ -67,7 +68,7 @@ createAccountRouter.post("/", async (req, res) => {
                         //Creates a new provider and returns the URL to the provider portal if the password is valid
                         if (process.env.NODE_ENV !== 'test') {
                             var provider = await createProvider(first_name, last_name, phone_number, email, password)
-                            return res.status(201).json({passed: true, providerPage: `/provider/${provider.provider_id}`})
+                            return res.status(201).json({passed: true, providerPage: `/provider/${provider.provider_id}`,provider_id: provider.provider_id})
                         }
                         return res.status(201).json({passed: true})
                     }
