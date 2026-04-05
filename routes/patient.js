@@ -19,7 +19,7 @@ import {
     } from '../database.js'
 
 
-//Opens form to add a new provider
+//Opens reminders page 
 patientRouter.get("/:id/reminders", async(req, res) => {
     var date = new Date()
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
