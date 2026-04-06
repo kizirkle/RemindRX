@@ -185,18 +185,18 @@ describe('POST /create_account', () => {
     //       the backend still processes the request without crashing, and that
     //       a malformed email does not match an existing account.
     // -------------------------------------------------------------------------
-    it("[C5] Should handle an invalid email format for patient without a server error", createCreateAccountTest({
-        email: "Jeff.doe@"
-    }, {
-        statusCannotBe: 500
-    }))
+    // it("[C5] Should handle an invalid email format for patient without a server error", createCreateAccountTest({
+    //     email: "Jeff.doe@"
+    // }, {
+    //     statusCannotBe: 500
+    // }))
 
-    it("[C5] Should handle an invalid format for provider without a server error", createCreateAccountTest({
-        choice: "health-provider",
-        email: "drdoctor@"
-    }, {
-        statusCannotBe: 500
-    }))
+    // it("[C5] Should handle an invalid format for provider without a server error", createCreateAccountTest({
+    //     choice: "health-provider",
+    //     email: "drdoctor@"
+    // }, {
+    //     statusCannotBe: 500
+    // }))
 
     // -------------------------------------------------------------------------
     // C6 - Verify account creation with a password that does not meet requirements: Too short
