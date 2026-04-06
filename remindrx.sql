@@ -21,7 +21,7 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 -- GTID state at the beginning of the backup 
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '83c45b9c-11a2-11f1-a518-f17faad63173:1-1025';
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '83c45b9c-11a2-11f1-a518-f17faad63173:1-1028';
 
 --
 -- Table structure for table `healthcare_provider`
@@ -123,7 +123,7 @@ CREATE TABLE `patient_log` (
   KEY `patient_id` (`patient_id`),
   CONSTRAINT `patient_log_ibfk_1` FOREIGN KEY (`prescription_id`) REFERENCES `prescription` (`prescription_id`) ON DELETE SET NULL,
   CONSTRAINT `patient_log_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `patient_log` (
 
 LOCK TABLES `patient_log` WRITE;
 /*!40000 ALTER TABLE `patient_log` DISABLE KEYS */;
-INSERT INTO `patient_log` VALUES (38,'taken','2026-04-06','12:43:00','',100000,22),(39,'missed','2026-04-08',NULL,'',100000,22);
+INSERT INTO `patient_log` VALUES (38,'taken','2026-04-06','12:43:00','',100000,22),(39,'missed','2026-04-08',NULL,'',100000,22),(40,'taken','2026-04-06','16:40:00','',100000,25),(41,'missed','2026-04-06',NULL,'',100000,25);
 /*!40000 ALTER TABLE `patient_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +187,7 @@ CREATE TABLE `prescription` (
   KEY `provider_id` (`provider_id`),
   CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE SET NULL,
   CONSTRAINT `prescription_ibfk_3` FOREIGN KEY (`provider_id`) REFERENCES `healthcare_provider` (`provider_id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +196,7 @@ CREATE TABLE `prescription` (
 
 LOCK TABLES `prescription` WRITE;
 /*!40000 ALTER TABLE `prescription` DISABLE KEYS */;
-INSERT INTO `prescription` VALUES (22,'Tylenol',2,'2026-04-06','2026-04-22',100,6,'Fatigue','Take after eating. ',100000,100000),(23,'Advil',2,'2026-04-23','2026-05-13',100,5,'None','',100000,100000),(24,'Ibuprofen',2,'2026-03-29','2026-03-29',4,6,'Stomach pain','Take after eating',100000,100000);
+INSERT INTO `prescription` VALUES (22,'Tylenol',2,'2026-04-06','2026-04-22',100,6,'Fatigue','Take after eating. ',100000,100000),(23,'Advil',2,'2026-04-23','2026-05-13',100,5,'None','',100000,100000),(24,'Ibuprofen',2,'2026-03-29','2026-03-29',4,6,'Stomach pain','Take after eating',100000,100000),(25,'Aspirin ',2,'2026-04-06','2026-04-06',4,6,'Stomach pain','',100000,100000);
 /*!40000 ALTER TABLE `prescription` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,4 +237,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-06 12:47:19
+-- Dump completed on 2026-04-06 16:43:03
