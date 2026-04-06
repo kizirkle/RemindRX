@@ -242,7 +242,7 @@ export async function getCurrentMedicationsForPatient(patient_id) {
       prescription AS P 
     INNER JOIN
       healthcare_provider AS H ON P.provider_id = H.provider_id
-    WHERE P.patient_id = ? AND P.end_date >= CURDATE()
+    WHERE P.patient_id = ? AND P.end_date >= CURDATE() AND P.start_date <= CURDATE()
     ORDER BY P.prescription_name ASC;
     `, [patient_id])
     return rows
@@ -269,10 +269,45 @@ export async function getPastMedicationsForPatient(patient_id) {
     INNER JOIN
       healthcare_provider AS H ON P.provider_id = H.provider_id
     WHERE P.patient_id = ? AND P.end_date < CURDATE()
-    ORDER BY P.prescription_name ASC;
+    ORDER BY P.prescription_name ASC, P.start_date ASC;
     `, [patient_id])
     return rows
 }
+
+//Gets all future medications for patient and necessary information
+export async function getFutureMedicationsForPatient(patient_id) {
+  var [rows] = await pool.query(`
+    SELECT 
+      P.prescription_name, 
+      P.dose, 
+      DATE_FORMAT(P.start_date, '%m/%d/%Y') AS start_date, 
+      DATE_FORMAT(P.end_date, '%m/%d/%Y') AS end_date, 
+      P.total_pills, 
+      P.frequency_hours, 
+      P.side_effects, 
+      P.additional_notes, 
+      P.patient_id, 
+      P.prescription_id,
+      H.provider_first_name,
+      H.provider_last_name
+    FROM 
+      prescription AS P 
+    INNER JOIN
+      healthcare_provider AS H ON P.provider_id = H.provider_id
+    WHERE P.patient_id = ? AND P.start_date > CURDATE()
+    ORDER BY P.prescription_name ASC, P.start_date ASC;
+    `, [patient_id])
+    return rows
+}
+
+export async function getMedicationWithinDates(patient_id, prescription_name, start_date, end_date) {
+  var [rows] = await pool.query(`
+    SELECT * FROM prescription
+    WHERE patient_id = ? AND prescription_name = ? AND start_date <= ? AND end_date >= ?
+    `, [patient_id, prescription_name, end_date, start_date])
+    return rows
+}
+
 
 
 //-----------------------------------------------------------------------------------------------------------------------------

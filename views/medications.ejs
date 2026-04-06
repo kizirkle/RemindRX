@@ -91,7 +91,48 @@
         </tbody>
         </table>
         </div>
-        <button id="return-home-btn" onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
+        <br>
+        <h2 id="future-medications" style="font-size: 25px;"><u>Future Medications</u></h2>
+        <br>
+        <div id="table-format">
+            <!-- Creates a future medications table -->
+            <% var counter = 0; %>
+            <% futureMedications.forEach(futureMedication => { %>
+                <!-- Loop through the future medications array and add rows -->
+                <% if(counter === 0) {%>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Medication</th>
+                                <th>Healthcare Provider</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Total Pills</th>
+                                <th>Dose</th>
+                                <th>Frequency</th>
+                                <th>Side Effects</th>
+                                <th>Additional Notes</th>
+                            </tr>
+                        </thead>
+                        <% counter = 1 %>
+                <% } %>
+                <tbody>
+                <tr>
+                    <td><%= futureMedication.prescription_name %></td>
+                    <td><%= futureMedication.provider_first_name %> <%= futureMedication.provider_last_name %></td>
+                    <td><%= futureMedication.start_date %></td>
+                    <td><%= futureMedication.end_date %></td>
+                    <td><%= futureMedication.total_pills %></td>
+                    <td><%= futureMedication.dose %></td>
+                    <td>Every <%= futureMedication.frequency_hours %> <%= futureMedication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                    <td><%= futureMedication.side_effects %></td>
+                    <td><%= futureMedication.additional_notes %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+        </table>
+        </div>
+        <button id="return-home-btn" style="margin: 20px 0px" window.location.href='<%= patientPortal %>'">Return to Portal</button>
         <br>
         <script src="/logout.js"></script>
     </body>

@@ -9,8 +9,9 @@ import {
         getPatientNames, 
         getPatientNamesFromProvider, 
         getPatientById, 
-        getPastMedicationsForPatient, 
         getPatientLogs, 
+        getPastMedicationsForPatient, 
+        getFutureMedicationsForPatient,
         getCurrentMedicationsForPatient, 
         deleteProviderAccount, deletePatientProvider
     } from '../database.js'
@@ -68,15 +69,16 @@ providerRouter.get("/:providerId/patient_log/:patientId", async(req,res)=> {
     }
     var currentMedications = await getCurrentMedicationsForPatient(patient.patient_id)
     var pastMedications = await getPastMedicationsForPatient(patient.patient_id)
+    var futureMedications = await getFutureMedicationsForPatient(patient.patient_id)
     var patientLogs = await getPatientLogs(patient.patient_id)
     return res.status(200).render('viewPatientLog.ejs', {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
         currentMedications: currentMedications, 
         pastMedications: pastMedications,
+        futureMedications: futureMedications, 
         patientLog: patientLogs,
         providerPortal: `/provider/${req.params.providerId}`,
         anotherPatient: `/provider/${req.params.providerId}/patient_log`,
-
     })
 })
 

@@ -8,7 +8,7 @@ import {
         addMedication, 
         getPatientById, 
         getPatientProvider, 
-        getCurrentMedicationsByName
+        getMedicationWithinDates
     } from '../database.js'
 
 //Allowing for file paths to be created 
@@ -37,8 +37,8 @@ addMedicationRouter.post("/", async (req, res) => {
             //If the patient is not associated with the provider, returns an error message
             return res.status(200).json({passed: false, message: `No patient found.`})
         }
-        var medication = await getCurrentMedicationsByName(prescription_name, patient_id)
-        if(medication.length !== 0) {
+        var medicationOverlap = await getMedicationWithinDates(patient_id, prescription_name, start_date, end_date)
+        if(medicationOverlap.length !== 0) {
             //If the medication has already been added, returns an error message
             return res.status(200).json({passed: false, message: `${prescription_name} has already been added for ${patient_first_name} ${patient_last_name}.`})
         }

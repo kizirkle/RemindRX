@@ -131,8 +131,12 @@
                                 <% } %>
                                 <tbody>
                                 <tr>
-                                    <td class="<%= log.status === 'taken' ? 'red' : 'green' %>">
-                                        <%= log.status %> 
+                                    <style>
+                                    .status-taken { color: rgb(53, 130, 53); }
+                                    .status-pending { color: rgb(221, 45, 45); }
+                                    </style>
+                                    <td class="<%= log.status === 'taken' ? 'status-taken' : 'status-pending' %>">
+                                        <%= log.status %>
                                     </td>
                                     <td><%= log.report_date %></td>
                                     <td><%= log.intake_time %></td>
@@ -144,6 +148,39 @@
                     </table>
                     <br>
                 <% }); %>   
+
+
+                <h2 id="future-medications" style="font-size: 25px; padding-bottom: 10px;"><u>Future Medications</u></h2>
+                <% futureMedications.forEach(futureMedication => { %>
+                <h3 style="text-align: center; padding: 10px; font-size: 20px;"><%= futureMedication.prescription_name %></h3>
+                <div id="table-format">
+                <!-- Displays future medication data in a table -->
+                <table>
+                    <thead>
+                        <tr style="background-color: #907ca277;">
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total Pills</th>
+                            <th>Dose</th>
+                            <th>Frequency</th>
+                            <th>Side Effects</th>
+                            <th>Additional Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><%= futureMedication.start_date %></td>
+                                <td><%= futureMedication.end_date %></td>
+                                <td><%= futureMedication.total_pills %></td>
+                                <td><%= futureMedication.dose %></td>
+                                <td>Every <%= futureMedication.frequency_hours %> <%= futureMedication.frequency_hours === 1 ? 'hour' : 'hours' %></td>
+                                <td><%= futureMedication.side_effects %></td>
+                                <td><%= futureMedication.additional_notes %></td>
+                            </tr>
+                    </tbody>
+                </table>
+                <br>
+                <% }); %>  
                  
         <button id="another-patient" style="margin-bottom: 7px;" onclick="window.location.href='<%= anotherPatient %>'">Select Another Patient</button>
         <br>

@@ -12,7 +12,8 @@ import {
         getProviderNamesFromPatient,
         getProviderIdsFromPatientId, 
         getCurrentMedicationsForPatient, 
-        getPastMedicationsForPatient, 
+        getPastMedicationsForPatient,
+        getFutureMedicationsForPatient, 
         createLogEntry, 
         deletePatientAccount, 
         deletePatientProvider, 
@@ -75,10 +76,12 @@ patientRouter.get("/:id/medications", async(req, res) => {
     }
     var currentMedications = await getCurrentMedicationsForPatient(patient.patient_id)
     var pastMedications = await getPastMedicationsForPatient(patient.patient_id)
+    var futureMedications = await getFutureMedicationsForPatient(patient.patient_id)
     return res.status(200).render('medications.ejs', {
         patientPortal: `/patient/${req.params.id}`, 
         currentMedications: currentMedications, 
-        pastMedications: pastMedications
+        pastMedications: pastMedications, 
+        futureMedications: futureMedications
     })
 })
 
