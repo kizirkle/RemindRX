@@ -248,6 +248,7 @@ export async function getCurrentMedicationsForPatient(patient_id) {
     return rows
 }
 
+
 //Gets all past medications for patient and necessary information
 export async function getPastMedicationsForPatient(patient_id) {
   var [rows] = await pool.query(`

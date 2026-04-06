@@ -29,9 +29,13 @@ patientRouter.get("/:id/reminders", async(req, res) => {
     var day = date.getDate()
     var month = months[date.getMonth()]
     var year = date.getFullYear()
+    var medications = await getCurrentMedicationsForPatient(req.params.id)
     var currentDate = `${dayOfWeek}, ${month} ${day}, ${year}`
     return res.status(200).render('reminders.ejs', {
         date: currentDate,
+        medications: medications,
+        medicationsPage: `/patient/${req.params.id}/medications`, 
+        logIntake: `/patient/${req.params.id}/log`, 
         patientPortal: `/patient/${req.params.id}/`
     })
 })
@@ -78,7 +82,9 @@ patientRouter.get("/:id/medications", async(req, res) => {
     var pastMedications = await getPastMedicationsForPatient(patient.patient_id)
     var futureMedications = await getFutureMedicationsForPatient(patient.patient_id)
     return res.status(200).render('medications.ejs', {
-        patientPortal: `/patient/${req.params.id}`, 
+        patientPortal: `/patient/${req.params.id}`,
+        reminders:  `/patient/${req.params.id}/reminders`,
+        logIntake: `/patient/${req.params.id}/log`,
         currentMedications: currentMedications, 
         pastMedications: pastMedications, 
         futureMedications: futureMedications
@@ -94,7 +100,9 @@ patientRouter.get("/:id/log", async(req, res) => {
     var medications = await getCurrentMedicationsForPatient(patient.patient_id)
     return res.status(200).render('logIntake.ejs', {
         patientPortal: `/patient/${req.params.id}`, 
-        medications: medications
+        medications: medications, 
+        reminders: `/patient/${req.params.id}/reminders`,
+        medicationsPage: `/patient/${req.params.id}/medications`
     })
 })
 
@@ -188,6 +196,7 @@ patientRouter.get("/:id", async(req,res) => {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
         patientProfile: `/patient/${req.params.id}/profile`,
         medications: `/patient/${req.params.id}/medications`, 
+        reminders: `/patient/${req.params.id}/reminders`,
         logIntake: `/patient/${req.params.id}/log`
     })
 })

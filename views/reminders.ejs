@@ -18,14 +18,28 @@
             </div>
             <div id="centered">
                 <!-- Provides information about the provider -->
-                <div id="profile-info" style="justify-content: right;">
-                    <ul>
-                        
-                    </ul>
+                <div id="reminders">
+                    <% if(medications.length !== 0) {%> 
+                        <% medications.forEach((medication) => { %>
+                            <p style="font-size: 18px; margin-bottom: 0px;">Take <%=medication.dose %> <%= medication.dose === 1 ? 'pill' : 'pills' %> of <b style="color: rgb(84, 42, 208)"><%= medication.prescription_name %></b> every <%= medication.frequency_hours %>  <%= medication.frequency_hours === 1 ? 'hour' : 'hours' %></p>
+                            <ul id="reminder">
+                                <li><b style="color: black">Side effects:</b> <%= medication.side_effects %></li>
+                                <% if(medication.additional_notes) { %>
+                                    <li><b style="color: black">Additional notes:</b> <%= medication.additional_notes %></li>
+                                <% } %>
+                            </ul>
+                        <% }) %>
+                    <% } %>
+                    <% if(medications.length === 0) {%> 
+                        <p style="font-size: 18px">No current medications.</p>
+                    <% } %>
                 </div>
         </div>
+        <button onclick="window.location.href='<%= logIntake %>'">Log Intake</button>
         <br>
-
-        <button onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
+        <button onclick="window.location.href='<%= medicationsPage %>'">View Medications</button>
+        <br>
+        <button style="margin-bottom: 20px;" onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
+        <br>
     </body>
 </html>
