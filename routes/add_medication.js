@@ -19,8 +19,7 @@ var __dirname = dirname(__filename);
 
 //Access the addMedication page
 addMedicationRouter.get("/", async(req,res) => {
-    var filePath = path.join(__dirname, '../public/addMedication.html');
-    res.status(200).sendFile(filePath)
+    res.status(200).render("addMedication.ejs")
 })
 
 //Add a new medication to the database
