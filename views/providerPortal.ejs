@@ -12,8 +12,7 @@
     </div>
     <body>
         <h1 id="patient-name">Welcome, <B><%= providerName %></B></h1>
-        <!-- Provides pages for provider to navigate to -->
-        <button id="add-medication-btn" onclick="location.href='/addMedication'">Add Medication</button>
+        <button id="add-medication-btn" onclick="window.location.href='<%= addMedication %>'">Add Medication</button>
         <br>
         <button id="view-patient-log-btn" onclick="window.location.href='<%= choosePatientLog %>'">View Patient Log</button>
         <br>
