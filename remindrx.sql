@@ -21,7 +21,7 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 -- GTID state at the beginning of the backup 
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '83c45b9c-11a2-11f1-a518-f17faad63173:1-898';
+SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '83c45b9c-11a2-11f1-a518-f17faad63173:1-1028';
 
 --
 -- Table structure for table `healthcare_provider`
@@ -38,7 +38,7 @@ CREATE TABLE `healthcare_provider` (
   `provider_email` varchar(50) DEFAULT NULL,
   `provider_password` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`provider_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,7 +90,7 @@ CREATE TABLE `patient` (
   `patient_email` varchar(100) DEFAULT NULL,
   `patient_password` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`patient_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +99,7 @@ CREATE TABLE `patient` (
 
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
-INSERT INTO `patient` VALUES (100000,'Jeff','Frank','1112223333','frank@gmail.com','RandomPasswords555!!!'),(100001,'Sheldon','Dean','1112228888','dean@gmail.com','RandomPasswords333!!!');
+INSERT INTO `patient` VALUES (100000,'Jeff','Frank','1112223333','frank@gmail.com','RandomPasswords555!!!'),(100001,'Sheldon','Dean','1112228888','dean@gmail.com','RandomPasswords333!!!'),(100004,'11','11','11','11@gma.icom','RandomPasswords555!!!');
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +123,7 @@ CREATE TABLE `patient_log` (
   KEY `patient_id` (`patient_id`),
   CONSTRAINT `patient_log_ibfk_1` FOREIGN KEY (`prescription_id`) REFERENCES `prescription` (`prescription_id`) ON DELETE SET NULL,
   CONSTRAINT `patient_log_ibfk_2` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `patient_log` (
 
 LOCK TABLES `patient_log` WRITE;
 /*!40000 ALTER TABLE `patient_log` DISABLE KEYS */;
-INSERT INTO `patient_log` VALUES (28,'missed','2026-04-02',NULL,'None',100000,16),(29,'taken','2026-04-20','15:09:00','11',100000,16),(30,'taken','2026-04-15','15:11:00','1',100000,16),(31,'missed','2026-04-02',NULL,'',100000,16),(32,'taken','2026-04-15','00:08:00','',100000,16),(33,'taken','2026-04-15','23:15:00','none',100000,16),(34,'missed','2026-04-02',NULL,'',100000,16),(35,'missed','2026-04-15',NULL,'11',100000,16);
+INSERT INTO `patient_log` VALUES (38,'taken','2026-04-06','12:43:00','',100000,22),(39,'missed','2026-04-08',NULL,'',100000,22),(40,'taken','2026-04-06','16:40:00','',100000,25),(41,'missed','2026-04-06',NULL,'',100000,25);
 /*!40000 ALTER TABLE `patient_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,7 +146,10 @@ DROP TABLE IF EXISTS `PatientProvider`;
 CREATE TABLE `PatientProvider` (
   `patient_id` int NOT NULL,
   `provider_id` int NOT NULL,
-  PRIMARY KEY (`patient_id`,`provider_id`)
+  PRIMARY KEY (`patient_id`,`provider_id`),
+  KEY `fk_provider_id` (`provider_id`),
+  CONSTRAINT `fk_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_provider_id` FOREIGN KEY (`provider_id`) REFERENCES `healthcare_provider` (`provider_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -184,7 +187,7 @@ CREATE TABLE `prescription` (
   KEY `provider_id` (`provider_id`),
   CONSTRAINT `prescription_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`) ON DELETE SET NULL,
   CONSTRAINT `prescription_ibfk_3` FOREIGN KEY (`provider_id`) REFERENCES `healthcare_provider` (`provider_id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +196,7 @@ CREATE TABLE `prescription` (
 
 LOCK TABLES `prescription` WRITE;
 /*!40000 ALTER TABLE `prescription` DISABLE KEYS */;
-INSERT INTO `prescription` VALUES (1,'Tylenol',2,'2026-03-28','2026-03-29',10,8,'Fatigue','None',100000,100000),(16,'Advil',2,'2026-04-16','2026-05-11',100,4,'None','None',100000,100000),(17,'Med',11,'2026-04-30','2026-05-01',11,11,'11','111',100000,100000),(18,'ddsfsd',11,'2026-04-22','2026-04-23',11,11,'11','11',100000,100000),(19,'MyMedication',1,'2026-04-23','2026-04-24',1,1,'1','1',100000,100000),(20,'randomer',1,'2026-03-29','2026-03-30',1,1,'1','1',100000,100000);
+INSERT INTO `prescription` VALUES (22,'Tylenol',2,'2026-04-06','2026-04-22',100,6,'Fatigue','Take after eating. ',100000,100000),(23,'Advil',2,'2026-04-23','2026-05-13',100,5,'None','',100000,100000),(24,'Ibuprofen',2,'2026-03-29','2026-03-29',4,6,'Stomach pain','Take after eating',100000,100000),(25,'Aspirin ',2,'2026-04-06','2026-04-06',4,6,'Stomach pain','',100000,100000);
 /*!40000 ALTER TABLE `prescription` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,4 +237,4 @@ SET @@SESSION.SQL_LOG_BIN = @MYSQLDUMP_TEMP_LOG_BIN;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-02 15:55:28
+-- Dump completed on 2026-04-06 16:43:03

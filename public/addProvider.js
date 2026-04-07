@@ -1,3 +1,5 @@
+//Add Provider JavaScript
+
 //Form that has the information to connect patient to provider
 var addProviderForm = document.getElementById("add-provider-form")
 
@@ -33,12 +35,13 @@ addProviderForm.addEventListener("submit", async (event)=> {
             provider_last_name: providerLastName.value
             })
         })
+        if(response.ok) {
+            //Gets the response from the API call which will either contain an error message or URL to personal portal
+            var data = await response.json()
 
-        //Gets the response from the API call which will either contain an error message or URL to personal portal
-        var data = await response.json()
-
-        //Calls function to either return an error or sends the patient or provider to their personal portal
-        systemResponse(data)
+            //Calls function to either return an error or sends the patient or provider to their personal portal
+            systemResponse(data)
+        }
     }
     catch(error) {
          console.log("ERROR: failed to submit, error from addProvider.js:", error);

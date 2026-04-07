@@ -352,5 +352,21 @@ th {
     color: rgb(117, 126, 255)
 }
 
+#reminders {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 0 0; 
+    text-align: left;
+    gap: 0;
+}
+
+#reminder {
+    margin: none; 
+    padding: none; 
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 20px; 
+}
 
 

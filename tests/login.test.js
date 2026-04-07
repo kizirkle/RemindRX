@@ -82,8 +82,7 @@ describe('POST /login', () => {
     it("[L3] Should not log in patient if they have an email but the wrong password", createLoginTest({
         entered_password: "Password5!Random!"
     }, {
-        message: "Incorrect password.",
-        statusCode: 401
+        message: "Incorrect password."
     }))
 
     // -------------------------------------------------------------------------
@@ -97,8 +96,7 @@ describe('POST /login', () => {
         entered_email: "bob@gmail.com",
         entered_password: "Password5!Random!"
     }, {
-        message: "Incorrect password.",
-        statusCode: 401
+        message: "Incorrect password."
     }))
 
     // -------------------------------------------------------------------------

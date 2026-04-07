@@ -11,9 +11,9 @@
     </div>
     <body>
         <h1>Log <B>Intake</B></h1>
-        <!-- Log intake form -->
+        <!-- Log Intake form -->
         <form class="log-intake" id="log-intake-form">
-            <!-- Provider Information -->
+            <!-- Select medication -->
              <div class="form">
                 <label for="medication-select" style="font-size: 18px;">Medication</label>
                 <select name="medications" id="medication-select" required>
@@ -22,6 +22,7 @@
                         <option value="<%= medication.prescription_id%>"><%= medication.prescription_name %></option>
                     <% }); %>
                 </select>
+                <!-- Indicate if taken or missed -->
                 <div>
                     <input type="radio" value="taken" name="status" id="radio-taken" required> 
                     <label for="radio-taken" class="option" >Taken</label>
@@ -30,13 +31,20 @@
                     <input type="radio" value="missed" name="status" id="radio-missed"> 
                     <label class="option">Missed</label>
                 </div>
+                <!-- Report date -->
                 <input type="text" id="report-date" placeholder="Date" onfocus="(this.type='date')">
+                <!-- Report time taken if "Telected" is selected -->
                 <input type="text" id="intake-time" placeholder="Time Taken" onfocus="(this.type='time')" style="display: none">
+                <!-- Report additional notes -->
                 <textarea class="auto-expand" id="additional-notes" type='text' placeholder="Additional Notes"></textarea>
             </div> 
-            <!-- Error message displayed on reload if add provider failed -->
+            <!-- Confirmation message that indicates the medication was logged -->
             <span class="provider-error-spacing" id="correctMessage" style="display: none"></span>
-            <button type="submit" id="log-btn" style="margin-bottom: 5px;">Submit</button>
+            <button type="submit" id="log-btn">Submit</button>
+            <br>
+            <button id="medications-btn" onclick="window.location.href='<%= reminders %>'">Reminders</button>
+            <br>
+            <button id="medications-btn" onclick="window.location.href='<%= medicationsPage %>'">View Medications</button>
             <br>
             <button onclick="window.location.href='<%= patientPortal %>'">Return to Portal</button>
         </form>
