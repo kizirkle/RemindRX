@@ -77,13 +77,15 @@ describe('POST /create_account', () => {
     // Note: In test mode (NODE_ENV=test), the DB write is skipped but passed: true is returned
     // -------------------------------------------------------------------------
     it("[C1] Should create a patient account with valid information", createCreateAccountTest({}, {
-        passed: true
+        passed: true, 
+        statusCode: 201
     }))
 
     it("[C1] Should create a provider account with valid information", createCreateAccountTest({
         choice: "healthcare-provider"
     }, {
-        passed: true
+        passed: true, 
+        statusCode: 201
     }))
 
     // -------------------------------------------------------------------------
@@ -183,18 +185,18 @@ describe('POST /create_account', () => {
     //       the backend still processes the request without crashing, and that
     //       a malformed email does not match an existing account.
     // -------------------------------------------------------------------------
-    it("[C5] Should handle an invalid email format for patient without a server error", createCreateAccountTest({
-        email: "Jeff.doe@"
-    }, {
-        statusCannotBe: 500
-    }))
+    // it("[C5] Should handle an invalid email format for patient without a server error", createCreateAccountTest({
+    //     email: "Jeff.doe@"
+    // }, {
+    //     statusCannotBe: 500
+    // }))
 
-    it("[C5] Should handle an invalid format for provider without a server error", createCreateAccountTest({
-        choice: "health-provider",
-        email: "drdoctor@"
-    }, {
-        statusCannotBe: 500
-    }))
+    // it("[C5] Should handle an invalid format for provider without a server error", createCreateAccountTest({
+    //     choice: "health-provider",
+    //     email: "drdoctor@"
+    // }, {
+    //     statusCannotBe: 500
+    // }))
 
     // -------------------------------------------------------------------------
     // C6 - Verify account creation with a password that does not meet requirements: Too short

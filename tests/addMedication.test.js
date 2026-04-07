@@ -139,7 +139,8 @@ describe('POST /addMedication', () => {
     it("[M7] Should add medication if inputs are valid", createAddMedicationTest({
         prescription_name: "Test Medicine"
     }, {
-        passed: true
+        passed: true,
+        statusCode: 201
     }))
 
 })

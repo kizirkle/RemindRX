@@ -1,4 +1,4 @@
-<!-- Patient portal -->
+<!-- Provider profile -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,19 +12,35 @@
     <body>
         <h1 id="patient-name" style="margin-bottom: 0">Provider <B>Profile</B></h1>
         <div id="centered">
+            <!-- Provides information about the provider -->
             <div id="profile-info">
                 <p><b>Name</b>: <%= providerName %></p>
                 <p><b>Provider ID</b>: <%= providerId %></p>
                 <p><b>Email</b>: <%= providerEmail %></p>
                 <p><b>Phone number</b>: <%= providerPhoneNumber %></p>
-                <h2 id="patient-name">Patients</h2>
+                <h2 style="text-align: center;">Patients</h2>
                     <div id="names-profile">
+                        <!-- Displays each patient -->
+                        <% var count = 0 %>
                         <% patients.forEach(patient => { %>
+                            <% count = 1 %>
                             <li><%= patient %></li>
                         <% }) %>
                         </div>
+                    <!-- Displays message if no patients have been added -->
+                    <% if(count === 0) { %>
+                        <div>
+                            <p style="text-align: center; margin: 0;">No Patients<p>
+                        </div>
+                    <% } %>
+                    <!-- Pages to navigate to -->
+                     <!-- Displays Remove Patient button if there are patient associated -->
+                    <% if (count === 1) { %>
+                        <button id="remove-provider" onclick="window.location.href='<%= removeProvider %>'">Remove Patient</button>
+                    <% } %>
                     <button onclick="window.location.href='<%= providerPortal %>'">Return to Portal</button>
                     <button onclick="logout()">Log Out</button>
+                    <button onclick="window.location.href='<%= deleteAccount %>'">Delete Account</button>
             </div>
         </div>
         <script src="/logout.js"></script>

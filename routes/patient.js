@@ -1,20 +1,49 @@
+//Patient Router
+
 import express from 'express'
 const patientRouter = express.Router()
-import path from 'path'
 
-import {getPatientById, getProviderById, getPatientProvider, createPatientProvider, getProviderIds, getProviderNames, getProviderFromPatient, getCurrentMedicationsForPatient, getPastMedicationsForPatient, createLogEntry, deletePatientAccount} from '../database.js'
+import {
+        getPatientById, 
+        getProviderById, 
+        getPatientProvider, 
+        createPatientProvider, 
+        getProviderNames, 
+        getProviderNamesFromPatient,
+        getProviderIdsFromPatientId, 
+        getCurrentMedicationsForPatient, 
+        getPastMedicationsForPatient,
+        getFutureMedicationsForPatient, 
+        createLogEntry, 
+        deletePatientAccount, 
+        deletePatientProvider, 
+    } from '../database.js'
 
-//Allowing for file paths to be created 
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = dirname(__filename);
 
+//Opens reminders page 
+patientRouter.get("/:id/reminders", async(req, res) => {
+    var date = new Date()
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var dayOfWeek = days[date.getDay()]
+    var day = date.getDate()
+    var month = months[date.getMonth()]
+    var year = date.getFullYear()
+    var medications = await getCurrentMedicationsForPatient(req.params.id)
+    var currentDate = `${dayOfWeek}, ${month} ${day}, ${year}`
+    return res.status(200).render('reminders.ejs', {
+        date: currentDate,
+        medications: medications,
+        medicationsPage: `/patient/${req.params.id}/medications`, 
+        logIntake: `/patient/${req.params.id}/log`, 
+        patientPortal: `/patient/${req.params.id}/`
+    })
+})
 
 //Opens form to add a new provider
 patientRouter.get("/:id/add_provider", async(req, res) => {
-    return res.render('addProvider.ejs', {
-        patientPortal: `/patient/${req.params.id}` 
+    return res.status(200).render('addProvider.ejs', {
+        patientProfile: `/patient/${req.params.id}/profile` 
     })
 })
 
@@ -25,19 +54,19 @@ patientRouter.post("/:id/add_provider", async(req, res) => {
         var providerExists = await getProviderById(provider_id)
         if (!providerExists || providerExists.provider_first_name !== provider_first_name ||providerExists.provider_last_name !== provider_last_name) {
             //If there is no provider with ID or the first or last name does not math the name associated with the ID, returns an error message
-            return res.json({passed: false, message: `No healthcare provider found.`})
+            return res.status(200).json({passed: false, message: `No healthcare provider found.`})
         } 
         var providerPatientAssociationExists = await getPatientProvider(patient_id, provider_id)
         if (providerPatientAssociationExists) {
             //If the patient as already associated with the provider in the database, returns an error message 
-            return res.json({passed: false, message: `Healthcare provider ${providerExists.provider_first_name} ${providerExists.provider_last_name} has already been added.`})
+            return res.status(200).json({passed: false, message: `Healthcare provider ${providerExists.provider_first_name} ${providerExists.provider_last_name} has already been added.`})
         }
         //If the provider ID exists and is not already associated with patient, creates new entry in PatientProvider table and return to patient portal
         if (process.env.NODE_ENV !== 'test') {
             createPatientProvider(patient_id, provider_id)
-            return res.json({passed: true, patientPage: `/patient/${patient_id}`})
+            return res.status(201).json({passed: true, patientPage: `/patient/${patient_id}/profile`})
         }
-        return res.json({passed: true})
+        return res.status(201).json({passed: true})
     } catch{
         res.status(500).json({passed: false, message:'Error in Add Provider.'})
     }
@@ -51,10 +80,14 @@ patientRouter.get("/:id/medications", async(req, res) => {
     }
     var currentMedications = await getCurrentMedicationsForPatient(patient.patient_id)
     var pastMedications = await getPastMedicationsForPatient(patient.patient_id)
-    return res.render('medications.ejs', {
-        patientPortal: `/patient/${req.params.id}`, 
+    var futureMedications = await getFutureMedicationsForPatient(patient.patient_id)
+    return res.status(200).render('medications.ejs', {
+        patientPortal: `/patient/${req.params.id}`,
+        reminders:  `/patient/${req.params.id}/reminders`,
+        logIntake: `/patient/${req.params.id}/log`,
         currentMedications: currentMedications, 
-        pastMedications: pastMedications
+        pastMedications: pastMedications, 
+        futureMedications: futureMedications
     })
 })
 
@@ -65,9 +98,11 @@ patientRouter.get("/:id/log", async(req, res) => {
         return res.status(404).send("Patient not found");
     }
     var medications = await getCurrentMedicationsForPatient(patient.patient_id)
-    return res.render('logIntake.ejs', {
+    return res.status(200).render('logIntake.ejs', {
         patientPortal: `/patient/${req.params.id}`, 
-        medications: medications
+        medications: medications, 
+        reminders: `/patient/${req.params.id}/reminders`,
+        medicationsPage: `/patient/${req.params.id}/medications`
     })
 })
 
@@ -80,9 +115,9 @@ patientRouter.post("/:id/log", async(req, res) => {
         } else {
             createLogEntry(status, report_date, null, additional_notes, patient_id, prescription_id)
         }
-        return res.json({passed: true, patientPage: `/patient/${patient_id}`})
+        return res.status(201).json({passed: true, patientPage: `/patient/${patient_id}`})
     } catch{
-        res.status(500).json({passed: false, message:'Error in Add Provider.'})
+        res.status(500).json({passed: false, message:'Error in Log Intake.'})
     }
 })
 
@@ -92,32 +127,62 @@ patientRouter.get("/:id/profile", async(req, res) => {
     if (!patient) {
         return res.status(404).send("Patient not found");
     }
-    var providersForPatient = await getProviderFromPatient(patient.patient_id) 
+    var providersById = await getProviderIdsFromPatientId(patient.patient_id) 
     var providerNameList = []
-    if (providersForPatient.length !== 0) {
-        var providersById = await getProviderIds(patient.patient_id)
+    if (providersById.length !== 0) {
         var providerIds = providersById.map(provider => provider.provider_id)
         var providerNames = await getProviderNames(providerIds)
         providerNames.forEach((provider) => {
             providerNameList.push(`${provider.provider_first_name} ${provider.provider_last_name}`)
         })
     } 
-    return res.render('patientProfile.ejs', {
+    return res.status(200).render('patientProfile.ejs', {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`, 
         patientId:`${patient.patient_id}`, 
         patientEmail: `${patient.patient_email}`,
         patientPhoneNumber: `${patient.patient_phone_number}`, 
         providers: providerNameList, 
         addProvider: `/patient/${req.params.id}/add_provider`, 
-        patientPortal: `/patient/${req.params.id}`
+        removeProvider: `/patient/${req.params.id}/remove_provider`,
+        patientPortal: `/patient/${req.params.id}`, 
+        deleteAccount: `/patient/${req.params.id}/delete_account`
     })
 })
 
-//View patient profile
-patientRouter.delete("/:id/profile", async(req, res) => {
+//View delete account page
+patientRouter.get("/:id/delete_account", async(req, res) => {
+    return res.status(200).render('deletePatientAccount.ejs', {
+        patientProfile: `/patient/${req.params.id}/profile`,
+    })
+})
+
+//Delete account
+patientRouter.delete("/:id/delete_account", async(req, res) => {
+    var patient = await getPatientById(req.params.id)
+    if (!patient) {
+        return res.status(404).send("Patient not found");
+    }
     await deletePatientAccount(req.params.id)
-    var filePath = path.join(__dirname, '../public/deleteAccount.html');
-    res.sendFile(filePath)
+    return res.status(200).json({success: true, redirect: '/' })
+})
+
+//View delete provider page
+patientRouter.get("/:id/remove_provider", async(req, res) => {
+    var providers = await getProviderNamesFromPatient(req.params.id)
+    return res.status(200).render('removeProvider.ejs', {
+        providers: providers,
+        patientProfile: `/patient/${req.params.id}/profile`,
+    })
+})
+
+//Remove provider
+patientRouter.delete("/:patientId/remove_provider/:providerId", async(req, res) => {
+    var patient = await getPatientById(req.params.patientId)
+    if (!patient) {
+        return res.status(404).send("Patient not found");
+    }
+    await deletePatientProvider(req.params.patientId, req.params.providerId)
+    return res.status(200).json({success: true, redirect: `/patient/${req.params.patientId}/profile`})
 })
 
 
@@ -129,9 +194,9 @@ patientRouter.get("/:id", async(req,res) => {
     }
     return res.render('patientPortal.ejs', {
         patientName: `${patient.patient_first_name} ${patient.patient_last_name}`,
-        addProvider: `/patient/${req.params.id}/add_provider`, 
         patientProfile: `/patient/${req.params.id}/profile`,
         medications: `/patient/${req.params.id}/medications`, 
+        reminders: `/patient/${req.params.id}/reminders`,
         logIntake: `/patient/${req.params.id}/log`
     })
 })
