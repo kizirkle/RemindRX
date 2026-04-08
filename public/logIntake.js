@@ -7,7 +7,6 @@ var prescriptionId = ""
 medicationSelect.addEventListener("change", (event) => {
     prescriptionId = event.target.value
 })
-
 //Radiobuttons to indicate status
 var radioTaken = document.getElementById("radio-taken")
 var radioMissed = document.getElementById("radio-missed")
