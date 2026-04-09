@@ -16,10 +16,19 @@
     font-style: normal;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     text-align: center; 
     font-family: "Questrial", sans-serif;
     background-color: rgb(245, 245, 245);
+    background-image: url("image/background_blue.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 b {
