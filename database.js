@@ -5,8 +5,13 @@ import mysql from 'mysql2'
 import dotenv from 'dotenv'
 dotenv.config()
 
+var isProd = process.env.NODE_ENV === 'production'
+
 //Setting up the connect to MySQL
-export var pool = mysql.createPool( {
+export var pool = mysql.createPool( 
+  isProd 
+    ? process.env.DATABASE_URL
+    :{
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
