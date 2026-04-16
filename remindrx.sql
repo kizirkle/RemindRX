@@ -18,12 +18,6 @@ SET @MYSQLDUMP_TEMP_LOG_BIN = @@SESSION.SQL_LOG_BIN;
 SET @@SESSION.SQL_LOG_BIN= 0;
 
 --
--- GTID state at the beginning of the backup 
---
-
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '83c45b9c-11a2-11f1-a518-f17faad63173:1-1028';
-
---
 -- Table structure for table `healthcare_provider`
 --
 
