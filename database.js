@@ -10,7 +10,7 @@ var isProd = process.env.NODE_ENV === 'production'
 //Setting up the connect to MySQL
 export var pool = mysql.createPool( 
   isProd 
-    ? process.env.DATABASE_URL
+    ? process.env.JAWSDB_URL
     :{
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
